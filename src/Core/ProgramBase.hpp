@@ -5,15 +5,21 @@
 
 namespace ogl
 {
-struct ProgramSettings
-{
-	std::string name;
-	u32 width = 0;
-	u32 height = 0;
-};
 
 struct ProgramBase
 {
+	struct Settings
+	{
+		std::string name = "Untitled";
+		u32 width = 640;
+		u32 height = 480;
+
+		Settings() = default;
+		Settings(const std::string& inName, u32 inWidth, u32 inHeight);
+		explicit Settings(const std::string& inName);
+		explicit Settings(u32 inWidth, u32 inHeight);
+	};
+
 	ProgramBase() = default;
 	GL_DEFAULT_COPY_MOVE(ProgramBase);
 	virtual ~ProgramBase() = default;
@@ -21,7 +27,7 @@ struct ProgramBase
 	virtual void init() = 0;
 	virtual void update() = 0;
 
-	virtual ProgramSettings getSettings() const;
+	virtual Settings getSettings() const = 0;
 
 	virtual i32 run() final;
 };

@@ -93,7 +93,7 @@
 			"targets": "glfw",
 			"recheck": false
 		},
-		"01_hello_world": {
+		"00_hello_world": {
 			"kind": "executable"
 		}
 	},

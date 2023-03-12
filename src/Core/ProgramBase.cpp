@@ -10,14 +10,24 @@ namespace ogl
 using ProcAddressFn = void* (*)(const char*);
 
 /*****************************************************************************/
-ProgramSettings ProgramBase::getSettings() const
+ProgramBase::Settings::Settings(const std::string& inName, u32 inWidth, u32 inHeight) :
+	name(inName),
+	width(inWidth),
+	height(inHeight)
 {
-	ProgramSettings ret;
-	ret.name = "Untitled";
-	ret.width = 640;
-	ret.height = 480;
+}
 
-	return ret;
+/*****************************************************************************/
+ProgramBase::Settings::Settings(const std::string& inName) :
+	name(inName)
+{
+}
+
+/*****************************************************************************/
+ProgramBase::Settings::Settings(u32 inWidth, u32 inHeight) :
+	width(inWidth),
+	height(inHeight)
+{
 }
 
 /*****************************************************************************/

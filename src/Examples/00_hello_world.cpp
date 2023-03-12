@@ -4,6 +4,11 @@ namespace ogl
 {
 struct Program final : ProgramBase
 {
+	virtual Settings getSettings() const final
+	{
+		return Settings("00: Hello World");
+	}
+
 	virtual void init() final
 	{
 		// Set the background color (Cornflower Blue - 100,149,237)
