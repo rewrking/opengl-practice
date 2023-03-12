@@ -19,6 +19,10 @@ struct Program final : ProgramBase
 	{
 		glCheck(glClear(GL_COLOR_BUFFER_BIT));
 	}
+
+	virtual void dispose() final
+	{
+	}
 };
 }
 

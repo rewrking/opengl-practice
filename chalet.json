@@ -95,6 +95,9 @@
 		},
 		"00_hello_world": {
 			"kind": "executable"
+		},
+		"01_triangles": {
+			"kind": "executable"
 		}
 	},
 	"distribution": {

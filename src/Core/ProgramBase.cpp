@@ -31,6 +31,20 @@ ProgramBase::Settings::Settings(u32 inWidth, u32 inHeight) :
 }
 
 /*****************************************************************************/
+std::string ProgramBase::getShader(const char* inPath) const
+{
+	return std::string("content/fx/") + inPath;
+}
+
+/*****************************************************************************/
+GLuint ProgramBase::loadShaders(const std::vector<ShaderInfo>& inShaders) const
+{
+	UNUSED(inShaders);
+	// throw std::runtime_error("Error loading shaders");
+	return 0;
+}
+
+/*****************************************************************************/
 i32 ProgramBase::run()
 {
 	GLFWwindow* window = nullptr;
@@ -119,22 +133,39 @@ i32 ProgramBase::run()
 	std::cout << glGetString(GL_VENDOR) << "\n";
 	std::cout << glGetString(GL_VERSION) << std::endl;
 
-	this->init();
-
-	// Loop until the user closes the window
-	while (!glfwWindowShouldClose(window))
+	try
 	{
-		// Render here
-		this->update();
+		this->init();
 
-		// Swap front and back buffers
-		glfwSwapBuffers(window);
+		// Loop until the user closes the window
+		while (!glfwWindowShouldClose(window))
+		{
+			// Render here
+			this->update();
 
-		// Poll for and process events
-		glfwPollEvents();
+			// Swap front and back buffers
+			glfwSwapBuffers(window);
+
+			// Poll for and process events
+			glfwPollEvents();
+		}
+	}
+	catch (const std::exception& err)
+	{
+		std::cerr << err.what() << '\n';
+	}
+
+	try
+	{
+		this->dispose();
+	}
+	catch (const std::exception& err)
+	{
+		std::cerr << err.what() << '\n';
 	}
 
 	glfwTerminate();
+	glfwDestroyWindow(window);
 	window = nullptr;
 
 	return 0;

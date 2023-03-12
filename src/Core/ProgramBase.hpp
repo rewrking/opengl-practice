@@ -2,6 +2,7 @@
 
 #include "Core/GLM.hpp"
 #include "Core/OpenGL.hpp"
+#include "Core/ShaderInfo.hpp"
 
 namespace ogl
 {
@@ -25,9 +26,13 @@ struct ProgramBase
 	virtual ~ProgramBase() = default;
 
 	virtual void init() = 0;
+	virtual void dispose() = 0;
 	virtual void update() = 0;
 
 	virtual Settings getSettings() const = 0;
+
+	virtual std::string getShader(const char* inPath) const final;
+	virtual GLuint loadShaders(const std::vector<ShaderInfo>& inShaders) const final;
 
 	virtual i32 run() final;
 };
@@ -39,3 +44,5 @@ struct ProgramBase
 		x program;            \
 		return program.run(); \
 	}
+
+#define BUFFER_OFFSET(offset) ((void*)(offset))
