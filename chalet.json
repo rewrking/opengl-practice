@@ -1,0 +1,127 @@
+{
+	"name": "chalet-example-glfw",
+	"version": "1.0.0",
+	"externalDependencies": {
+		"glfw": {
+			"kind": "git",
+			"repository": "git@github.com:glfw/glfw.git"
+		},
+		"glm": {
+			"kind": "git",
+			"repository": "git@github.com:g-truc/glm.git"
+		}
+	},
+	"abstracts:*": {
+		"language": "C++",
+		"settings:Cxx": {
+			"buildSuffix": "opengl",
+			"cppStandard": "c++20",
+			"warningsPreset": "pedantic",
+			"precompiledHeader": "src/PCH.hpp",
+			"runtimeTypeInformation": false,
+			"threads": true,
+			"defines[:debug]": [
+				"_DEBUG"
+			],
+			"defines[:macos]": [
+				"GL_SILENCE_DEPRECATION"
+			],
+			"includeDirs": [
+				"src",
+				"${external:glfw}/include",
+				"${external:glm}"
+			],
+			"libDirs": [
+				"${externalBuild:glfw}/src",
+				"${externalBuild:glm}/glm"
+			],
+			"staticLinks": [
+				"glfw3",
+				"glm_static"
+			],
+			"links[:windows]": [
+				"opengl32",
+				"dwmapi"
+			],
+			"links[:linux]": [
+				"GL",
+				"glfw3",
+				"X11"
+			],
+			"macosFrameworks": [
+				"Cocoa",
+				"OpenGL",
+				"IOKit"
+			],
+			"windowsSubSystem[:!debug]": "windows",
+			"windowsApplicationIcon": "platform/windows/app.ico",
+			"windowsApplicationManifest": "platform/windows/app.manifest"
+		},
+		"files": [
+			"src/Examples/${name}.cpp",
+			"src/Platform/*.cpp",
+			"src/*.cpp"
+		]
+	},
+	"targets": {
+		"glm": {
+			"kind": "cmakeProject",
+			"location": "${external:glm}",
+			"targets": "glm/all",
+			"defines": [
+				"BUILD_STATIC_LIBS=ON",
+				"BUILD_SHARED_LIBS=OFF"
+			],
+			"recheck": false
+		},
+		"glfw": {
+			"kind": "cmakeProject",
+			"location": "${external:glfw}",
+			"targets": "glfw",
+			"recheck": false
+		},
+		"01_hello_world": {
+			"kind": "executable"
+		}
+	},
+	"distribution": {
+		"GLFWApp": {
+			"kind": "bundle",
+			"buildTargets": "*",
+			"macosBundle": {
+				"type": "app",
+				"infoPropertyList": "platform/macos/Info.plist.json",
+				"entitlementsPropertyList": "platform/macos/Entitlements.plist.json",
+				"icon": "platform/glfw-logo.png"
+			},
+			"linuxDesktopEntry": {
+				"template": "platform/linux/app.desktop",
+				"icon": "platform/glfw-logo.png"
+			}
+		},
+		"GLFWApp.dmg": {
+			"kind": "macosDiskImage",
+			"pathbarVisible": false,
+			"textSize": 12,
+			"iconSize": 80,
+			"background": {
+				"1x": "platform/macos/dmg-background.png",
+				"2x": "platform/macos/dmg-background@2x.png"
+			},
+			"size": {
+				"width": 512,
+				"height": 342
+			},
+			"positions": {
+				"GLFWApp": {
+					"x": 120,
+					"y": 188
+				},
+				"Applications": {
+					"x": 392,
+					"y": 188
+				}
+			}
+		}
+	}
+}
