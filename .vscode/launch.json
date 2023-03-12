@@ -36,7 +36,7 @@
 			"cwd": "${workspaceFolder}",
 			"preLaunchTask": "Build: Debug",
 			"osx": {
-				"program": "${workspaceFolder}/build/arm64-apple-darwin_Debug/01_triangles"
+				"program": "${workspaceFolder}/build/arm64-apple-darwin_Debug/01_hello_triangles"
 			}
 		},
 		{

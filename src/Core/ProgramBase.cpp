@@ -6,9 +6,6 @@
 
 namespace ogl
 {
-// might be mac-only
-using ProcAddressFn = void* (*)(const char*);
-
 /*****************************************************************************/
 ProgramBase::Settings::Settings(const std::string& inName, u32 inWidth, u32 inHeight) :
 	name(inName),
@@ -31,17 +28,17 @@ ProgramBase::Settings::Settings(u32 inWidth, u32 inHeight) :
 }
 
 /*****************************************************************************/
-std::string ProgramBase::getShader(const char* inPath) const
+ShaderProgram ProgramBase::loadShaderProgram(const StringList& inShaderFiles) const
 {
-	return std::string("content/fx/") + inPath;
-}
+	ShaderProgram shaderProgram;
 
-/*****************************************************************************/
-GLuint ProgramBase::loadShaders(const std::vector<ShaderInfo>& inShaders) const
-{
-	UNUSED(inShaders);
-	// throw std::runtime_error("Error loading shaders");
-	return 0;
+	bool result = shaderProgram.load(inShaderFiles);
+	if (!result)
+	{
+		throw std::runtime_error(std::string("Failed to load shader program!"));
+	}
+
+	return shaderProgram;
 }
 
 /*****************************************************************************/
@@ -66,10 +63,10 @@ i32 ProgramBase::run()
 
 	{
 #if defined(OGL_MACOS)
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
-		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 		window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 #elif defined(OGL_LINUX)
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
@@ -118,10 +115,10 @@ i32 ProgramBase::run()
 	// Make the window's context current
 	glfwMakeContextCurrent(window);
 
-	int version = gladLoadGLLoader((ProcAddressFn)glfwGetProcAddress);
+	int version = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	if (version == 0)
 	{
-		std::cout << "Failed to initialize OpenGL context\n";
+		std::cout << "Failed to initialize GLAD\n";
 		return -1;
 	}
 

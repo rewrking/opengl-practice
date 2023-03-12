@@ -22,6 +22,7 @@
 #endif // _WIN32
 
 #include <algorithm>
+#include <array>
 #include <cstdio>
 #include <deque>
 #include <fstream>
@@ -36,6 +37,7 @@
 #include <functional>
 
 #include "Core/Defines.hpp"
+#include "Core/Filesystem.hpp"
 #include "Core/Macros.hpp"
 #include "Core/Types.hpp"
 

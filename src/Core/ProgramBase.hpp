@@ -2,11 +2,10 @@
 
 #include "Core/GLM.hpp"
 #include "Core/OpenGL.hpp"
-#include "Core/ShaderInfo.hpp"
+#include "Core/ShaderProgram.hpp"
 
 namespace ogl
 {
-
 struct ProgramBase
 {
 	struct Settings
@@ -31,8 +30,7 @@ struct ProgramBase
 
 	virtual Settings getSettings() const = 0;
 
-	virtual std::string getShader(const char* inPath) const final;
-	virtual GLuint loadShaders(const std::vector<ShaderInfo>& inShaders) const final;
+	virtual ShaderProgram loadShaderProgram(const StringList& inShaderFiles) const final;
 
 	virtual void processInput(GLFWwindow* window);
 

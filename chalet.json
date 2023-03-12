@@ -93,10 +93,10 @@
 			"targets": "glfw",
 			"recheck": false
 		},
-		"00_hello_world": {
+		"00_hello_window": {
 			"kind": "executable"
 		},
-		"01_triangles": {
+		"01_hello_triangles": {
 			"kind": "executable"
 		}
 	},

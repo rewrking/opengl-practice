@@ -6,7 +6,7 @@ struct Program final : ProgramBase
 {
 	virtual Settings getSettings() const final
 	{
-		return Settings("00: Hello World");
+		return Settings("00: Hello Window");
 	}
 
 	virtual void init() final
