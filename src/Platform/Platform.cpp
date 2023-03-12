@@ -10,7 +10,7 @@
 void ogl::Platform::initialize(GLFWwindow* inWindow)
 {
 #if defined(_WIN32)
-	util::WindowsPlatform platform;
+	ogl::WindowsPlatform platform;
 	platform.initialize(inWindow);
 #else
 	UNUSED(inWindow);

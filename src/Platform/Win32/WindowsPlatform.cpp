@@ -5,6 +5,8 @@
 
 	#include <cmath>
 
+	#include "Libraries/OpenGL.hpp"
+
 	#define GLFW_EXPOSE_NATIVE_WIN32
 	#include <GLFW/glfw3native.h>
 
@@ -14,7 +16,7 @@
 		#define DWMWA_USE_IMMERSIVE_DARK_MODE 20
 	#endif
 
-namespace util
+namespace ogl
 {
 WindowsPlatform::WindowsPlatform()
 {
@@ -48,7 +50,6 @@ void WindowsPlatform::initialize(GLFWwindow* inWindow)
 	// https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-destroyicon
 	// It is only necessary to call DestroyIcon for icons and cursors created with the following functions:
 	//   CreateIconFromResourceEx (if called without the LR_SHARED flag)
-
 
 	// Dark mode
 	// Note: in MinGW (GCC 12.2 at least), the titlebar is noticeably smaller in Windows 11 than if the app were compiled with MSVC

@@ -33,6 +33,8 @@
 #include <string>
 #include <vector>
 
+#include <functional>
+
 #include "Utility/Defines.hpp"
 #include "Utility/Macros.hpp"
 #include "Utility/Types.hpp"

@@ -2,7 +2,9 @@
 
 #include <array>
 
-namespace util
+struct GLFWwindow;
+
+namespace ogl
 {
 struct WindowsPlatform
 {

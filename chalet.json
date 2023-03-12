@@ -4,7 +4,8 @@
 	"externalDependencies": {
 		"glfw": {
 			"kind": "git",
-			"repository": "git@github.com:glfw/glfw.git"
+			"repository": "git@github.com:glfw/glfw.git",
+			"tag": "3.3.8"
 		},
 		"glm": {
 			"kind": "git",
@@ -62,7 +63,7 @@
 		},
 		"files": [
 			"src/Examples/${name}.cpp",
-			"src/Platform/*.cpp",
+			"src/Platform/**.cpp",
 			"src/Libraries/OpenGL.cpp",
 			"src/*.cpp"
 		]
