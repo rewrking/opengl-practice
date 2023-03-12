@@ -5,7 +5,7 @@
 		"glfw": {
 			"kind": "git",
 			"repository": "git@github.com:glfw/glfw.git",
-			"tag": "3.3.8"
+			"commit": "9a87635686c7fcb63ca63149c5b179b85a53a725"
 		},
 		"glm": {
 			"kind": "git",

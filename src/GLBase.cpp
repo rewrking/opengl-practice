@@ -84,6 +84,7 @@ i32 GLBase::run()
 
 	// Make the window's context current
 	glfwMakeContextCurrent(window);
+
 	int version = gladLoadGLLoader((ProcAddressFn)glfwGetProcAddress);
 	if (version == 0)
 	{
