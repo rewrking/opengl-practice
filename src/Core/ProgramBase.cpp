@@ -99,6 +99,7 @@ i32 ProgramBase::run()
 		}
 
 #else
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		// Create a windowed mode window and its OpenGL context
 		window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 #endif

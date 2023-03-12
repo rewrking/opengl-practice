@@ -43,7 +43,7 @@ bool Shader::loadFromFile(const std::string& inFilePath)
 	if (success <= 0)
 	{
 		std::array<char, 512> infoLog;
-		glCheck(glGetShaderInfoLog(m_id, infoLog.size(), nullptr, reinterpret_cast<GLchar*>(infoLog.data())));
+		glCheck(glGetShaderInfoLog(m_id, static_cast<GLsizei>(infoLog.size()), nullptr, reinterpret_cast<GLchar*>(infoLog.data())));
 
 		dispose();
 
