@@ -55,61 +55,63 @@ i32 ProgramBase::run()
 
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
 
-	auto settings = getSettings();
-
-#if defined(OGL_MACOS)
-	const std::array<char, 2> versions[] = { { 4, 1 }, { 3, 3 }, { 3, 2 }, { 2, 1 } };
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, true);
-
-	for (auto ver : versions)
 	{
-		if (ver[0] < 3)
+		auto settings = getSettings();
+#if defined(OGL_MACOS)
+		// glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+
+		const std::array<char, 2> versions[] = { { 4, 1 }, { 3, 3 }, { 3, 2 }, { 2, 1 } };
+		for (auto ver : versions)
 		{
-			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, false);
+			if (ver[0] < 3)
+			{
+				glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_FALSE);
+			}
+
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0]);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1]);
+			window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
+
+			if (window)
+				break;
 		}
-
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0]);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1]);
-		window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
-
-		if (window)
-			break;
-	}
 
 #elif defined(OGL_LINUX)
-	glfwWindowHint(GLFW_VISIBLE, false);
-	window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
-	if (window)
-	{
-		glfwMakeContextCurrent(window);
-		std::string versionStr = glGetString(GL_VERSION);
-		if (versionStr[0] < '4' && versionStr.contains("Mesa"))
+		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+		window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
+		if (window)
 		{
-			glfwDestroyWindow(window);
-			window = nullptr;
-
-			// force 3.2 context
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-
-			window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
-			if (window)
+			glfwMakeContextCurrent(window);
+			std::string versionStr = glGetString(GL_VERSION);
+			if (versionStr[0] < '4' && versionStr.contains("Mesa"))
 			{
-				glfwMakeContextCurrent(window);
+				glfwDestroyWindow(window);
+				window = nullptr;
+
+				// force 3.2 context
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+
+				window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
+				if (window)
+				{
+					glfwMakeContextCurrent(window);
+				}
+				else
+				{
+					glfwTerminate();
+					return -1;
+				}
 			}
-			else
-			{
-				glfwTerminate();
-				return -1;
-			}
+			glfwShowWindow(window);
 		}
-		glfwShowWindow(window);
-	}
 
 #else
-	// Create a windowed mode window and its OpenGL context
-	window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
+		// Create a windowed mode window and its OpenGL context
+		window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 #endif
+	}
 
 	if (!window)
 	{

@@ -10,8 +10,8 @@
 			"cwd": "${workspaceFolder}",
 			"console": "integratedTerminal",
 			"preLaunchTask": "Build: Debug",
-			"program": "${workspaceFolder}/build/x64-pc-windows-msvc17_Debug/01_triangles.exe",
-			"envFile": "${workspaceFolder}/build/x64-pc-windows-msvc17_Debug/run.env"
+			"program": "${workspaceFolder}/build/x86_64-pc-windows-msvc_Debug/01_triangles.exe",
+			"envFile": "${workspaceFolder}/build/x86_64-pc-windows-msvc_Debug/run.env"
 		},
 		{
 			"name": "LLDB",
