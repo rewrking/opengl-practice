@@ -1,4 +1,4 @@
-#if defined(OG_WIN32)
+#if defined(OGL_WIN32)
 	#include "Core/Win32/WindowsPlatform.hpp"
 
 	#include <cmath>
