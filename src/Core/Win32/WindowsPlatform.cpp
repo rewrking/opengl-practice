@@ -1,11 +1,9 @@
-#ifdef _WIN32
-	#include "Platform/Win32/WindowsPlatform.hpp"
-
-	#include "Resource.h"
+#if defined(OG_WIN32)
+	#include "Core/Win32/WindowsPlatform.hpp"
 
 	#include <cmath>
 
-	#include "Libraries/OpenGL.hpp"
+	#include "Core/OpenGL.hpp"
 
 	#define GLFW_EXPOSE_NATIVE_WIN32
 	#include <GLFW/glfw3native.h>
@@ -15,6 +13,8 @@
 	#ifndef DWMWA_USE_IMMERSIVE_DARK_MODE
 		#define DWMWA_USE_IMMERSIVE_DARK_MODE 20
 	#endif
+
+	#define WIN32_ICON_MAIN 2
 
 namespace ogl
 {

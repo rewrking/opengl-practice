@@ -1,10 +1,8 @@
-#include "Libraries/OpenGL.hpp"
+#include "Core/OpenGL.hpp"
 
-namespace ogl
-{
 /*****************************************************************************/
 // Note: based on SFML's glCheckError
-void priv::doGLCheck(const char* inFile, u32 inLine, const char* inExpression)
+void ogl::priv::doGLCheck(const char* inFile, u32 inLine, const char* inExpression)
 {
 	GLenum errorCode = glGetError();
 	if (errorCode != GL_NO_ERROR)
@@ -62,5 +60,4 @@ void priv::doGLCheck(const char* inFile, u32 inLine, const char* inExpression)
 				  << "\nExpression:\n   " << inExpression << "\nError description:\n   " << error << "\n   " << description << '\n'
 				  << std::endl;
 	}
-}
 }

@@ -14,12 +14,9 @@
 	#pragma clang diagnostic pop
 #endif
 
-namespace ogl
-{
-namespace priv
+namespace ogl::priv
 {
 void doGLCheck(const char* inFile, u32 inLine, const char* inExpression);
-}
 }
 
 #if defined(OGL_DEBUG)

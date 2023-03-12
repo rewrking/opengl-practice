@@ -35,8 +35,8 @@
 
 #include <functional>
 
-#include "Utility/Defines.hpp"
-#include "Utility/Macros.hpp"
-#include "Utility/Types.hpp"
+#include "Core/Defines.hpp"
+#include "Core/Macros.hpp"
+#include "Core/Types.hpp"
 
 #endif // PRECOMPILED_HEADER_HPP

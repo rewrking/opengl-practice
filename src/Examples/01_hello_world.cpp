@@ -1,8 +1,8 @@
-#include "GLBase.hpp"
+#include "Core/ProgramBase.hpp"
 
 namespace ogl
 {
-struct Program final : GLBase
+struct Program final : ProgramBase
 {
 	virtual void init() final
 	{

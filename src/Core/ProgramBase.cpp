@@ -1,8 +1,8 @@
-#include "GLBase.hpp"
+#include "ProgramBase.hpp"
 
 #include <array>
 
-#include "Platform/Platform.hpp"
+#include "Core/Platform.hpp"
 
 namespace ogl
 {
@@ -10,7 +10,18 @@ namespace ogl
 using ProcAddressFn = void* (*)(const char*);
 
 /*****************************************************************************/
-i32 GLBase::run()
+ProgramSettings ProgramBase::getSettings() const
+{
+	ProgramSettings ret;
+	ret.name = "Untitled";
+	ret.width = 640;
+	ret.height = 480;
+
+	return ret;
+}
+
+/*****************************************************************************/
+i32 ProgramBase::run()
 {
 	GLFWwindow* window = nullptr;
 
@@ -19,6 +30,8 @@ i32 GLBase::run()
 		return -1;
 
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+
+	auto settings = getSettings();
 
 #if defined(OGL_MACOS)
 	const std::array<char, 2> versions[] = { { 4, 1 }, { 3, 3 }, { 3, 2 }, { 2, 1 } };
@@ -33,7 +46,7 @@ i32 GLBase::run()
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0]);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1]);
-		window = glfwCreateWindow(m_data.width, m_data.height, m_data.name.data(), nullptr, nullptr);
+		window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 
 		if (window)
 			break;
@@ -41,7 +54,7 @@ i32 GLBase::run()
 
 #elif defined(OGL_LINUX)
 	glfwWindowHint(GLFW_VISIBLE, false);
-	window = glfwCreateWindow(m_data.width, m_data.height, m_data.name.data(), nullptr, nullptr);
+	window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 	if (window)
 	{
 		glfwMakeContextCurrent(window);
@@ -55,7 +68,7 @@ i32 GLBase::run()
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 
-			window = glfwCreateWindow(m_data.width, m_data.height, m_data.name.data(), nullptr, nullptr);
+			window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 			if (window)
 			{
 				glfwMakeContextCurrent(window);
@@ -71,7 +84,7 @@ i32 GLBase::run()
 
 #else
 	// Create a windowed mode window and its OpenGL context
-	window = glfwCreateWindow(m_data.width, m_data.height, m_data.name.data(), nullptr, nullptr);
+	window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 #endif
 
 	if (!window)
@@ -88,7 +101,7 @@ i32 GLBase::run()
 	int version = gladLoadGLLoader((ProcAddressFn)glfwGetProcAddress);
 	if (version == 0)
 	{
-		printf("Failed to initialize OpenGL context\n");
+		std::cout << "Failed to initialize OpenGL context\n";
 		return -1;
 	}
 

@@ -17,8 +17,9 @@
 		"settings:Cxx": {
 			"buildSuffix": "opengl",
 			"cppStandard": "c++20",
-			"warningsPreset": "pedantic",
+			"warningsPreset": "strictPedantic",
 			"precompiledHeader": "src/PCH.hpp",
+			"treatWarningsAsErrors": true,
 			"runtimeTypeInformation": false,
 			"threads": true,
 			"defines[:debug]": [
@@ -63,9 +64,7 @@
 		},
 		"files": [
 			"src/Examples/${name}.cpp",
-			"src/Platform/**.cpp",
-			"src/Libraries/OpenGL.cpp",
-			"src/*.cpp"
+			"src/Core/**.cpp"
 		]
 	},
 	"targets": {
