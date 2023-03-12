@@ -3,13 +3,12 @@
 namespace ogl
 {
 /*****************************************************************************/
-bool String::endsWith(const std::string& inStr, std::string_view inSuffix)
+bool String::endsWith(const std::string_view inEnd, const std::string& inString)
 {
-	if (inStr.length() < inSuffix.length())
-	{
+	if (inEnd.size() > inString.size())
 		return false;
-	}
-	return std::equal(inSuffix.rbegin(), inSuffix.rend(), inSuffix.rbegin());
+
+	return std::equal(inEnd.rbegin(), inEnd.rend(), inString.rbegin());
 }
 
 }

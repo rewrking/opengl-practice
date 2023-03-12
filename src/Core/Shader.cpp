@@ -16,15 +16,16 @@ u32 Shader::id() const noexcept
 /*****************************************************************************/
 bool Shader::loadFromFile(const std::string& inFilePath)
 {
-	auto shaderSource = readFile(getShaderPath(inFilePath.c_str()));
+	auto resolvedPath = getShaderPath(inFilePath.c_str());
+	auto shaderSource = readFile(resolvedPath);
 	auto shaderSourceData = shaderSource.c_str();
 
-	GLuint type = 0;
-	if (String::endsWith(inFilePath, ".vert"))
+	GLenum type = 0;
+	if (String::endsWith(".vert", inFilePath))
 	{
 		type = GL_VERTEX_SHADER;
 	}
-	else if (String::endsWith(inFilePath, ".frag"))
+	else if (String::endsWith(".frag", inFilePath))
 	{
 		type = GL_FRAGMENT_SHADER;
 	}
@@ -49,6 +50,9 @@ bool Shader::loadFromFile(const std::string& inFilePath)
 
 		throw std::runtime_error(std::string("Shader compilation failed:\n") + infoLog.data());
 	}
+
+	auto typeString = (type == GL_VERTEX_SHADER ? "Vertex" : "Fragment");
+	std::cout << "Loaded " << resolvedPath << " (" << typeString << ")" << std::endl;
 
 	return true;
 }

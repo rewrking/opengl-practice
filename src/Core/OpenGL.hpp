@@ -5,10 +5,9 @@
 	#pragma clang diagnostic ignored "-Wlanguage-extension-token"
 #endif
 
-#include <glad/glad.h>
-
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 #if defined(OGL_MSVC) && defined(OGL_CLANG)
 	#pragma clang diagnostic pop

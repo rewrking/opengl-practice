@@ -1,7 +1,5 @@
 #version 330 core
 
-#extension GL_ARB_shader_subroutine : require
-
 out vec4 FragColor;
 
 void main()

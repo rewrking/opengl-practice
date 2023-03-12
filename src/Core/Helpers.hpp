@@ -4,6 +4,6 @@ namespace ogl
 {
 namespace String
 {
-bool endsWith(const std::string& inStr, std::string_view inSuffix);
+bool endsWith(const std::string_view inEnd, const std::string& inString);
 }
 }
