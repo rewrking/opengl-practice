@@ -28,14 +28,17 @@
 			],
 			"includeDirs": [
 				"src",
+				"vendor/glad/include",
 				"${external:glfw}/include",
 				"${external:glm}"
 			],
 			"libDirs": [
+				"${buildDir}/vendor/glad",
 				"${externalBuild:glfw}/src",
 				"${externalBuild:glm}/glm"
 			],
 			"staticLinks": [
+				"glad-s",
 				"glfw3",
 				"glm_static"
 			],
@@ -60,10 +63,20 @@
 		"files": [
 			"src/Examples/${name}.cpp",
 			"src/Platform/*.cpp",
+			"src/Libraries/OpenGL.cpp",
 			"src/*.cpp"
 		]
 	},
 	"targets": {
+		"glad": {
+			"kind": "cmakeProject",
+			"location": "vendor/glad",
+			"recheck": false,
+			"rebuild": false,
+			"defines[:linux]": [
+				"CMAKE_POSITION_INDEPENDENT_CODE=ON"
+			]
+		},
 		"glm": {
 			"kind": "cmakeProject",
 			"location": "${external:glm}",

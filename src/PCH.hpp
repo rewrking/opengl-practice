@@ -21,8 +21,6 @@
 	#include <windows.h>
 #endif // _WIN32
 
-#include <GLFW/glfw3.h>
-
 #include <algorithm>
 #include <cstdio>
 #include <deque>
@@ -35,6 +33,7 @@
 #include <string>
 #include <vector>
 
+#include "Utility/Defines.hpp"
 #include "Utility/Macros.hpp"
 #include "Utility/Types.hpp"
 

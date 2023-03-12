@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Libraries/OpenGL.hpp"
+
 namespace ogl
 {
 struct GLBase

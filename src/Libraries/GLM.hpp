@@ -1,12 +1,12 @@
 #pragma once
 
-#if defined(PHAROS_MSVC)
+#if defined(OGL_MSVC)
 	#pragma warning(push)
 	#pragma warning(disable : 4201)
 #else
 #endif
 
-#if defined(PHAROS_MSVC) && defined(PHAROS_CLANG)
+#if defined(OGL_MSVC) && defined(OGL_CLANG)
 	#pragma clang diagnostic push
 	#pragma clang diagnostic ignored "-Wgnu-anonymous-struct"
 	#pragma clang diagnostic ignored "-Wnested-anon-types"
@@ -27,11 +27,11 @@
 
 #include <glm/mat4x4.hpp>
 
-#if defined(PHAROS_MSVC)
+#if defined(OGL_MSVC)
 	#pragma warning(pop)
 #else
 #endif
 
-#if defined(PHAROS_MSVC) && defined(__clang__)
+#if defined(OGL_MSVC) && defined(OGL_CLANG)
 	#pragma clang diagnostic pop
 #endif

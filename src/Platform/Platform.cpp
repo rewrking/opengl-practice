@@ -1,11 +1,13 @@
 #include "Platform/Platform.hpp"
 
+#include "Libraries/OpenGL.hpp"
+
 #if defined(_WIN32)
 	#include "Platform/Win32/WindowsPlatform.hpp"
 #endif
 
 /*****************************************************************************/
-void Platform::initialize(GLFWwindow* inWindow)
+void ogl::Platform::initialize(GLFWwindow* inWindow)
 {
 #if defined(_WIN32)
 	util::WindowsPlatform platform;
