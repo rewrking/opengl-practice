@@ -12,8 +12,8 @@ struct ProgramBase
 	struct Settings
 	{
 		std::string name = "Untitled";
-		u32 width = 640;
-		u32 height = 480;
+		u32 width = 800;
+		u32 height = 600;
 
 		Settings() = default;
 		Settings(const std::string& inName, u32 inWidth, u32 inHeight);
@@ -33,6 +33,8 @@ struct ProgramBase
 
 	virtual std::string getShader(const char* inPath) const final;
 	virtual GLuint loadShaders(const std::vector<ShaderInfo>& inShaders) const final;
+
+	virtual void processInput(GLFWwindow* window);
 
 	virtual i32 run() final;
 };

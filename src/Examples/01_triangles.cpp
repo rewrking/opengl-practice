@@ -37,7 +37,7 @@ struct Program final : ProgramBase
 
 	virtual Settings getSettings() const final
 	{
-		return Settings("01: Triangles", 640, 480);
+		return Settings("01: Triangles", 800, 600);
 	}
 
 	virtual void init() final
@@ -62,8 +62,7 @@ struct Program final : ProgramBase
 		glCheck(glEnableVertexAttribArray(vPosition));
 	}
 
-	virtual void
-	update() final
+	virtual void update() final
 	{
 		glCheck(glClear(GL_COLOR_BUFFER_BIT));
 	}

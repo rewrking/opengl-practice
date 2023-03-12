@@ -45,6 +45,13 @@ GLuint ProgramBase::loadShaders(const std::vector<ShaderInfo>& inShaders) const
 }
 
 /*****************************************************************************/
+void ProgramBase::processInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+}
+
+/*****************************************************************************/
 i32 ProgramBase::run()
 {
 	GLFWwindow* window = nullptr;
@@ -55,28 +62,15 @@ i32 ProgramBase::run()
 
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
 
+	Settings settings = getSettings();
+
 	{
-		auto settings = getSettings();
 #if defined(OGL_MACOS)
-		// glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-
-		const std::array<char, 2> versions[] = { { 4, 1 }, { 3, 3 }, { 3, 2 }, { 2, 1 } };
-		for (auto ver : versions)
-		{
-			if (ver[0] < 3)
-			{
-				glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_FALSE);
-			}
-
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, ver[0]);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, ver[1]);
-			window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
-
-			if (window)
-				break;
-		}
-
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+		window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 #elif defined(OGL_LINUX)
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 		window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
@@ -135,6 +129,8 @@ i32 ProgramBase::run()
 	std::cout << glGetString(GL_VENDOR) << "\n";
 	std::cout << glGetString(GL_VERSION) << std::endl;
 
+	glCheck(glViewport(0, 0, settings.width, settings.height));
+
 	try
 	{
 		this->init();
@@ -142,6 +138,8 @@ i32 ProgramBase::run()
 		// Loop until the user closes the window
 		while (!glfwWindowShouldClose(window))
 		{
+			processInput(window);
+
 			// Render here
 			this->update();
 
