@@ -1,13 +1,20 @@
 #include "OpenGL/ShaderProgram.hpp"
 
-#define CHECK_LOCATION()                                                                         \
-	if (location < 0)                                                                            \
-	{                                                                                            \
-		throw std::runtime_error(fmt::format("Error finding location of uniform '{}'", inName)); \
-	}
-
 namespace ogl
 {
+namespace
+{
+inline i32 getUniformLocation(u32 id, const char* inName)
+{
+	i32 location = glGetUniformLocation(id, inName);
+	if (location < 0)
+	{
+		throw std::runtime_error(fmt::format("Error finding location of uniform '{}'", inName));
+	}
+
+	return location;
+}
+}
 /*****************************************************************************/
 u32 ShaderProgram::id() const noexcept
 {
@@ -102,32 +109,28 @@ void ShaderProgram::dispose()
 /*****************************************************************************/
 void ShaderProgram::setUniform1f(const char* inName, f32 inValue)
 {
-	i32 location = glGetUniformLocation(m_id, inName);
-	CHECK_LOCATION();
+	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform1f(location, inValue));
 }
 
 /*****************************************************************************/
 void ShaderProgram::setUniform2f(const char* inName, f32 inX, f32 inY)
 {
-	i32 location = glGetUniformLocation(m_id, inName);
-	CHECK_LOCATION();
+	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform2f(location, inX, inY));
 }
 
 /*****************************************************************************/
 void ShaderProgram::setUniform3f(const char* inName, f32 inX, f32 inY, f32 inZ)
 {
-	i32 location = glGetUniformLocation(m_id, inName);
-	CHECK_LOCATION();
+	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform3f(location, inX, inY, inZ));
 }
 
 /*****************************************************************************/
 void ShaderProgram::setUniform4f(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW)
 {
-	i32 location = glGetUniformLocation(m_id, inName);
-	CHECK_LOCATION();
+	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform4f(location, inX, inY, inZ, inW));
 }
 }
