@@ -81,7 +81,7 @@ struct Program final : ProgramBase
 		glCheck(glBindVertexArray(m_vao));
 		// glCheck(glDrawArrays(GL_TRIANGLES, 0, 6));
 		glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));
-		glCheck(glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0));
+		glCheck(glDrawElements(GL_TRIANGLES, static_cast<i32>(m_indices.size()), GL_UNSIGNED_INT, 0));
 		glCheck(glBindVertexArray(0));
 	}
 
