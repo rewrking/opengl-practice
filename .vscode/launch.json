@@ -43,7 +43,7 @@
 			"name": "GDB",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/build/Debug/01_triangles",
+			"program": "${workspaceFolder}/build/Debug/02_shaders",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
@@ -59,8 +59,8 @@
 			"linux": {
 				"MIMode": "gdb",
 				"miDebuggerPath": "/usr/bin/gdb",
-				"program": "${workspaceRoot}/build/x86_64-pc-linux-gnu_Debug/01_triangles",
-				"envFile": "${workspaceFolder}/build/x86_64-pc-linux-gnu_Debug/run.env"
+				"program": "${workspaceRoot}/build/x86_64-linux-gnu_Debug/02_shaders",
+				"envFile": "${workspaceFolder}/build/x86_64-linux-gnu_Debug/run.env"
 			}
 		}
 	]
