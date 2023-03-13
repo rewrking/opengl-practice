@@ -7,6 +7,15 @@
 
 namespace ogl
 {
+namespace
+{
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	UNUSED(window);
+	glCheck(glViewport(0, 0, width, height));
+}
+}
+
 /*****************************************************************************/
 ProgramBase::Settings::Settings(const std::string& inName, u32 inWidth, u32 inHeight) :
 	name(inName),
@@ -121,6 +130,7 @@ i32 ProgramBase::run()
 
 	// Make the window's context current
 	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	int version = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	if (version == 0)
