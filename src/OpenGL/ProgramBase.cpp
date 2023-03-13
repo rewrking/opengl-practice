@@ -94,8 +94,9 @@ i32 ProgramBase::run()
 		if (window)
 		{
 			glfwMakeContextCurrent(window);
-			std::string versionStr = glGetString(GL_VERSION);
-			if (versionStr[0] < '4' && versionStr.contains("Mesa"))
+
+			std::string versionStr = (const char*)glGetString(GL_VERSION);
+			if (versionStr[0] < '4' && versionStr.find("Mesa") != std::string::npos)
 			{
 				glfwDestroyWindow(window);
 				window = nullptr;
@@ -111,6 +112,7 @@ i32 ProgramBase::run()
 				}
 				else
 				{
+					log_fatal("Failed to create window");
 					glfwTerminate();
 					return -1;
 				}
