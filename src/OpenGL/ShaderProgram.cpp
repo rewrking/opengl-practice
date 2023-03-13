@@ -1,7 +1,19 @@
 #include "OpenGL/ShaderProgram.hpp"
 
+#define CHECK_LOCATION()                                                                         \
+	if (location < 0)                                                                            \
+	{                                                                                            \
+		throw std::runtime_error(fmt::format("Error finding location of uniform '{}'", inName)); \
+	}
+
 namespace ogl
 {
+/*****************************************************************************/
+u32 ShaderProgram::id() const noexcept
+{
+	return m_id;
+}
+
 /*****************************************************************************/
 bool ShaderProgram::valid() const noexcept
 {
@@ -86,4 +98,38 @@ void ShaderProgram::dispose()
 		m_id = 0;
 	}
 }
+
+/*****************************************************************************/
+void ShaderProgram::setUniform1f(const char* inName, f32 inValue)
+{
+	i32 location = glGetUniformLocation(m_id, inName);
+	CHECK_LOCATION();
+	glCheck(glUniform1f(location, inValue));
 }
+
+/*****************************************************************************/
+void ShaderProgram::setUniform2f(const char* inName, f32 inX, f32 inY)
+{
+	i32 location = glGetUniformLocation(m_id, inName);
+	CHECK_LOCATION();
+	glCheck(glUniform2f(location, inX, inY));
+}
+
+/*****************************************************************************/
+void ShaderProgram::setUniform3f(const char* inName, f32 inX, f32 inY, f32 inZ)
+{
+	i32 location = glGetUniformLocation(m_id, inName);
+	CHECK_LOCATION();
+	glCheck(glUniform3f(location, inX, inY, inZ));
+}
+
+/*****************************************************************************/
+void ShaderProgram::setUniform4f(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW)
+{
+	i32 location = glGetUniformLocation(m_id, inName);
+	CHECK_LOCATION();
+	glCheck(glUniform4f(location, inX, inY, inZ, inW));
+}
+}
+
+#undef CHECK_LOCATION

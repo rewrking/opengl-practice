@@ -56,9 +56,9 @@ void ogl::priv::doGLCheck(const char* inFile, u32 inLine, const char* inExpressi
 			}*/
 		}
 
-		log_error("An internal OpenGL call failed in: {}:{}", fileString.substr(fileString.find_last_of("\\/") + 1), inLine);
+		log_error(fmt::format("An internal OpenGL call failed in: {}:{}", fileString.substr(fileString.find_last_of("\\/") + 1), inLine));
 		log_error(outputBullet(inExpression));
-		log_error(outputBullet(fmt::format("{} (code:{})", error, errorCode)));
+		log_error(outputBullet(fmt::format("{} (code: {})", error, errorCode)));
 		log_error(outputBullet(description));
 	}
 }

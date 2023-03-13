@@ -33,7 +33,7 @@ struct ProgramBase
 
 	virtual ShaderProgram loadShaderProgram(const StringList& inShaderFiles) const final;
 
-	virtual void processInput(GLFWwindow* window);
+	virtual bool processInput(GLFWwindow* window);
 
 	virtual i32 run() final;
 

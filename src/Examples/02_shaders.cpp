@@ -2,6 +2,30 @@
 
 namespace ogl
 {
+struct BufferAttrib
+{
+	i32 position;
+	i32 offset;
+	i32 size;
+};
+struct BufferAttribList
+{
+	std::vector<BufferAttrib> attribs;
+	i32 size = 0;
+
+	BufferAttribList(const std::vector<i32>& inAttribSizes)
+	{
+		i32 position = 0;
+		size = 0;
+		for (auto attribSize : inAttribSizes)
+		{
+			attribs.emplace_back(BufferAttrib{ position, size, attribSize });
+			size += attribSize;
+			position++;
+		}
+	}
+};
+
 struct Program final : ProgramBase
 {
 	const std::vector<f32> m_vertices = {
@@ -9,10 +33,10 @@ struct Program final : ProgramBase
 		// -0.5f, -0.5f, 0.0f,
 		// 0.5f, -0.5f, 0.0f,
 		// 0.0f,  0.5f, 0.0f
-		 0.5f,  0.5f, 0.0f,  // top right
-		 0.5f, -0.5f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f   // top left
+		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f,  // top right
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f, 1.0f,  // bottom right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f,  // bottom left
+		-0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 0.0f, 1.0f,  // top left
 		// clang-format on
 	};
 	const std::vector<u32> m_indices = {
@@ -31,7 +55,7 @@ struct Program final : ProgramBase
 
 	virtual Settings getSettings() const final
 	{
-		return Settings("01: Hello Triangles", 800, 600);
+		return Settings("02: Shaders", 800, 600);
 	}
 
 	virtual void init() final
@@ -39,8 +63,8 @@ struct Program final : ProgramBase
 		glCheck(glClearColor(100.0f / 255.0f, 149.0f / 255.0f, 237.0f / 255.0f, 1.0f));
 
 		shaderProgram = loadShaderProgram({
-			"01_basic.vert",
-			"01_basic.frag",
+			"02_inout.vert",
+			"02_inout.frag",
 		});
 
 		{
@@ -56,10 +80,14 @@ struct Program final : ProgramBase
 			glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));
 			glCheck(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW));
 
-			GLuint attribLocation = 0;
-			GLint attribSize = 3;
-			glCheck(glVertexAttribPointer(attribLocation, attribSize, GL_FLOAT, GL_FALSE, attribSize * sizeof(f32), (void*)0));
-			glCheck(glEnableVertexAttribArray(attribLocation));
+			{
+				BufferAttribList attribList({ 3, 4 });
+				for (auto& attrib : attribList.attribs)
+				{
+					glCheck(glVertexAttribPointer(attrib.position, attrib.size, GL_FLOAT, GL_FALSE, sizeof(f32) * attribList.size, (void*)(attrib.offset * sizeof(f32))));
+					glCheck(glEnableVertexAttribArray(attrib.position));
+				}
+			}
 
 			glCheck(glBindBuffer(GL_ARRAY_BUFFER, 0));
 
@@ -67,6 +95,9 @@ struct Program final : ProgramBase
 			// glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 
 			glCheck(glBindVertexArray(0));
+
+			shaderProgram.use();
+			shaderProgram.setUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
 		}
 
 		// wireframe!
@@ -78,6 +109,11 @@ struct Program final : ProgramBase
 		glCheck(glClear(GL_COLOR_BUFFER_BIT));
 
 		shaderProgram.use();
+
+		// f32 timeValue = glfwGetTime();
+		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
+		// shaderProgram.setUniform4f("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
+
 		glCheck(glBindVertexArray(m_vao));
 		// glCheck(glDrawArrays(GL_TRIANGLES, 0, 6));
 		glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));

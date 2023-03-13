@@ -52,10 +52,15 @@ ShaderProgram ProgramBase::loadShaderProgram(const StringList& inShaderFiles) co
 }
 
 /*****************************************************************************/
-void ProgramBase::processInput(GLFWwindow* window)
+bool ProgramBase::processInput(GLFWwindow* window)
 {
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	bool shouldClose = glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS;
+	if (shouldClose)
+	{
 		glfwSetWindowShouldClose(window, true);
+	}
+
+	return !shouldClose;
 }
 
 /*****************************************************************************/
@@ -144,6 +149,12 @@ i32 ProgramBase::run()
 	log_info("-", glGetString(GL_VENDOR));
 	log_info("-", glGetString(GL_VERSION));
 
+	{
+		i32 nrAttributes;
+		glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
+		log_info("- Max vertex attributes:", nrAttributes);
+	}
+
 	// glCheck(glViewport(0, 0, settings.width, settings.height));
 
 	try
@@ -153,7 +164,8 @@ i32 ProgramBase::run()
 		// Loop until the user closes the window
 		while (!glfwWindowShouldClose(window))
 		{
-			processInput(window);
+			if (!processInput(window))
+				break;
 
 			// Render here
 			this->update();
