@@ -3,7 +3,7 @@
 
 	#include <cmath>
 
-	#include "Core/OpenGL.hpp"
+	#include "OpenGL/OpenGL.hpp"
 
 	#define GLFW_EXPOSE_NATIVE_WIN32
 	#include <GLFW/glfw3native.h>
