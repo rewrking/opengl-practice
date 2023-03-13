@@ -44,5 +44,6 @@
 #include "Core/Format.hpp"
 #include "Core/Log/Logger.hpp"
 #include "Core/Types.hpp"
+#include "Core/UnusedMacro.hpp"
 
 #endif // PRECOMPILED_HEADER_HPP
