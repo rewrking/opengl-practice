@@ -134,7 +134,7 @@ i32 ProgramBase::run()
 	log_info("-", glGetString(GL_VENDOR));
 	log_info("-", glGetString(GL_VERSION));
 
-	glCheck(glViewport(0, 0, settings.width, settings.height));
+	// glCheck(glViewport(0, 0, settings.width, settings.height));
 
 	try
 	{

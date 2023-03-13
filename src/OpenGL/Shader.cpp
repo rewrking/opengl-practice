@@ -6,11 +6,16 @@
 
 namespace ogl
 {
-
 /*****************************************************************************/
 u32 Shader::id() const noexcept
 {
 	return m_id;
+}
+
+/*****************************************************************************/
+Shader::Type Shader::type() const noexcept
+{
+	return m_type;
 }
 
 /*****************************************************************************/
@@ -27,10 +32,12 @@ bool Shader::loadFromFile(const std::string& inFilePath)
 	if (String::endsWith(".vert", inFilePath))
 	{
 		type = GL_VERTEX_SHADER;
+		m_type = Type::Vertex;
 	}
 	else if (String::endsWith(".frag", inFilePath))
 	{
 		type = GL_FRAGMENT_SHADER;
+		m_type = Type::Fragment;
 	}
 	else
 	{

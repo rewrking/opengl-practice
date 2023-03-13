@@ -32,9 +32,22 @@ bool ShaderProgram::load(const StringList& inShaderFiles)
 		shaders.emplace_back(std::move(shader));
 	}
 
+	std::vector<Shader::Type> shaderTypes;
+
 	m_id = glCreateProgram();
 	for (auto& shader : shaders)
 	{
+		auto type = shader.type();
+		for (auto shaderType : shaderTypes)
+		{
+			if (type == shaderType)
+			{
+				log_error("Shader program cannot contain duplicate shader types");
+				return disposeShaders();
+			}
+		}
+		shaderTypes.emplace_back(shader.type());
+
 		glCheck(glAttachShader(m_id, shader.id()));
 	}
 
@@ -53,11 +66,15 @@ bool ShaderProgram::load(const StringList& inShaderFiles)
 		return disposeShaders();
 	}
 
-	glCheck(glUseProgram(m_id));
-
 	disposeShaders();
 
 	return true;
+}
+
+/*****************************************************************************/
+void ShaderProgram::use() const
+{
+	glCheck(glUseProgram(m_id));
 }
 
 /*****************************************************************************/

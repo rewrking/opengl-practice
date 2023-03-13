@@ -12,6 +12,7 @@ struct ShaderProgram
 	bool valid() const noexcept;
 
 	bool load(const StringList& inShaderFiles);
+	void use() const;
 
 	void dispose();
 
