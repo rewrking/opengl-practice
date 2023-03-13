@@ -1,4 +1,4 @@
-#include "Core/Shader.hpp"
+#include "OpenGL/Shader.hpp"
 
 #include "Core/Helpers.hpp"
 
@@ -18,6 +18,9 @@ bool Shader::loadFromFile(const std::string& inFilePath)
 {
 	auto resolvedPath = getShaderPath(inFilePath.c_str());
 	auto shaderSource = readFile(resolvedPath);
+	if (shaderSource.empty())
+		return false;
+
 	auto shaderSourceData = shaderSource.c_str();
 
 	GLenum type = 0;
@@ -31,6 +34,7 @@ bool Shader::loadFromFile(const std::string& inFilePath)
 	}
 	else
 	{
+		log_error("Unknown type:", inFilePath);
 		return false;
 	}
 
@@ -48,11 +52,12 @@ bool Shader::loadFromFile(const std::string& inFilePath)
 
 		dispose();
 
-		throw std::runtime_error(std::string("Shader compilation failed:\n") + infoLog.data());
+		log_error("Shader compilation failed:", infoLog.data());
+		return false;
 	}
 
 	auto typeString = (type == GL_VERTEX_SHADER ? "Vertex" : "Fragment");
-	std::cout << "Loaded " << resolvedPath << " (" << typeString << ")" << std::endl;
+	log_info(fmt::format("Loaded {} ({})", resolvedPath, typeString));
 
 	return true;
 }
@@ -75,7 +80,8 @@ std::string Shader::readFile(const std::string& inFilePath) const
 		std::error_code ec;
 		if (!fs::exists(inFilePath, ec))
 		{
-			throw std::runtime_error("File doesn't exist!");
+			log_error("File doesn't exist:", inFilePath);
+			return std::string();
 		}
 
 		std::ifstream t(inFilePath);

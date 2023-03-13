@@ -1,10 +1,11 @@
-#include "Core/ShaderProgram.hpp"
+#include "OpenGL/ShaderProgram.hpp"
 
 namespace ogl
 {
 /*****************************************************************************/
-ShaderProgram::ShaderProgram()
+bool ShaderProgram::valid() const noexcept
 {
+	return m_id > 0;
 }
 
 /*****************************************************************************/
@@ -12,20 +13,27 @@ bool ShaderProgram::load(const StringList& inShaderFiles)
 {
 	dispose();
 
+	std::vector<Shader> shaders;
+	auto disposeShaders = [&shaders]() -> bool {
+		for (auto& shader : shaders)
+			shader.dispose();
+
+		shaders.clear();
+		return false;
+	};
+
 	for (auto& file : inShaderFiles)
 	{
 		Shader shader;
 		bool result = shader.loadFromFile(file);
 		if (!result)
-		{
-			throw std::runtime_error(std::string("Failed to load shader: ") + file);
-		}
+			return disposeShaders();
 
-		m_shaders.emplace_back(std::move(shader));
+		shaders.emplace_back(std::move(shader));
 	}
 
 	m_id = glCreateProgram();
-	for (auto& shader : m_shaders)
+	for (auto& shader : shaders)
 	{
 		glCheck(glAttachShader(m_id, shader.id()));
 	}
@@ -41,10 +49,13 @@ bool ShaderProgram::load(const StringList& inShaderFiles)
 
 		dispose();
 
-		throw std::runtime_error(std::string("Shader program linking failed:\n") + infoLog.data());
+		log_error("Shader program linking failed:", infoLog.data());
+		return disposeShaders();
 	}
 
 	glCheck(glUseProgram(m_id));
+
+	disposeShaders();
 
 	return true;
 }
@@ -56,11 +67,6 @@ void ShaderProgram::dispose()
 	{
 		glCheck(glDeleteProgram(m_id));
 		m_id = 0;
-	}
-
-	for (auto& shader : m_shaders)
-	{
-		shader.dispose();
 	}
 }
 }

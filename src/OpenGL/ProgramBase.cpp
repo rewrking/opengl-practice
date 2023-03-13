@@ -1,7 +1,8 @@
-#include "ProgramBase.hpp"
+#include "OpenGL/ProgramBase.hpp"
 
 #include <array>
 
+#include "Core/Log/LogManager.hpp"
 #include "Core/Platform.hpp"
 
 namespace ogl
@@ -51,6 +52,8 @@ void ProgramBase::processInput(GLFWwindow* window)
 /*****************************************************************************/
 i32 ProgramBase::run()
 {
+	initializeLogger();
+
 	GLFWwindow* window = nullptr;
 
 	// Initialize the library
@@ -60,6 +63,9 @@ i32 ProgramBase::run()
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
 
 	Settings settings = getSettings();
+
+	auto glfwVersion = glfwGetVersionString();
+	log_info("GLFW", glfwVersion);
 
 	{
 #if defined(OGL_MACOS)
@@ -107,6 +113,7 @@ i32 ProgramBase::run()
 
 	if (!window)
 	{
+		log_fatal("Failed to create window");
 		glfwTerminate();
 		return -1;
 	}
@@ -119,13 +126,14 @@ i32 ProgramBase::run()
 	int version = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	if (version == 0)
 	{
-		std::cout << "Failed to initialize GLAD\n";
+		log_fatal("Failed to initialize GLAD");
+		glfwTerminate();
 		return -1;
 	}
 
-	std::cout << glGetString(GL_RENDERER) << "\n";
-	std::cout << glGetString(GL_VENDOR) << "\n";
-	std::cout << glGetString(GL_VERSION) << std::endl;
+	log_info("-", glGetString(GL_RENDERER));
+	log_info("-", glGetString(GL_VENDOR));
+	log_info("-", glGetString(GL_VERSION));
 
 	glCheck(glViewport(0, 0, settings.width, settings.height));
 
@@ -150,7 +158,7 @@ i32 ProgramBase::run()
 	}
 	catch (const std::exception& err)
 	{
-		std::cerr << err.what() << '\n';
+		log_fatal("Exception thrown:", err.what());
 	}
 
 	try
@@ -159,13 +167,36 @@ i32 ProgramBase::run()
 	}
 	catch (const std::exception& err)
 	{
-		std::cerr << err.what() << '\n';
+		log_fatal("Exception thrown:", err.what());
 	}
 
 	glfwTerminate();
 	glfwDestroyWindow(window);
 	window = nullptr;
 
+	LogManager::dispose();
+
 	return 0;
 };
+
+/*****************************************************************************/
+void ProgramBase::initializeLogger()
+{
+	LoggerSettings logSettings;
+	logSettings.printKey = false;
+	logSettings.outputFile = false;
+
+#if defined(OGL_DEBUG)
+	logSettings.outputStdout = true;
+	logSettings.logLevel = LogLevel::Trace;
+	logSettings.filename = "ogl-debug.log";
+#else
+	logSettings.outputStdout = false;
+	logSettings.logLevel = LogLevel::Fatal;
+#endif
+
+	LogManager::initialize(logSettings);
+
+	log_decor(std::string(80, '='));
+}
 }

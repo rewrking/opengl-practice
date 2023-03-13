@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Core/GLM.hpp"
-#include "Core/OpenGL.hpp"
-#include "Core/ShaderProgram.hpp"
+#include "Core/Format.hpp"
+#include "OpenGL/GLM.hpp"
+#include "OpenGL/OpenGL.hpp"
+#include "OpenGL/ShaderProgram.hpp"
 
 namespace ogl
 {
@@ -21,7 +22,7 @@ struct ProgramBase
 	};
 
 	ProgramBase() = default;
-	GL_DEFAULT_COPY_MOVE(ProgramBase);
+	OGL_DEFAULT_COPY_MOVE(ProgramBase);
 	virtual ~ProgramBase() = default;
 
 	virtual void init() = 0;
@@ -35,6 +36,9 @@ struct ProgramBase
 	virtual void processInput(GLFWwindow* window);
 
 	virtual i32 run() final;
+
+private:
+	void initializeLogger();
 };
 }
 

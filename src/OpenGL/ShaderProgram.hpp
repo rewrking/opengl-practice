@@ -1,21 +1,21 @@
 #pragma once
 
-#include "Core/OpenGL.hpp"
-#include "Core/Shader.hpp"
+#include "OpenGL/OpenGL.hpp"
+#include "OpenGL/Shader.hpp"
 
 namespace ogl
 {
 struct ShaderProgram
 {
-	ShaderProgram();
+	ShaderProgram() = default;
+
+	bool valid() const noexcept;
 
 	bool load(const StringList& inShaderFiles);
 
 	void dispose();
 
 private:
-	std::vector<Shader> m_shaders;
-
 	u32 m_id = 0;
 };
 }

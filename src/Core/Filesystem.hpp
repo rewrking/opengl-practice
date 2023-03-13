@@ -16,7 +16,7 @@
 #endif
 
 #if defined(OGL_NO_FILE_SYSTEM)
-	#error "Pharos requires a compiler with C++17 and std::filesystem"
+	#error "OGL requires a compiler with C++17 and std::filesystem"
 #else
 	#include <filesystem>
 namespace ogl

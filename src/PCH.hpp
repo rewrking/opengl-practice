@@ -21,6 +21,9 @@
 	#include <windows.h>
 #endif // _WIN32
 
+#include "Core/Defines.hpp"
+#include "Core/Macros.hpp"
+
 #include <algorithm>
 #include <array>
 #include <cstdio>
@@ -31,14 +34,15 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <sstream>
 #include <string>
 #include <vector>
 
 #include <functional>
 
-#include "Core/Defines.hpp"
 #include "Core/Filesystem.hpp"
-#include "Core/Macros.hpp"
+#include "Core/Format.hpp"
+#include "Core/Log/Logger.hpp"
 #include "Core/Types.hpp"
 
 #endif // PRECOMPILED_HEADER_HPP

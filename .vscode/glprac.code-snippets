@@ -1,5 +1,5 @@
 {
-	"Pharos Header File": {
+	"OGL Header File": {
 		"prefix": "oglh",
 		"description": "Class hpp file",
 		"scope": "cpp",
@@ -17,7 +17,7 @@
 			""
 		],
 	},
-	"Pharos Implementation File": {
+	"OGL Implementation File": {
 		"prefix": "oglc",
 		"description": "Class cpp file",
 		"scope": "cpp",
@@ -34,7 +34,7 @@
 			""
 		],
 	},
-	"Pharos Enum": {
+	"OGL Enum": {
 		"prefix": "oglenum",
 		"description": "Enum Class hpp file",
 		"scope": "cpp",
@@ -53,12 +53,12 @@
 			""
 		],
 	},
-	"Scene Header File": {
+	"Program Header File": {
 		"prefix": "oglprog",
-		"description": "Scene hpp file",
+		"description": "Program hpp file",
 		"scope": "cpp",
 		"body": [
-			"#include \"Core/ProgramBase.hpp\"",
+			"#include \"OpenGL/ProgramBase.hpp\"",
 			"",
 			"namespace ogl",
 			"{",

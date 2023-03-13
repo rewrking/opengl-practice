@@ -1,4 +1,4 @@
-#include "Core/ProgramBase.hpp"
+#include "OpenGL/ProgramBase.hpp"
 
 namespace ogl
 {

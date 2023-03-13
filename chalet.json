@@ -2,6 +2,11 @@
 	"name": "chalet-example-glfw",
 	"version": "1.0.0",
 	"externalDependencies": {
+		"fmt": {
+			"kind": "git",
+			"repository": "git@github.com:fmtlib/fmt.git",
+			"tag": "9.0.0"
+		},
 		"glfw": {
 			"kind": "git",
 			"repository": "git@github.com:glfw/glfw.git",
@@ -10,6 +15,11 @@
 		"glm": {
 			"kind": "git",
 			"repository": "git@github.com:g-truc/glm.git"
+		},
+		"spdlog": {
+			"kind": "git",
+			"repository": "git@github.com:gabime/spdlog.git",
+			"tag": "v1.11.0"
 		}
 	},
 	"abstracts:*": {
@@ -29,20 +39,29 @@
 				"GL_SILENCE_DEPRECATION"
 			],
 			"includeDirs": [
-				"src",
-				"vendor/glad/include",
+				"${external:fmt}/include",
 				"${external:glfw}/include",
-				"${external:glm}"
+				"${external:spdlog}/include",
+				"${external:glm}",
+				"vendor/glad/include",
+				"src"
 			],
 			"libDirs": [
-				"${buildDir}/vendor/glad",
+				"${externalBuild:spdlog}",
 				"${externalBuild:glfw}/src",
-				"${externalBuild:glm}/glm"
+				"${externalBuild:glm}/glm",
+				"${buildDir}/vendor/glad"
 			],
 			"staticLinks": [
 				"glad-s",
 				"glfw3",
 				"glm_static"
+			],
+			"staticLinks[:!debug]": [
+				"spdlog"
+			],
+			"staticLinks[:debug]": [
+				"spdlogd"
 			],
 			"links[:windows]": [
 				"opengl32",
@@ -64,6 +83,7 @@
 		},
 		"files": [
 			"src/Examples/${name}.cpp",
+			"src/OpenGL/**.cpp",
 			"src/Core/**.cpp"
 		]
 	},
@@ -76,6 +96,13 @@
 			"defines[:linux]": [
 				"CMAKE_POSITION_INDEPENDENT_CODE=ON"
 			]
+		},
+		"spdlog": {
+			"kind": "cmakeProject",
+			"location": "${external:spdlog}",
+			"recheck": false,
+			"rebuild": false,
+			"targets": "spdlog"
 		},
 		"glm": {
 			"kind": "cmakeProject",

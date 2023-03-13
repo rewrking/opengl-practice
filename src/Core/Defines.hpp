@@ -45,3 +45,7 @@
 	#define OGL_EXIT_SUCCESS EXIT_SUCCESS
 	#define OGL_EXIT_FAILURE EXIT_FAILURE
 #endif
+
+#if defined(OGL_DEBUG)
+	#define OGL_ENABLE_LOGGING
+#endif

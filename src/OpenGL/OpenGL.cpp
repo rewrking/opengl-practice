@@ -1,4 +1,4 @@
-#include "Core/OpenGL.hpp"
+#include "OpenGL/OpenGL.hpp"
 
 /*****************************************************************************/
 // Note: based on SFML's glCheckError
@@ -56,8 +56,9 @@ void ogl::priv::doGLCheck(const char* inFile, u32 inLine, const char* inExpressi
 			}*/
 		}
 
-		std::cerr << "An internal OpenGL call failed in " << inFile << "(" << inLine << ")."
-				  << "\nExpression:\n   " << inExpression << "\nError description:\n   " << error << "\n   " << description << '\n'
-				  << std::endl;
+		log_error("An internal OpenGL call failed in: {}:{}", fileString.substr(fileString.find_last_of("\\/") + 1), inLine);
+		log_error(outputBullet(inExpression));
+		log_error(outputBullet(fmt::format("{} (code:{})", error, errorCode)));
+		log_error(outputBullet(description));
 	}
 }

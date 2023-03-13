@@ -7,10 +7,12 @@
 			"cStandard": "c11",
 			"cppStandard": "c++17",
 			"includePath": [
-				"${workspaceFolder}/src",
 				"${workspaceFolder}/vendor/glad/include",
+				"${workspaceFolder}/chalet_external/fmt/include",
+				"${workspaceFolder}/chalet_external/spdlog/include",
 				"${workspaceFolder}/chalet_external/glfw/include",
 				"${workspaceFolder}/chalet_external/glm",
+				"${workspaceFolder}/src",
 				"/usr/local/include/",
 				"/usr/include/**"
 			],
@@ -33,10 +35,12 @@
 				"/Library/Frameworks"
 			],
 			"includePath": [
-				"${workspaceFolder}/src",
 				"${workspaceFolder}/vendor/glad/include",
+				"${workspaceFolder}/chalet_external/fmt/include",
+				"${workspaceFolder}/chalet_external/spdlog/include",
 				"${workspaceFolder}/chalet_external/glfw/include",
 				"${workspaceFolder}/chalet_external/glm",
+				"${workspaceFolder}/src",
 				"/usr/local/include/"
 			],
 			"defines": [
@@ -53,10 +57,12 @@
 			"cStandard": "c11",
 			"cppStandard": "c++17",
 			"includePath": [
-				"${workspaceFolder}/src",
 				"${workspaceFolder}/vendor/glad/include",
+				"${workspaceFolder}/chalet_external/fmt/include",
+				"${workspaceFolder}/chalet_external/spdlog/include",
 				"${workspaceFolder}/chalet_external/glfw/include",
-				"${workspaceFolder}/chalet_external/glm"
+				"${workspaceFolder}/chalet_external/glm",
+				"${workspaceFolder}/src"
 			],
 			"defines": [
 				"_WIN32",
@@ -75,9 +81,12 @@
 			"cStandard": "c11",
 			"cppStandard": "c++17",
 			"includePath": [
-				"${workspaceFolder}/src",
+				"${workspaceFolder}/vendor/glad/include",
+				"${workspaceFolder}/chalet_external/fmt/include",
+				"${workspaceFolder}/chalet_external/spdlog/include",
 				"${workspaceFolder}/chalet_external/glfw/include",
-				"${workspaceFolder}/chalet_external/glm"
+				"${workspaceFolder}/chalet_external/glm",
+				"${workspaceFolder}/src"
 			],
 			"defines": [
 				"_WIN32",

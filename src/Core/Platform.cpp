@@ -1,6 +1,6 @@
 #include "Core/Platform.hpp"
 
-#include "Core/OpenGL.hpp"
+#include "OpenGL/OpenGL.hpp"
 
 #if defined(OGL_WIN32)
 	#include "Core/Win32/WindowsPlatform.hpp"
