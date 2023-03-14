@@ -9,10 +9,11 @@ struct ShaderProgram
 {
 	ShaderProgram() = default;
 
+	[[nodiscard]] static ShaderProgram make(const StringList& inShaderFiles);
+
 	u32 id() const noexcept;
 	bool valid() const noexcept;
 
-	bool load(const StringList& inShaderFiles);
 	void use() const;
 
 	void dispose();
@@ -22,7 +23,11 @@ struct ShaderProgram
 	void setUniform3f(const char* inName, f32 inX, f32 inY, f32 inZ);
 	void setUniform4f(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW);
 
+	void setUniform1i(const char* inName, i32 inValue);
+
 private:
+	bool loadFromFiles(const StringList& inShaderFiles);
+
 	u32 m_id = 0;
 };
 }

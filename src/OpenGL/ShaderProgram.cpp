@@ -15,6 +15,19 @@ inline i32 getUniformLocation(u32 id, const char* inName)
 	return location;
 }
 }
+
+/*****************************************************************************/
+[[nodiscard]] ShaderProgram ShaderProgram::make(const StringList& inShaderFiles)
+{
+	ShaderProgram ret;
+	bool result = ret.loadFromFiles(inShaderFiles);
+	if (!result)
+	{
+		throw std::runtime_error(std::string("Failed to load shader program!"));
+	}
+	return ret;
+}
+
 /*****************************************************************************/
 u32 ShaderProgram::id() const noexcept
 {
@@ -28,7 +41,7 @@ bool ShaderProgram::valid() const noexcept
 }
 
 /*****************************************************************************/
-bool ShaderProgram::load(const StringList& inShaderFiles)
+bool ShaderProgram::loadFromFiles(const StringList& inShaderFiles)
 {
 	dispose();
 
@@ -132,6 +145,13 @@ void ShaderProgram::setUniform4f(const char* inName, f32 inX, f32 inY, f32 inZ, 
 {
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform4f(location, inX, inY, inZ, inW));
+}
+
+/*****************************************************************************/
+void ShaderProgram::setUniform1i(const char* inName, i32 inValue)
+{
+	i32 location = getUniformLocation(m_id, inName);
+	glCheck(glUniform1i(location, inValue));
 }
 }
 

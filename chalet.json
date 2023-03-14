@@ -28,6 +28,9 @@
 			"buildSuffix": "opengl",
 			"cppStandard": "c++20",
 			"warningsPreset": "strictPedantic",
+			"warnings[toolchain:apple-llvm]": [
+				"no-deprecated-declarations"
+			],
 			"precompiledHeader": "src/PCH.hpp",
 			"treatWarningsAsErrors": true,
 			"runtimeTypeInformation": false,
@@ -43,6 +46,7 @@
 				"${external:glfw}/include",
 				"${external:spdlog}/include",
 				"${external:glm}",
+				"vendor/stb/include",
 				"vendor/glad/include",
 				"src"
 			],
@@ -127,6 +131,9 @@
 			"kind": "executable"
 		},
 		"02_shaders": {
+			"kind": "executable"
+		},
+		"03_textures": {
 			"kind": "executable"
 		}
 	},

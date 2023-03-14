@@ -38,7 +38,7 @@ struct Program final : ProgramBase
 	{
 		glCheck(glClearColor(100.0f / 255.0f, 149.0f / 255.0f, 237.0f / 255.0f, 1.0f));
 
-		shaderProgram = loadShaderProgram({
+		shaderProgram = ShaderProgram::make({
 			"01_basic.vert",
 			"01_basic.frag",
 		});

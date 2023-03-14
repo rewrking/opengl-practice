@@ -8,19 +8,20 @@ struct Program final : ProgramBase
 {
 	const std::vector<f32> m_vertices = {
 		// clang-format off
-		// -0.5f, -0.5f, 0.0f,
-		// 0.5f, -0.5f, 0.0f,
-		// 0.0f,  0.5f, 0.0f
-		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f,  // top right
-		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f, 1.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 0.0f, 1.0f,  // top left
+		-0.5f, -0.5f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f, 1.0f,   1.0f, 0.0f,
+		 0.0f,  0.5f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f,   0.5f, 1.0f,
+		//  0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f, 1.0f,  // top right
+		//  0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f, 1.0f,  // bottom right
+		// -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f, 1.0f,  // bottom left
+		// -0.5f,  0.5f, 0.0f,   0.0f, 0.0f, 0.0f, 1.0f,  // top left
 		// clang-format on
 	};
 	const std::vector<u32> m_indices = {
 		// clang-format off
-		0, 1, 3,   // first triangle
-		1, 2, 3    // second triangle
+		0, 1, 2,
+		// 0, 1, 3,   // first triangle
+		// 1, 2, 3    // second triangle
 		// clang-format on
 	};
 
@@ -29,11 +30,13 @@ struct Program final : ProgramBase
 
 	u32 m_vao = 0;
 
+	u32 m_texture = 0;
+
 	ShaderProgram shaderProgram;
 
 	virtual Settings getSettings() const final
 	{
-		return Settings("02: Shaders", 800, 600);
+		return Settings("03: Textures", 800, 600);
 	}
 
 	virtual void init() final
@@ -41,10 +44,42 @@ struct Program final : ProgramBase
 		glCheck(glClearColor(100.0f / 255.0f, 149.0f / 255.0f, 237.0f / 255.0f, 1.0f));
 
 		shaderProgram = ShaderProgram::make({
-			"02_inout.vert",
-			"02_inout.frag",
+			"03_textures.vert",
+			"03_textures.frag",
 		});
 
+		{
+			u32 channels = 3;
+			auto image = Image::make("wall.jpg", channels);
+
+			glCheck(glGenTextures(1, &m_texture));
+			glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
+
+			/*
+				GL_REPEAT
+				GL_MIRRORED_REPEAT
+				GL_CLAMP_TO_EDGE
+				GL_CLAMP_TO_BORDER
+			*/
+			glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+			glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+
+			/*
+				GL_NEAREST
+				GL_LINEAR
+
+			// control mipmaps levels
+				GL_NEAREST_MIPMAP_NEAREST
+				GL_LINEAR_MIPMAP_NEAREST
+				GL_NEAREST_MIPMAP_LINEAR
+				GL_LINEAR_MIPMAP_LINEAR
+			*/
+			glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
+			glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+
+			glCheck(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, static_cast<GLsizei>(image.width), static_cast<GLsizei>(image.height), 0, GL_RGB, GL_UNSIGNED_BYTE, image.pixels.data()));
+			glCheck(glGenerateMipmap(GL_TEXTURE_2D));
+		};
 		{
 			glCheck(glGenVertexArrays(1, &m_vao));
 			glCheck(glGenBuffers(1, &m_vbo));
@@ -59,7 +94,7 @@ struct Program final : ProgramBase
 			glCheck(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW));
 
 			{
-				BufferAttribList attribList({ 3, 4 });
+				BufferAttribList attribList({ 3, 4, 2 });
 				for (auto& attrib : attribList.attribs)
 				{
 					glCheck(glVertexAttribPointer(attrib.position, attrib.size, GL_FLOAT, GL_FALSE, sizeof(f32) * attribList.size, (void*)(attrib.offset * sizeof(f32))));
@@ -76,6 +111,7 @@ struct Program final : ProgramBase
 
 			shaderProgram.use();
 			shaderProgram.setUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
+			shaderProgram.setUniform1i("u_Texture", 0);
 		}
 
 		// wireframe!
@@ -92,6 +128,9 @@ struct Program final : ProgramBase
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
 		// shaderProgram.setUniform4f("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
 
+		glCheck(glActiveTexture(GL_TEXTURE0));
+		glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
+
 		glCheck(glBindVertexArray(m_vao));
 		// glCheck(glDrawArrays(GL_TRIANGLES, 0, 6));
 		glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));
@@ -101,6 +140,7 @@ struct Program final : ProgramBase
 
 	virtual void dispose() final
 	{
+		glCheck(glDeleteTextures(1, &m_texture));
 		glCheck(glDeleteVertexArrays(1, &m_vao));
 		glCheck(glDeleteBuffers(1, &m_vbo));
 		glCheck(glDeleteBuffers(1, &m_ebo));

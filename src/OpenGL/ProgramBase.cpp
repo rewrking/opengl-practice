@@ -38,20 +38,6 @@ ProgramBase::Settings::Settings(u32 inWidth, u32 inHeight) :
 }
 
 /*****************************************************************************/
-ShaderProgram ProgramBase::loadShaderProgram(const StringList& inShaderFiles) const
-{
-	ShaderProgram shaderProgram;
-
-	bool result = shaderProgram.load(inShaderFiles);
-	if (!result)
-	{
-		throw std::runtime_error(std::string("Failed to load shader program!"));
-	}
-
-	return shaderProgram;
-}
-
-/*****************************************************************************/
 bool ProgramBase::processInput(GLFWwindow* window)
 {
 	bool shouldClose = glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS;

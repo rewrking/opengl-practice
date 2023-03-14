@@ -8,6 +8,7 @@
 			"cppStandard": "c++17",
 			"includePath": [
 				"${workspaceFolder}/vendor/glad/include",
+				"${workspaceFolder}/vendor/stb/include",
 				"${workspaceFolder}/chalet_external/fmt/include",
 				"${workspaceFolder}/chalet_external/spdlog/include",
 				"${workspaceFolder}/chalet_external/glfw/include",
@@ -36,6 +37,7 @@
 			],
 			"includePath": [
 				"${workspaceFolder}/vendor/glad/include",
+				"${workspaceFolder}/vendor/stb/include",
 				"${workspaceFolder}/chalet_external/fmt/include",
 				"${workspaceFolder}/chalet_external/spdlog/include",
 				"${workspaceFolder}/chalet_external/glfw/include",
@@ -58,6 +60,7 @@
 			"cppStandard": "c++17",
 			"includePath": [
 				"${workspaceFolder}/vendor/glad/include",
+				"${workspaceFolder}/vendor/stb/include",
 				"${workspaceFolder}/chalet_external/fmt/include",
 				"${workspaceFolder}/chalet_external/spdlog/include",
 				"${workspaceFolder}/chalet_external/glfw/include",
@@ -82,6 +85,7 @@
 			"cppStandard": "c++17",
 			"includePath": [
 				"${workspaceFolder}/vendor/glad/include",
+				"${workspaceFolder}/vendor/stb/include",
 				"${workspaceFolder}/chalet_external/fmt/include",
 				"${workspaceFolder}/chalet_external/spdlog/include",
 				"${workspaceFolder}/chalet_external/glfw/include",

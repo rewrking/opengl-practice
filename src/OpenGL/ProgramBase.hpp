@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Format.hpp"
+#include "Core/Image/Image.hpp"
 #include "OpenGL/GLM.hpp"
 #include "OpenGL/OpenGL.hpp"
 #include "OpenGL/ShaderProgram.hpp"
@@ -30,8 +31,6 @@ struct ProgramBase
 	virtual void update() = 0;
 
 	virtual Settings getSettings() const = 0;
-
-	virtual ShaderProgram loadShaderProgram(const StringList& inShaderFiles) const final;
 
 	virtual bool processInput(GLFWwindow* window);
 
