@@ -153,6 +153,14 @@ void ShaderProgram::setUniform1i(const char* inName, i32 inValue)
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform1i(location, inValue));
 }
+
+/*****************************************************************************/
+void ShaderProgram::setUniformMatrix4f(const char* inName, const glm::mat4& inValue)
+{
+	i32 location = getUniformLocation(m_id, inName);
+	glCheck(glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(inValue)));
+}
+
 }
 
 #undef CHECK_LOCATION

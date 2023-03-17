@@ -135,6 +135,9 @@
 		},
 		"03_textures": {
 			"kind": "executable"
+		},
+		"04_transformations": {
+			"kind": "executable"
 		}
 	},
 	"distribution": {
