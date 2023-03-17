@@ -56,7 +56,6 @@ i32 ProgramBase::run()
 
 	GLFWwindow* window = nullptr;
 
-	// Initialize the library
 	if (!glfwInit())
 		return -1;
 
@@ -75,39 +74,9 @@ i32 ProgramBase::run()
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 		window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 #elif defined(OGL_LINUX)
-		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 		window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
-		if (window)
-		{
-			glfwMakeContextCurrent(window);
-
-			std::string versionStr = (const char*)glGetString(GL_VERSION);
-			if (versionStr[0] < '4' && versionStr.find("Mesa") != std::string::npos)
-			{
-				glfwDestroyWindow(window);
-				window = nullptr;
-
-				// force 3.2 context
-				glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-				glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-
-				window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
-				if (window)
-				{
-					glfwMakeContextCurrent(window);
-				}
-				else
-				{
-					log_fatal("Failed to create window");
-					glfwTerminate();
-					return -1;
-				}
-			}
-			glfwShowWindow(window);
-		}
 
 #else
-		// Create a windowed mode window and its OpenGL context
 		window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 #endif
 	}
@@ -121,7 +90,6 @@ i32 ProgramBase::run()
 
 	Platform::initialize(window);
 
-	// Make the window's context current
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
