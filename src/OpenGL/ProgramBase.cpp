@@ -107,11 +107,13 @@ i32 ProgramBase::run()
 
 	{
 		i32 nrAttributes;
-		glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
+		glCheck(glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes));
 		log_info("- Max vertex attributes:", nrAttributes);
 	}
 
 	// glCheck(glViewport(0, 0, settings.width, settings.height));
+
+	glCheck(glEnable(GL_DEPTH_TEST));
 
 	try
 	{

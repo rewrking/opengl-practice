@@ -138,6 +138,9 @@
 		},
 		"04_transformations": {
 			"kind": "executable"
+		},
+		"05_coordinate_systems": {
+			"kind": "executable"
 		}
 	},
 	"distribution": {
