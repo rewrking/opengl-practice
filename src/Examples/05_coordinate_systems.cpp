@@ -91,6 +91,8 @@ struct Program final : ProgramBase
 
 	virtual void init() final
 	{
+		glCheck(glEnable(GL_DEPTH_TEST));
+
 		glCheck(glClearColor(100.0f / 255.0f, 149.0f / 255.0f, 237.0f / 255.0f, 1.0f));
 
 		shaderProgram = ShaderProgram::make({
@@ -196,7 +198,7 @@ struct Program final : ProgramBase
 			// calculate the model matrix for each object and pass it to shader before drawing
 			auto model = glm::mat4(1.0f);
 			model = glm::translate(model, m_cubePositions[i]);
-			f32 angle = 20.0f * static_cast<f32>(i);
+			f32 angle = 20.0f * static_cast<f32>(i) + (10.0f * static_cast<f32>(glfwGetTime()));
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 			shaderProgram.setUniformMatrix4f("u_Model", model);
 

@@ -113,8 +113,6 @@ i32 ProgramBase::run()
 
 	// glCheck(glViewport(0, 0, settings.width, settings.height));
 
-	glCheck(glEnable(GL_DEPTH_TEST));
-
 	try
 	{
 		this->init();
