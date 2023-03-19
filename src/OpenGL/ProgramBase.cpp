@@ -7,15 +7,6 @@
 
 namespace ogl
 {
-namespace
-{
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	UNUSED(window);
-	glCheck(glViewport(0, 0, width, height));
-}
-}
-
 /*****************************************************************************/
 ProgramBase::Settings::Settings(const std::string& inName, u32 inWidth, u32 inHeight) :
 	name(inName),
@@ -88,10 +79,23 @@ i32 ProgramBase::run()
 		return -1;
 	}
 
+	m_width = settings.width;
+	m_height = settings.height;
+
 	Platform::initialize(window);
 
+	glfwSetWindowUserPointer(window, this);
 	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height) {
+		UNUSED(window);
+		glCheck(glViewport(0, 0, width, height));
+	});
+	glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height) {
+		UNUSED(window);
+		auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(window));
+		self->m_width = static_cast<u32>(width);
+		self->m_height = static_cast<u32>(height);
+	});
 
 	int version = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	if (version == 0)

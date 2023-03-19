@@ -141,6 +141,9 @@
 		},
 		"05_coordinate_systems": {
 			"kind": "executable"
+		},
+		"06_camera": {
+			"kind": "executable"
 		}
 	},
 	"distribution": {

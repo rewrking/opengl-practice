@@ -82,9 +82,13 @@ struct Program final : ProgramBase
 
 	ShaderProgram shaderProgram;
 
+	glm::mat4 m_view;
+	glm::mat4 m_projection;
+	glm::mat4 m_model;
+
 	virtual Settings getSettings() const final
 	{
-		return Settings("05: Coordinate Systems", 800, 600);
+		return Settings("06: Camera", 800, 600);
 	}
 
 	virtual void init() final
@@ -94,8 +98,8 @@ struct Program final : ProgramBase
 		glCheck(glClearColor(100.0f / 255.0f, 149.0f / 255.0f, 237.0f / 255.0f, 1.0f));
 
 		shaderProgram = ShaderProgram::make({
-			"05_coordinate_systems.vert",
-			"05_coordinate_systems.frag",
+			"06_camera.vert",
+			"06_camera.frag",
 		});
 
 		{
@@ -181,22 +185,23 @@ struct Program final : ProgramBase
 		glCheck(glActiveTexture(GL_TEXTURE0));
 		glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
 
-		// Note: It's actually more efficient to pre-multiply the transform before sending
-		//  it to the vertex shader since it's done once vs on every vertex
 		{
 			constexpr f32 fov = 45.0f;
 			constexpr f32 near = 0.1f;
 			constexpr f32 far = 100.0f;
-			auto projection = glm::mat4(1.0f);
-			projection = glm::perspective(glm::radians(fov), static_cast<f32>(m_width) / static_cast<f32>(m_height), near, far);
-			shaderProgram.setUniformMatrix4f("u_Projection", projection);
+			// m_projection = glm::mat4(1.0f);
+			m_projection = glm::perspective(glm::radians(fov), static_cast<f32>(m_width) / static_cast<f32>(m_height), near, far);
 		}
 
 		{
-			auto view = glm::mat4(1.0f);
+			// auto cameraPos = glm::vec3(0.0f, 0.0f, -3.0f);
 			// note that we're translating the scene in the reverse direction of where we want to move
-			view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-			shaderProgram.setUniformMatrix4f("u_View", view);
+			// m_view = glm::mat4(1.0f);
+			// m_view = glm::translate(glm::mat4(1.0f), cameraPos);
+			constexpr f64 radius = 10.0;
+			f32 camX = static_cast<f32>(std::sin(glfwGetTime()) * radius);
+			f32 camZ = static_cast<f32>(std::cos(glfwGetTime()) * radius);
+			m_view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 		}
 
 		glCheck(glBindVertexArray(m_vao));
@@ -204,11 +209,10 @@ struct Program final : ProgramBase
 		for (u32 i = 0; i < m_cubePositions.size(); ++i)
 		{
 			// calculate the model matrix for each object and pass it to shader before drawing
-			auto model = glm::mat4(1.0f);
-			model = glm::translate(model, m_cubePositions[i]);
+			m_model = glm::translate(glm::mat4(1.0f), m_cubePositions[i]);
 			f32 angle = 20.0f * static_cast<f32>(i) + (10.0f * static_cast<f32>(glfwGetTime()));
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-			shaderProgram.setUniformMatrix4f("u_Model", model);
+			m_model = glm::rotate(m_model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			shaderProgram.setUniformMatrix4f("u_Transform", m_projection * m_view * m_model);
 
 			glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_vertices.size())));
 		}

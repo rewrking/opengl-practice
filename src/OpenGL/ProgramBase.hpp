@@ -36,6 +36,10 @@ struct ProgramBase
 
 	virtual i32 run() final;
 
+protected:
+	u32 m_width = 0;
+	u32 m_height = 0;
+
 private:
 	void initializeLogger();
 };
