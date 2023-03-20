@@ -86,16 +86,16 @@ i32 ProgramBase::run()
 
 	glfwSetWindowUserPointer(window, this);
 	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height) {
-		if (window)
+	glfwSetFramebufferSizeCallback(window, [](GLFWwindow* win, int width, int height) {
+		if (win)
 		{
 			glCheck(glViewport(0, 0, width, height));
 		}
 	});
-	glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height) {
-		if (window)
+	glfwSetWindowSizeCallback(window, [](GLFWwindow* win, int width, int height) {
+		if (win)
 		{
-			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(window));
+			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
 			self->m_width = static_cast<u32>(width);
 			self->m_height = static_cast<u32>(height);
 		}
