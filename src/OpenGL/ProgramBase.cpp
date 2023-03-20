@@ -87,14 +87,18 @@ i32 ProgramBase::run()
 	glfwSetWindowUserPointer(window, this);
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height) {
-		UNUSED(window);
-		glCheck(glViewport(0, 0, width, height));
+		if (window)
+		{
+			glCheck(glViewport(0, 0, width, height));
+		}
 	});
 	glfwSetWindowSizeCallback(window, [](GLFWwindow* window, int width, int height) {
-		UNUSED(window);
-		auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(window));
-		self->m_width = static_cast<u32>(width);
-		self->m_height = static_cast<u32>(height);
+		if (window)
+		{
+			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(window));
+			self->m_width = static_cast<u32>(width);
+			self->m_height = static_cast<u32>(height);
+		}
 	});
 
 	int version = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -127,13 +131,9 @@ i32 ProgramBase::run()
 			if (!processInput(window))
 				break;
 
-			// Render here
 			this->update();
 
-			// Swap front and back buffers
 			glfwSwapBuffers(window);
-
-			// Poll for and process events
 			glfwPollEvents();
 		}
 	}

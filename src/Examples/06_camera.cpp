@@ -61,16 +61,16 @@ struct Program final : ProgramBase
 	};*/
 
 	const std::vector<glm::vec3> m_cubePositions = {
-		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3(2.0f, 5.0f, -15.0f),
-		glm::vec3(-1.5f, -2.2f, -2.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),
-		glm::vec3(2.4f, -0.4f, -3.5f),
-		glm::vec3(-1.7f, 3.0f, -7.5f),
-		glm::vec3(1.3f, -2.0f, -2.5f),
-		glm::vec3(1.5f, 2.0f, -2.5f),
-		glm::vec3(1.5f, 0.2f, -1.5f),
-		glm::vec3(-1.3f, 1.0f, -1.5f)
+		{ 0.0f, 0.0f, 0.0f },
+		{ 2.0f, 5.0f, -15.0f },
+		{ -1.5f, -2.2f, -2.5f },
+		{ -3.8f, -2.0f, -12.3f },
+		{ 2.4f, -0.4f, -3.5f },
+		{ -1.7f, 3.0f, -7.5f },
+		{ 1.3f, -2.0f, -2.5f },
+		{ 1.5f, 2.0f, -2.5f },
+		{ 1.5f, 0.2f, -1.5f },
+		{ -1.3f, 1.0f, -1.5f }
 	};
 
 	u32 m_vbo = 0;
@@ -85,6 +85,37 @@ struct Program final : ProgramBase
 	glm::mat4 m_view;
 	glm::mat4 m_projection;
 	glm::mat4 m_model;
+
+	glm::vec3 m_cameraPos{ 0.0f, 0.0f, 3.0f };
+	glm::vec3 m_cameraFront{ 0.0f, 0.0f, -1.0f };
+	glm::vec3 m_cameraUp{ 0.0f, 1.0f, 0.0f };
+
+	virtual bool processInput(GLFWwindow* window) final
+	{
+		bool res = ProgramBase::processInput(window);
+
+		constexpr float cameraSpeed = 0.05f; // adjust accordingly
+		if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS
+			|| glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS)
+		{
+			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+				m_cameraPos.y += cameraSpeed;
+			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+				m_cameraPos.y -= cameraSpeed;
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+			m_cameraPos += cameraSpeed * m_cameraFront;
+		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+			m_cameraPos -= cameraSpeed * m_cameraFront;
+
+		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+			m_cameraPos -= glm::normalize(glm::cross(m_cameraFront, m_cameraUp)) * cameraSpeed;
+		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+			m_cameraPos += glm::normalize(glm::cross(m_cameraFront, m_cameraUp)) * cameraSpeed;
+
+		return res;
+	}
 
 	virtual Settings getSettings() const final
 	{
@@ -198,10 +229,13 @@ struct Program final : ProgramBase
 			// note that we're translating the scene in the reverse direction of where we want to move
 			// m_view = glm::mat4(1.0f);
 			// m_view = glm::translate(glm::mat4(1.0f), cameraPos);
-			constexpr f64 radius = 10.0;
-			f32 camX = static_cast<f32>(std::sin(glfwGetTime()) * radius);
-			f32 camZ = static_cast<f32>(std::cos(glfwGetTime()) * radius);
-			m_view = glm::lookAt(glm::vec3(camX, 0.0, camZ), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+
+			// constexpr f64 radius = 10.0;
+			// f32 camX = static_cast<f32>(std::sin(glfwGetTime()) * radius);
+			// f32 camZ = static_cast<f32>(std::cos(glfwGetTime()) * radius);
+			// auto cameraPos = glm::vec3(camX, 0.0, camZ);
+
+			m_view = glm::lookAt(m_cameraPos, m_cameraPos + m_cameraFront, m_cameraUp);
 		}
 
 		glCheck(glBindVertexArray(m_vao));
