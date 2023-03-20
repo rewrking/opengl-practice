@@ -2,6 +2,8 @@
 
 #include <array>
 
+#include "Core/Win32/WindowsInclude.hpp"
+
 struct GLFWwindow;
 
 namespace ogl

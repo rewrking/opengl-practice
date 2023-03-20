@@ -1,10 +1,10 @@
 #include "Core/Platform.hpp"
 
-#include "OpenGL/OpenGL.hpp"
-
 #if defined(OGL_WIN32)
 	#include "Core/Win32/WindowsPlatform.hpp"
 #endif
+
+#include "OpenGL/OpenGL.hpp"
 
 /*****************************************************************************/
 void ogl::Platform::initialize(GLFWwindow* inWindow)
