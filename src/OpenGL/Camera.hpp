@@ -32,9 +32,9 @@ private:
 	// camera Attributes
 	Vec3f m_position{ 0.0f, 0.0f, 0.0f };
 	Vec3f m_front{ 0.0f, 0.0f, -1.0f };
-	Vec3f m_up{ 0.0f, 1.0f, 0.0f };
+	Vec3f m_up{ 0.0f, 0.0f, 0.0f };
 	Vec3f m_right{ 0.0f, 0.0f, 0.0f };
-	Vec3f m_worldUp{ 0.0f, 0.0f, 0.0f };
+	Vec3f m_worldUp{ 0.0f, 1.0f, 0.0f };
 
 	// euler Angles
 	f32 m_yaw = -90.0f;
