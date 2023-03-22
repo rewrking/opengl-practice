@@ -84,8 +84,13 @@ i32 ProgramBase::run()
 
 	Platform::initialize(window);
 
-	glfwSetWindowUserPointer(window, this);
 	glfwMakeContextCurrent(window);
+
+	glfwSetWindowUserPointer(window, this);
+
+	if (glfwRawMouseMotionSupported())
+		glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+
 	glfwSetFramebufferSizeCallback(window, [](GLFWwindow* win, i32 width, i32 height) {
 		if (win)
 		{
@@ -105,7 +110,18 @@ i32 ProgramBase::run()
 		if (win)
 		{
 			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
-			self->onMouseMove(xpos, ypos);
+			// if (self->m_mouseInView)
+			{
+				self->onMouseMove(xpos, ypos);
+			}
+		}
+	});
+
+	glfwSetCursorEnterCallback(window, [](GLFWwindow* win, i32 entered) {
+		if (win)
+		{
+			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
+			self->m_mouseInView = entered == GLFW_TRUE;
 		}
 	});
 
@@ -198,5 +214,4 @@ void ProgramBase::initializeLogger()
 
 	log_decor(std::string(80, '='));
 }
-
 }

@@ -91,25 +91,21 @@ struct Program final : ProgramBase
 	Mat4f m_projection;
 	Mat4f m_model;
 
-	Vec3f m_cameraPos{ 0.0f, 0.0f, 3.0f };
-	Vec3f m_cameraFront{ 0.0f, 0.0f, -1.0f };
-	Vec3f m_cameraUp{ 0.0f, 1.0f, 0.0f };
+	Camera m_camera = Camera(Vec3f{ 0.0f, 0.0f, 3.0f });
 
 	virtual bool processInput(GLFWwindow* window) final
 	{
 		bool res = ProgramBase::processInput(window);
 
-		const f32 cameraSpeed = 2.5f * Clock.deltaTime;
-
 		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-			m_cameraPos += cameraSpeed * m_cameraFront;
-		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-			m_cameraPos -= cameraSpeed * m_cameraFront;
+			m_camera.processKeyboard(CameraMovement::Forward, Clock.deltaTime);
+		else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+			m_camera.processKeyboard(CameraMovement::Backward, Clock.deltaTime);
 
 		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-			m_cameraPos -= glm::normalize(glm::cross(m_cameraFront, m_cameraUp)) * cameraSpeed;
-		if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-			m_cameraPos += glm::normalize(glm::cross(m_cameraFront, m_cameraUp)) * cameraSpeed;
+			m_camera.processKeyboard(CameraMovement::Left, Clock.deltaTime);
+		else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+			m_camera.processKeyboard(CameraMovement::Right, Clock.deltaTime);
 
 		return res;
 	}
@@ -219,11 +215,10 @@ struct Program final : ProgramBase
 		glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
 
 		{
-			constexpr f32 fov = 45.0f;
 			constexpr f32 near = 0.1f;
 			constexpr f32 far = 100.0f;
 			// m_projection = Mat4f(1.0f);
-			m_projection = glm::perspective(glm::radians(fov), static_cast<f32>(m_width) / static_cast<f32>(m_height), near, far);
+			m_projection = glm::perspective(m_camera.getFieldOfView(), static_cast<f32>(m_width) / static_cast<f32>(m_height), near, far);
 		}
 
 		{
@@ -237,7 +232,7 @@ struct Program final : ProgramBase
 			// f32 camZ = static_cast<f32>(std::cos(glfwGetTime()) * radius);
 			// auto cameraPos = Vec3f{ camX, 0.0, camZ };
 
-			m_view = glm::lookAt(m_cameraPos, m_cameraPos + m_cameraFront, m_cameraUp);
+			m_view = m_camera.getViewMatrix();
 		}
 
 		glCheck(glBindVertexArray(m_vao));
@@ -245,7 +240,8 @@ struct Program final : ProgramBase
 		for (u32 i = 0; i < m_cubePositions.size(); ++i)
 		{
 			// calculate the model matrix for each object and pass it to shader before drawing
-			m_model = glm::translate(Mat4f(1.0f), m_cubePositions[i]);
+			m_model = Mat4f(1.0f);
+			m_model = glm::translate(m_model, m_cubePositions[i]);
 			f32 angle = 20.0f * static_cast<f32>(i) + (10.0f * static_cast<f32>(glfwGetTime()));
 			m_model = glm::rotate(m_model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
 			shaderProgram.setUniformMatrix4f("u_Transform", m_projection * m_view * m_model);
@@ -282,24 +278,7 @@ struct Program final : ProgramBase
 		m_lastMouse.x = xpos;
 		m_lastMouse.y = ypos;
 
-		f32 sensitivity = 0.1f;
-		xoffset *= sensitivity;
-		yoffset *= sensitivity;
-
-		m_yaw += xoffset;
-		m_pitch += yoffset;
-
-		if (m_pitch > 89.0f)
-			m_pitch = 89.0f;
-
-		if (m_pitch < -89.0f)
-			m_pitch = -89.0f;
-
-		Vec3f front;
-		front.x = std::cos(glm::radians(m_yaw)) * std::cos(glm::radians(m_pitch));
-		front.y = std::sin(glm::radians(m_pitch));
-		front.z = std::sin(glm::radians(m_yaw)) * std::cos(glm::radians(m_pitch));
-		m_cameraFront = glm::normalize(front);
+		m_camera.processMouseMovement(xoffset, yoffset);
 	}
 };
 }

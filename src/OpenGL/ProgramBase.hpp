@@ -2,6 +2,7 @@
 
 #include "Core/Format.hpp"
 #include "Core/Image/Image.hpp"
+#include "OpenGL/Camera.hpp"
 #include "OpenGL/GLM.hpp"
 #include "OpenGL/OpenGL.hpp"
 #include "OpenGL/ShaderProgram.hpp"
@@ -44,10 +45,12 @@ struct ProgramBase
 	virtual void onMouseMove(const f64 inX, const f64 inY);
 
 protected:
+	EngineClock Clock;
+
 	u32 m_width = 0;
 	u32 m_height = 0;
 
-	EngineClock Clock;
+	bool m_mouseInView = true;
 
 private:
 	void initializeLogger();
