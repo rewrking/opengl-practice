@@ -86,18 +86,26 @@ i32 ProgramBase::run()
 
 	glfwSetWindowUserPointer(window, this);
 	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, [](GLFWwindow* win, int width, int height) {
+	glfwSetFramebufferSizeCallback(window, [](GLFWwindow* win, i32 width, i32 height) {
 		if (win)
 		{
 			glCheck(glViewport(0, 0, width, height));
 		}
 	});
-	glfwSetWindowSizeCallback(window, [](GLFWwindow* win, int width, int height) {
+	glfwSetWindowSizeCallback(window, [](GLFWwindow* win, i32 width, i32 height) {
 		if (win)
 		{
 			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
 			self->m_width = static_cast<u32>(width);
 			self->m_height = static_cast<u32>(height);
+		}
+	});
+
+	glfwSetCursorPosCallback(window, [](GLFWwindow* win, f64 xpos, f64 ypos) {
+		if (win)
+		{
+			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
+			self->onMouseMove(xpos, ypos);
 		}
 	});
 
@@ -128,6 +136,10 @@ i32 ProgramBase::run()
 		// Loop until the user closes the window
 		while (!glfwWindowShouldClose(window))
 		{
+			f32 currentFrame = glfwGetTime();
+			Clock.deltaTime = currentFrame - Clock.lastFrame;
+			Clock.lastFrame = currentFrame;
+
 			if (!processInput(window))
 				break;
 
@@ -161,6 +173,12 @@ i32 ProgramBase::run()
 };
 
 /*****************************************************************************/
+void ProgramBase::onMouseMove(const f64 inX, const f64 inY)
+{
+	UNUSED(inX, inY);
+}
+
+/*****************************************************************************/
 void ProgramBase::initializeLogger()
 {
 	LoggerSettings logSettings;
@@ -180,4 +198,5 @@ void ProgramBase::initializeLogger()
 
 	log_decor(std::string(80, '='));
 }
+
 }

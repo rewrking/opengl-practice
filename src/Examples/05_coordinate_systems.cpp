@@ -60,17 +60,17 @@ struct Program final : ProgramBase
 		// clang-format on
 	};*/
 
-	const std::vector<glm::vec3> m_cubePositions = {
-		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3(2.0f, 5.0f, -15.0f),
-		glm::vec3(-1.5f, -2.2f, -2.5f),
-		glm::vec3(-3.8f, -2.0f, -12.3f),
-		glm::vec3(2.4f, -0.4f, -3.5f),
-		glm::vec3(-1.7f, 3.0f, -7.5f),
-		glm::vec3(1.3f, -2.0f, -2.5f),
-		glm::vec3(1.5f, 2.0f, -2.5f),
-		glm::vec3(1.5f, 0.2f, -1.5f),
-		glm::vec3(-1.3f, 1.0f, -1.5f)
+	const std::vector<Vec3f> m_cubePositions = {
+		{ 0.0f, 0.0f, 0.0f },
+		{ 2.0f, 5.0f, -15.0f },
+		{ -1.5f, -2.2f, -2.5f },
+		{ -3.8f, -2.0f, -12.3f },
+		{ 2.4f, -0.4f, -3.5f },
+		{ -1.7f, 3.0f, -7.5f },
+		{ 1.3f, -2.0f, -2.5f },
+		{ 1.5f, 2.0f, -2.5f },
+		{ 1.5f, 0.2f, -1.5f },
+		{ -1.3f, 1.0f, -1.5f }
 	};
 
 	u32 m_vbo = 0;
@@ -187,15 +187,15 @@ struct Program final : ProgramBase
 			constexpr f32 fov = 45.0f;
 			constexpr f32 near = 0.1f;
 			constexpr f32 far = 100.0f;
-			auto projection = glm::mat4(1.0f);
+			auto projection = Mat4f(1.0f);
 			projection = glm::perspective(glm::radians(fov), static_cast<f32>(m_width) / static_cast<f32>(m_height), near, far);
 			shaderProgram.setUniformMatrix4f("u_Projection", projection);
 		}
 
 		{
-			auto view = glm::mat4(1.0f);
+			auto view = Mat4f(1.0f);
 			// note that we're translating the scene in the reverse direction of where we want to move
-			view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+			view = glm::translate(view, Vec3f{ 0.0f, 0.0f, -3.0f });
 			shaderProgram.setUniformMatrix4f("u_View", view);
 		}
 
@@ -204,10 +204,10 @@ struct Program final : ProgramBase
 		for (u32 i = 0; i < m_cubePositions.size(); ++i)
 		{
 			// calculate the model matrix for each object and pass it to shader before drawing
-			auto model = glm::mat4(1.0f);
+			auto model = Mat4f(1.0f);
 			model = glm::translate(model, m_cubePositions[i]);
 			f32 angle = 20.0f * static_cast<f32>(i) + (10.0f * static_cast<f32>(glfwGetTime()));
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			model = glm::rotate(model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
 			shaderProgram.setUniformMatrix4f("u_Model", model);
 
 			glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_vertices.size())));

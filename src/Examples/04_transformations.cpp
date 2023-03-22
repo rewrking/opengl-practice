@@ -128,9 +128,9 @@ struct Program final : ProgramBase
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
 		// shaderProgram.setUniform4f("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
 
-		glm::mat4 trans = glm::mat4(1.0f);
-		// trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-		trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
+		Mat4f trans = Mat4f(1.0f);
+		// trans = glm::translate(trans, Vec3f{ 0.5f, -0.5f, 0.0f });
+		trans = glm::rotate(trans, (float)glfwGetTime(), Vec3f{ 1.0f, 1.0f, 1.0f });
 		shaderProgram.setUniformMatrix4f("u_Transform", trans);
 
 		glCheck(glActiveTexture(GL_TEXTURE0));

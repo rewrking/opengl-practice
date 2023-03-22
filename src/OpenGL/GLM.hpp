@@ -36,3 +36,10 @@
 #if defined(OGL_MSVC) && defined(OGL_CLANG)
 	#pragma clang diagnostic pop
 #endif
+
+namespace ogl
+{
+using Vec2f = glm::vec2;
+using Vec3f = glm::vec3;
+using Mat4f = glm::mat4;
+}

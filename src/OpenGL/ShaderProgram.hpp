@@ -26,7 +26,7 @@ struct ShaderProgram
 
 	void setUniform1i(const char* inName, i32 inValue);
 
-	void setUniformMatrix4f(const char* inName, const glm::mat4& inValue);
+	void setUniformMatrix4f(const char* inName, const Mat4f& inValue);
 
 private:
 	bool loadFromFiles(const StringList& inShaderFiles);

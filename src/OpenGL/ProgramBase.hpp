@@ -8,6 +8,11 @@
 
 namespace ogl
 {
+struct EngineClock
+{
+	f32 deltaTime = 0.0f;
+	f32 lastFrame = 0.0f;
+};
 struct ProgramBase
 {
 	struct Settings
@@ -36,9 +41,13 @@ struct ProgramBase
 
 	virtual i32 run() final;
 
+	virtual void onMouseMove(const f64 inX, const f64 inY);
+
 protected:
 	u32 m_width = 0;
 	u32 m_height = 0;
+
+	EngineClock Clock;
 
 private:
 	void initializeLogger();

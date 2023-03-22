@@ -155,7 +155,7 @@ void ShaderProgram::setUniform1i(const char* inName, i32 inValue)
 }
 
 /*****************************************************************************/
-void ShaderProgram::setUniformMatrix4f(const char* inName, const glm::mat4& inValue)
+void ShaderProgram::setUniformMatrix4f(const char* inName, const Mat4f& inValue)
 {
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(inValue)));

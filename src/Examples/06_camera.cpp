@@ -60,7 +60,7 @@ struct Program final : ProgramBase
 		// clang-format on
 	};*/
 
-	const std::vector<glm::vec3> m_cubePositions = {
+	const std::vector<Vec3f> m_cubePositions = {
 		{ 0.0f, 0.0f, 0.0f },
 		{ 2.0f, 5.0f, -15.0f },
 		{ -1.5f, -2.2f, -2.5f },
@@ -80,29 +80,26 @@ struct Program final : ProgramBase
 
 	u32 m_texture = 0;
 
+	Vec2f m_lastMouse{ 0.0f, 0.0f };
+
+	f32 m_yaw = 0.0f;
+	f32 m_pitch = 0.0f;
+
 	ShaderProgram shaderProgram;
 
-	glm::mat4 m_view;
-	glm::mat4 m_projection;
-	glm::mat4 m_model;
+	Mat4f m_view;
+	Mat4f m_projection;
+	Mat4f m_model;
 
-	glm::vec3 m_cameraPos{ 0.0f, 0.0f, 3.0f };
-	glm::vec3 m_cameraFront{ 0.0f, 0.0f, -1.0f };
-	glm::vec3 m_cameraUp{ 0.0f, 1.0f, 0.0f };
+	Vec3f m_cameraPos{ 0.0f, 0.0f, 3.0f };
+	Vec3f m_cameraFront{ 0.0f, 0.0f, -1.0f };
+	Vec3f m_cameraUp{ 0.0f, 1.0f, 0.0f };
 
 	virtual bool processInput(GLFWwindow* window) final
 	{
 		bool res = ProgramBase::processInput(window);
 
-		constexpr float cameraSpeed = 0.05f; // adjust accordingly
-		if (glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS
-			|| glfwGetKey(window, GLFW_KEY_RIGHT_ALT) == GLFW_PRESS)
-		{
-			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-				m_cameraPos.y += cameraSpeed;
-			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-				m_cameraPos.y -= cameraSpeed;
-		}
+		const f32 cameraSpeed = 2.5f * Clock.deltaTime;
 
 		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 			m_cameraPos += cameraSpeed * m_cameraFront;
@@ -127,6 +124,11 @@ struct Program final : ProgramBase
 		glCheck(glEnable(GL_DEPTH_TEST));
 
 		glCheck(glClearColor(100.0f / 255.0f, 149.0f / 255.0f, 237.0f / 255.0f, 1.0f));
+
+		m_lastMouse.x = static_cast<f32>(m_width / 2);
+		m_lastMouse.y = static_cast<f32>(m_height / 2);
+		m_yaw = 0.0f;
+		m_pitch = 0.0f;
 
 		shaderProgram = ShaderProgram::make({
 			"06_camera.vert",
@@ -220,20 +222,20 @@ struct Program final : ProgramBase
 			constexpr f32 fov = 45.0f;
 			constexpr f32 near = 0.1f;
 			constexpr f32 far = 100.0f;
-			// m_projection = glm::mat4(1.0f);
+			// m_projection = Mat4f(1.0f);
 			m_projection = glm::perspective(glm::radians(fov), static_cast<f32>(m_width) / static_cast<f32>(m_height), near, far);
 		}
 
 		{
-			// auto cameraPos = glm::vec3(0.0f, 0.0f, -3.0f);
+			// auto cameraPos = Vec3f{ 0.0f, 0.0f, -3.0f };
 			// note that we're translating the scene in the reverse direction of where we want to move
-			// m_view = glm::mat4(1.0f);
-			// m_view = glm::translate(glm::mat4(1.0f), cameraPos);
+			// m_view = Mat4f(1.0f);
+			// m_view = glm::translate(Mat4f(1.0f), cameraPos);
 
 			// constexpr f64 radius = 10.0;
 			// f32 camX = static_cast<f32>(std::sin(glfwGetTime()) * radius);
 			// f32 camZ = static_cast<f32>(std::cos(glfwGetTime()) * radius);
-			// auto cameraPos = glm::vec3(camX, 0.0, camZ);
+			// auto cameraPos = Vec3f{ camX, 0.0, camZ };
 
 			m_view = glm::lookAt(m_cameraPos, m_cameraPos + m_cameraFront, m_cameraUp);
 		}
@@ -243,9 +245,9 @@ struct Program final : ProgramBase
 		for (u32 i = 0; i < m_cubePositions.size(); ++i)
 		{
 			// calculate the model matrix for each object and pass it to shader before drawing
-			m_model = glm::translate(glm::mat4(1.0f), m_cubePositions[i]);
+			m_model = glm::translate(Mat4f(1.0f), m_cubePositions[i]);
 			f32 angle = 20.0f * static_cast<f32>(i) + (10.0f * static_cast<f32>(glfwGetTime()));
-			m_model = glm::rotate(m_model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			m_model = glm::rotate(m_model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
 			shaderProgram.setUniformMatrix4f("u_Transform", m_projection * m_view * m_model);
 
 			glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_vertices.size())));
@@ -261,6 +263,43 @@ struct Program final : ProgramBase
 		glCheck(glDeleteBuffers(1, &m_vbo));
 		glCheck(glDeleteBuffers(1, &m_ebo));
 		shaderProgram.dispose();
+	}
+
+	virtual void onMouseMove(const f64 inX, const f64 inY) final
+	{
+		f32 xpos = static_cast<f32>(inX);
+		f32 ypos = static_cast<f32>(inY);
+
+		// if (firstMouse)
+		// {
+		// 	m_lastMouse.x = xpos;
+		// 	m_lastMouse.y = ypos;
+		// 	firstMouse = false;
+		// }
+
+		f32 xoffset = xpos - m_lastMouse.x;
+		f32 yoffset = m_lastMouse.y - ypos;
+		m_lastMouse.x = xpos;
+		m_lastMouse.y = ypos;
+
+		f32 sensitivity = 0.1f;
+		xoffset *= sensitivity;
+		yoffset *= sensitivity;
+
+		m_yaw += xoffset;
+		m_pitch += yoffset;
+
+		if (m_pitch > 89.0f)
+			m_pitch = 89.0f;
+
+		if (m_pitch < -89.0f)
+			m_pitch = -89.0f;
+
+		Vec3f front;
+		front.x = std::cos(glm::radians(m_yaw)) * std::cos(glm::radians(m_pitch));
+		front.y = std::sin(glm::radians(m_pitch));
+		front.z = std::sin(glm::radians(m_yaw)) * std::cos(glm::radians(m_pitch));
+		m_cameraFront = glm::normalize(front);
 	}
 };
 }
