@@ -152,9 +152,9 @@ i32 ProgramBase::run()
 		// Loop until the user closes the window
 		while (!glfwWindowShouldClose(window))
 		{
-			f32 currentFrame = glfwGetTime();
-			Clock.deltaTime = currentFrame - Clock.lastFrame;
-			Clock.lastFrame = currentFrame;
+			f64 currentFrame = glfwGetTime();
+			Clock.deltaTime = static_cast<f32>(currentFrame) - Clock.lastFrame;
+			Clock.lastFrame = static_cast<f32>(currentFrame);
 
 			if (!processInput(window))
 				break;
