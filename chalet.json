@@ -147,6 +147,9 @@
 		},
 		"07_lighting_color": {
 			"kind": "executable"
+		},
+		"08_lighting_basic": {
+			"kind": "executable"
 		}
 	},
 	"distribution": {
