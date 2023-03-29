@@ -45,8 +45,6 @@ i32 ProgramBase::run()
 {
 	initializeLogger();
 
-	GLFWwindow* window = nullptr;
-
 	if (!glfwInit())
 		return -1;
 
@@ -63,16 +61,16 @@ i32 ProgramBase::run()
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
-		window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
+		m_window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 #elif defined(OGL_LINUX)
-		window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
+		m_window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 
 #else
-		window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
+		m_window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 #endif
 	}
 
-	if (!window)
+	if (!m_window)
 	{
 		log_fatal("Failed to create window");
 		glfwTerminate();
@@ -82,22 +80,22 @@ i32 ProgramBase::run()
 	m_width = settings.width;
 	m_height = settings.height;
 
-	Platform::initialize(window);
+	Platform::initialize(m_window);
 
-	glfwMakeContextCurrent(window);
+	glfwMakeContextCurrent(m_window);
 
-	glfwSetWindowUserPointer(window, this);
+	glfwSetWindowUserPointer(m_window, this);
 
 	if (glfwRawMouseMotionSupported())
-		glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+		glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
-	glfwSetFramebufferSizeCallback(window, [](GLFWwindow* win, i32 width, i32 height) {
+	glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* win, i32 width, i32 height) {
 		if (win)
 		{
 			glCheck(glViewport(0, 0, width, height));
 		}
 	});
-	glfwSetWindowSizeCallback(window, [](GLFWwindow* win, i32 width, i32 height) {
+	glfwSetWindowSizeCallback(m_window, [](GLFWwindow* win, i32 width, i32 height) {
 		if (win)
 		{
 			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
@@ -106,7 +104,7 @@ i32 ProgramBase::run()
 		}
 	});
 
-	glfwSetCursorPosCallback(window, [](GLFWwindow* win, f64 xpos, f64 ypos) {
+	glfwSetCursorPosCallback(m_window, [](GLFWwindow* win, f64 xpos, f64 ypos) {
 		if (win)
 		{
 			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
@@ -117,7 +115,7 @@ i32 ProgramBase::run()
 		}
 	});
 
-	glfwSetCursorEnterCallback(window, [](GLFWwindow* win, i32 entered) {
+	glfwSetCursorEnterCallback(m_window, [](GLFWwindow* win, i32 entered) {
 		if (win)
 		{
 			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
@@ -149,19 +147,21 @@ i32 ProgramBase::run()
 	{
 		this->init();
 
+		updateMouse();
+
 		// Loop until the user closes the window
-		while (!glfwWindowShouldClose(window))
+		while (!glfwWindowShouldClose(m_window))
 		{
 			f64 currentFrame = glfwGetTime();
 			Clock.deltaTime = static_cast<f32>(currentFrame) - Clock.lastFrame;
 			Clock.lastFrame = static_cast<f32>(currentFrame);
 
-			if (!processInput(window))
+			if (!processInput(m_window))
 				break;
 
 			this->update();
 
-			glfwSwapBuffers(window);
+			glfwSwapBuffers(m_window);
 			glfwPollEvents();
 		}
 	}
@@ -180,8 +180,8 @@ i32 ProgramBase::run()
 	}
 
 	glfwTerminate();
-	glfwDestroyWindow(window);
-	window = nullptr;
+	glfwDestroyWindow(m_window);
+	m_window = nullptr;
 
 	LogManager::dispose();
 
@@ -189,9 +189,36 @@ i32 ProgramBase::run()
 };
 
 /*****************************************************************************/
+void ProgramBase::updateMouse()
+{
+	f64 xpos = 0.0;
+	f64 ypos = 0.0;
+	glfwGetCursorPos(m_window, &xpos, &ypos);
+
+	onMouseMove(xpos, ypos);
+}
+
+/*****************************************************************************/
 void ProgramBase::onMouseMove(const f64 inX, const f64 inY)
 {
 	UNUSED(inX, inY);
+}
+
+/*****************************************************************************/
+void ProgramBase::setClearColor(const i32 inR, const i32 inG, const i32 inB)
+{
+	glCheck(glClearColor(static_cast<f32>(inR) / 255.0f, static_cast<f32>(inG) / 255.0f, static_cast<f32>(inB) / 255.0f, 1.0f));
+}
+
+/*****************************************************************************/
+Color ProgramBase::getColor(const i32 inR, const i32 inG, const i32 inB, const i32 inA) const
+{
+	return Color{
+		static_cast<f32>(inR) / 255.0f,
+		static_cast<f32>(inG) / 255.0f,
+		static_cast<f32>(inB) / 255.0f,
+		static_cast<f32>(inA) / 255.0f,
+	};
 }
 
 /*****************************************************************************/

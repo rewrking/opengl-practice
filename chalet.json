@@ -144,6 +144,9 @@
 		},
 		"06_camera": {
 			"kind": "executable"
+		},
+		"07_lighting_color": {
+			"kind": "executable"
 		}
 	},
 	"distribution": {

@@ -21,6 +21,12 @@ Camera::Camera(const Vec3f& inPosition, const Vec3f& inUp, const f32 inYaw, cons
 }
 
 /*****************************************************************************/
+Camera::Camera(const f32 posX, const f32 posY, const f32 posZ) :
+	m_position({ posX, posY, posZ })
+{
+}
+
+/*****************************************************************************/
 Camera::Camera(const f32 posX, const f32 posY, const f32 posZ, const f32 upX, const f32 upY, const f32 upZ, const f32 inYaw, const f32 inPitch) :
 	m_position({ posX, posY, posZ }),
 	m_worldUp({ upX, upY, upZ }),
@@ -102,6 +108,7 @@ void Camera::processMouseScroll(const f32 inYOffset)
 		m_zoom = 45.0f;
 }
 
+/*****************************************************************************/
 void Camera::updateCameraVectors()
 {
 	Vec3f front;

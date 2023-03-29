@@ -44,6 +44,10 @@ struct ProgramBase
 
 	virtual void onMouseMove(const f64 inX, const f64 inY);
 
+	void updateMouse();
+	void setClearColor(const i32 inR, const i32 inG, const i32 inB);
+	Color getColor(const i32 inR, const i32 inG, const i32 inB, const i32 inA = 255) const;
+
 protected:
 	EngineClock Clock;
 
@@ -54,6 +58,8 @@ protected:
 
 private:
 	void initializeLogger();
+
+	GLFWwindow* m_window = nullptr;
 };
 }
 

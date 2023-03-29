@@ -148,6 +148,13 @@ void ShaderProgram::setUniform4f(const char* inName, f32 inX, f32 inY, f32 inZ, 
 }
 
 /*****************************************************************************/
+void ShaderProgram::setUniform4f(const char* inName, const Color& inColor)
+{
+	i32 location = getUniformLocation(m_id, inName);
+	glCheck(glUniform4f(location, inColor.r, inColor.g, inColor.b, inColor.a));
+}
+
+/*****************************************************************************/
 void ShaderProgram::setUniform1i(const char* inName, i32 inValue)
 {
 	i32 location = getUniformLocation(m_id, inName);

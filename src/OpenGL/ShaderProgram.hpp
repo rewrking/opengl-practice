@@ -23,6 +23,7 @@ struct ShaderProgram
 	void setUniform2f(const char* inName, f32 inX, f32 inY);
 	void setUniform3f(const char* inName, f32 inX, f32 inY, f32 inZ);
 	void setUniform4f(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW);
+	void setUniform4f(const char* inName, const Color& inColor);
 
 	void setUniform1i(const char* inName, i32 inValue);
 

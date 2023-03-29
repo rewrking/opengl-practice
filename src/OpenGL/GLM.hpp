@@ -42,4 +42,5 @@ namespace ogl
 using Vec2f = glm::vec2;
 using Vec3f = glm::vec3;
 using Mat4f = glm::mat4;
+using Color = glm::vec4;
 }

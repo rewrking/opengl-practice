@@ -12,7 +12,7 @@ struct Program final : ProgramBase
 	virtual void init() final
 	{
 		// Set the background color (Cornflower Blue - 100,149,237)
-		glCheck(glClearColor(100.0f / 255.0f, 149.0f / 255.0f, 237.0f / 255.0f, 1.0f));
+		setClearColor(100, 149, 237);
 	}
 
 	virtual void update() final
