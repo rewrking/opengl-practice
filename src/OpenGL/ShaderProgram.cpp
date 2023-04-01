@@ -134,10 +134,24 @@ void ShaderProgram::setUniform2f(const char* inName, f32 inX, f32 inY)
 }
 
 /*****************************************************************************/
+void ShaderProgram::setUniform2f(const char* inName, const Vec2f& inVec)
+{
+	i32 location = getUniformLocation(m_id, inName);
+	glCheck(glUniform2f(location, inVec.x, inVec.y));
+}
+
+/*****************************************************************************/
 void ShaderProgram::setUniform3f(const char* inName, f32 inX, f32 inY, f32 inZ)
 {
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform3f(location, inX, inY, inZ));
+}
+
+/*****************************************************************************/
+void ShaderProgram::setUniform3f(const char* inName, const Vec3f& inVec)
+{
+	i32 location = getUniformLocation(m_id, inName);
+	glCheck(glUniform3f(location, inVec.x, inVec.y, inVec.z));
 }
 
 /*****************************************************************************/

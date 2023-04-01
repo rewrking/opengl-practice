@@ -9,47 +9,47 @@ struct Program final : ProgramBase
 	// a single cube (no indices)
 	const std::vector<f32> m_vertices = {
 		// clang-format off
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
+         0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
+         0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
 
-        -0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
+        -0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,
 
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,
 
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,    1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,    1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,    1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,    1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,    1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,    1.0f,  0.0f,  0.0f,
 
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,    0.0f,  -1.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,    0.0f,  -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,    0.0f,  -1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,    0.0f,  -1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,    0.0f,  -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,    0.0f,  -1.0f,  0.0f,
 
-        -0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f,
+        -0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,
 		// clang-format on
 	};
 
@@ -120,12 +120,12 @@ struct Program final : ProgramBase
 		m_pitch = 0.0f;
 
 		m_lightingShader = ShaderProgram::make({
-			"07_lighting_color/colors.vert",
-			"07_lighting_color/colors.frag",
+			"08_lighting_basic/colors.vert",
+			"08_lighting_basic/colors.frag",
 		});
 		m_lightCubeshader = ShaderProgram::make({
-			"07_lighting_color/light_cube.vert",
-			"07_lighting_color/light_cube.frag",
+			"08_lighting_basic/light_cube.vert",
+			"08_lighting_basic/light_cube.frag",
 		});
 
 		{
@@ -171,7 +171,7 @@ struct Program final : ProgramBase
 			// glCheck(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW));
 
 			{
-				BufferAttribList attribList({ 3 });
+				BufferAttribList attribList({ 3, 3 });
 				for (auto& attrib : attribList.attribs)
 				{
 					glCheck(glVertexAttribPointer(attrib.position, attrib.size, GL_FLOAT, GL_FALSE, sizeof(f32) * attribList.size, (void*)(attrib.offset * sizeof(f32))));
@@ -190,7 +190,7 @@ struct Program final : ProgramBase
 			// we only need to bind to the VBO (to link it with glVertexAttribPointer), no need to fill it; the VBO's data already contains all we need (it's already bound, but we do it again for educational purposes)
 			glCheck(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
 
-			glCheck(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(f32) * 3, (void*)0));
+			glCheck(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(f32) * 6, (void*)0));
 			glCheck(glEnableVertexAttribArray(0));
 
 			glCheck(glBindVertexArray(0));
@@ -233,9 +233,12 @@ struct Program final : ProgramBase
 
 		glCheck(glBindVertexArray(m_vao));
 
+		Vec3f lightPos{ 1.2f, 1.0f, 2.0f };
+
 		m_lightingShader.use();
 		m_lightingShader.setUniform4f("u_LightColor", getColor(255, 255, 255));
 		m_lightingShader.setUniform4f("u_ObjectColor", getColor(255, 128, 79));
+		m_lightingShader.setUniform3f("u_lightPos", lightPos);
 
 		// f32 delta = static_cast<f32>(glfwGetTime());
 
@@ -252,8 +255,6 @@ struct Program final : ProgramBase
 		}
 
 		m_lightCubeshader.use();
-
-		Vec3f lightPos{ 1.2f, 1.0f, 2.0f };
 
 		{
 			m_lightCubeshader.setUniformMatrix4f("u_Projection", m_projection);
