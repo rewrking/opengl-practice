@@ -49,8 +49,7 @@ struct Program final : ProgramBase
 		});
 
 		{
-			u32 channels = 3;
-			auto image = Image::make("wall.jpg", channels);
+			auto image = Image::make("wall.jpg");
 
 			glCheck(glGenTextures(1, &m_texture));
 			glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));

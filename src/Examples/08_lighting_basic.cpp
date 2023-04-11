@@ -129,8 +129,7 @@ struct Program final : ProgramBase
 		});
 
 		{
-			u32 channels = 3;
-			auto image = Image::make("container.jpg", channels);
+			auto image = Image::make("container.jpg");
 
 			/*
 				GL_REPEAT

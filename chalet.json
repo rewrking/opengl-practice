@@ -150,6 +150,9 @@
 		},
 		"08_lighting_basic": {
 			"kind": "executable"
+		},
+		"x1_abstractions": {
+			"kind": "executable"
 		}
 	},
 	"distribution": {

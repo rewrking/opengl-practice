@@ -6,6 +6,7 @@
 
 namespace ogl
 {
+struct Mesh;
 struct ShaderProgram
 {
 	ShaderProgram() = default;
@@ -30,6 +31,8 @@ struct ShaderProgram
 	void setUniform1i(const char* inName, i32 inValue);
 
 	void setUniformMatrix4f(const char* inName, const Mat4f& inValue);
+
+	void draw(const Mesh& inMesh) const;
 
 private:
 	bool loadFromFiles(const StringList& inShaderFiles);

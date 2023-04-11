@@ -25,7 +25,7 @@ namespace ogl
 
 		if (width > 0 && height > 0 && channels > 0)
 		{
-			img.pixels.resize(static_cast<size_t>(width * height * static_cast<i32>(inTargetChannels)));
+			img.pixels.resize(static_cast<size_t>(width * height * channels));
 			::memcpy(img.pixels.data(), pixels, img.pixels.size());
 		}
 

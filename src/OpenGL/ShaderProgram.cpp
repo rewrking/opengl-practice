@@ -1,5 +1,7 @@
 #include "OpenGL/ShaderProgram.hpp"
 
+#include "OpenGL/Mesh.hpp"
+
 namespace ogl
 {
 namespace
@@ -180,6 +182,12 @@ void ShaderProgram::setUniformMatrix4f(const char* inName, const Mat4f& inValue)
 {
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(inValue)));
+}
+
+/*****************************************************************************/
+void ShaderProgram::draw(const Mesh& inMesh) const
+{
+	inMesh.draw();
 }
 
 }

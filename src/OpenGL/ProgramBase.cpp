@@ -205,6 +205,24 @@ void ProgramBase::onMouseMove(const f64 inX, const f64 inY)
 }
 
 /*****************************************************************************/
+void ProgramBase::clearContext()
+{
+	i32 flags = GL_COLOR_BUFFER_BIT;
+
+	if (m_usingDepthBuffer)
+		flags |= GL_DEPTH_BUFFER_BIT;
+
+	glCheck(glClear(flags));
+}
+
+/*****************************************************************************/
+void ProgramBase::useDepthBuffer()
+{
+	glCheck(glEnable(GL_DEPTH_TEST));
+	m_usingDepthBuffer = true;
+}
+
+/*****************************************************************************/
 void ProgramBase::setClearColor(const i32 inR, const i32 inG, const i32 inB)
 {
 	glCheck(glClearColor(static_cast<f32>(inR) / 255.0f, static_cast<f32>(inG) / 255.0f, static_cast<f32>(inB) / 255.0f, 1.0f));
