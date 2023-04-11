@@ -170,7 +170,7 @@ struct Program final : ProgramBase
 			// glCheck(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW));
 
 			{
-				BufferAttribList attribList({ 3, 3 });
+				BufferAttribList attribList({ MeshAttribute::Position3D, MeshAttribute::Normal3D });
 				for (auto& attrib : attribList.attribs)
 				{
 					glCheck(glVertexAttribPointer(attrib.position, attrib.size, GL_FLOAT, GL_FALSE, sizeof(f32) * attribList.size, (void*)(attrib.offset * sizeof(f32))));

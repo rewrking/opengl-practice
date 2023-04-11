@@ -9,5 +9,7 @@ enum MeshAttribute
 	TexCoord = 2,
 	ColorRGB = 3,
 	ColorRGBA = 4,
+	Normal2D = 2,
+	Normal3D = 3,
 };
 }
