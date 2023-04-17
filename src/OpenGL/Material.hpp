@@ -34,6 +34,7 @@ struct Material
 
 	void setUniform1i(const char* inName, i32 inValue);
 
+	void setUniformMatrix3f(const char* inName, const Mat3f& inValue);
 	void setUniformMatrix4f(const char* inName, const Mat4f& inValue);
 
 protected:

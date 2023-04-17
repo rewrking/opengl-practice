@@ -23,6 +23,8 @@ struct Camera
 	f32 getFieldOfView() const;
 	Mat4f getViewMatrix() const;
 
+	const Vec3f& position() const noexcept;
+
 	void processKeyboard(const CameraMovement inDirection, const f32 inDeltaTime);
 	void processMouseMovement(f32 offsetX, f32 offsetY, const bool inConstrainPitch = true);
 	void processMouseScroll(const f32 inYOffset);

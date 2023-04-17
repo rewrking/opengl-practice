@@ -20,6 +20,8 @@ struct Mesh
 
 	void draw() const;
 
+	u32 vbo() const; // temp?
+
 private:
 	void initialize();
 

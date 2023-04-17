@@ -66,24 +66,21 @@ struct Program final : ProgramBase
 		{ -1.3f, 1.0f, -1.5f }
 	};
 
-	u32 m_vbo = 0;
-	u32 m_ebo = 0;
-
-	u32 m_vao = 0;
-	u32 m_vaoLight = 0;
-
 	Vec2f m_lastMouse{ 0.0f, 0.0f };
 
 	f32 m_yaw = 0.0f;
 	f32 m_pitch = 0.0f;
 
-	Material m_lightingShader;
-	Material m_lightCubeshader;
+	Material m_cubeMaterial;
+	Material m_lightMaterial;
+
+	Mesh m_cubeMesh;
+	Mesh m_lightMesh;
 
 	Mat4f m_view;
 	Mat4f m_projection;
 
-	Camera m_camera = Camera(Vec3f{ 1.0f, 1.0f, 5.0f });
+	Camera m_camera = Camera(Vec3f{ 1.25f, 1.0f, 4.0f });
 
 	virtual bool processInput(GLFWwindow* window) final
 	{
@@ -117,81 +114,20 @@ struct Program final : ProgramBase
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
-		m_lightingShader = Material::make({
+		m_cubeMaterial = Material::make({
 			"08_lighting_basic/colors.vert",
 			"08_lighting_basic/colors.frag",
 		});
-		m_lightCubeshader = Material::make({
+		m_lightMaterial = Material::make({
 			"08_lighting_basic/light_cube.vert",
 			"08_lighting_basic/light_cube.frag",
 		});
 
-		{
-			auto image = Image::make("container.jpg");
+		m_cubeMesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::Normal3D }, m_vertices);
+		m_cubeMesh.setMaterial(m_cubeMaterial);
 
-			/*
-				GL_REPEAT
-				GL_MIRRORED_REPEAT
-				GL_CLAMP_TO_EDGE
-				GL_CLAMP_TO_BORDER
-			*/
-			glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-			glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
-
-			/*
-				GL_NEAREST
-				GL_LINEAR
-
-			// control mipmaps levels
-				GL_NEAREST_MIPMAP_NEAREST
-				GL_LINEAR_MIPMAP_NEAREST
-				GL_NEAREST_MIPMAP_LINEAR
-				GL_LINEAR_MIPMAP_LINEAR
-			*/
-			glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
-			glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
-
-			glCheck(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, static_cast<GLsizei>(image.width), static_cast<GLsizei>(image.height), 0, GL_RGB, GL_UNSIGNED_BYTE, image.pixels.data()));
-			glCheck(glGenerateMipmap(GL_TEXTURE_2D));
-		}
-		{
-			glCheck(glGenVertexArrays(1, &m_vao));
-			glCheck(glGenBuffers(1, &m_vbo));
-			glCheck(glGenBuffers(1, &m_ebo));
-
-			glCheck(glBindVertexArray(m_vao));
-
-			glCheck(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
-			glCheck(glBufferData(GL_ARRAY_BUFFER, sizeof(f32) * m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW));
-
-			// glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));
-			// glCheck(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW));
-
-			{
-				BufferAttribList attribList({ MeshAttribute::Position3D, MeshAttribute::Normal3D });
-				for (auto& attrib : attribList.attribs)
-				{
-					glCheck(glVertexAttribPointer(attrib.position, attrib.size, GL_FLOAT, GL_FALSE, sizeof(f32) * attribList.size, (void*)(attrib.offset * sizeof(f32))));
-					glCheck(glEnableVertexAttribArray(attrib.position));
-				}
-			}
-
-			glCheck(glBindBuffer(GL_ARRAY_BUFFER, 0));
-
-			// no!
-			// glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-
-			glCheck(glGenVertexArrays(1, &m_vaoLight));
-			glCheck(glBindVertexArray(m_vaoLight));
-
-			// we only need to bind to the VBO (to link it with glVertexAttribPointer), no need to fill it; the VBO's data already contains all we need (it's already bound, but we do it again for educational purposes)
-			glCheck(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
-
-			glCheck(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(f32) * 6, (void*)0));
-			glCheck(glEnableVertexAttribArray(0));
-
-			glCheck(glBindVertexArray(0));
-		}
+		m_lightMesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::Normal3D }, m_vertices);
+		m_lightMesh.setMaterial(m_lightMaterial);
 
 		// wireframe!
 		// glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
@@ -228,42 +164,39 @@ struct Program final : ProgramBase
 			m_view = m_camera.getViewMatrix();
 		}
 
-		glCheck(glBindVertexArray(m_vao));
+		Vec3f lightPos{ 0.0f, -0.25f, 2.0f };
 
-		Vec3f lightPos{ 1.2f, 1.0f, 2.0f };
-
-		m_lightingShader.bind();
-		m_lightingShader.setUniform4f("u_LightColor", getColor(255, 255, 255));
-		m_lightingShader.setUniform4f("u_ObjectColor", getColor(255, 128, 79));
-		m_lightingShader.setUniform3f("u_lightPos", lightPos);
+		m_cubeMaterial.setUniform4f("u_LightColor", getColor(255, 255, 255));
+		m_cubeMaterial.setUniform4f("u_ObjectColor", getColor(255, 128, 79));
+		m_cubeMaterial.setUniform3f("u_lightPos", lightPos);
+		m_cubeMaterial.setUniform3f("u_viewPos", m_camera.position());
 
 		// f32 delta = static_cast<f32>(glfwGetTime());
 
 		{
-			m_lightingShader.setUniformMatrix4f("u_Projection", m_projection);
-			m_lightingShader.setUniformMatrix4f("u_View", m_view);
-
 			// f32 angle = 20.0f * 0.0f + (10.0f * delta);
 			auto model = Mat4f(1.0f);
-			// m_model = glm::rotate(m_model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
-			m_lightingShader.setUniformMatrix4f("u_Model", model);
+			// model = glm::rotate(m_model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
 
-			glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_vertices.size())));
+			auto normalMatrix = Mat3f(glm::transpose(glm::inverse(model)));
+
+			m_cubeMaterial.setUniformMatrix4f("u_Projection", m_projection);
+			m_cubeMaterial.setUniformMatrix4f("u_View", m_view);
+			m_cubeMaterial.setUniformMatrix4f("u_Model", model);
+			m_cubeMaterial.setUniformMatrix3f("u_NormalMatrix", normalMatrix);
+
+			m_cubeMesh.draw();
 		}
 
-		m_lightCubeshader.bind();
-
 		{
-			m_lightCubeshader.setUniformMatrix4f("u_Projection", m_projection);
-			m_lightCubeshader.setUniformMatrix4f("u_View", m_view);
-
 			auto model = glm::translate(Mat4f(1.0f), lightPos);
 			model = glm::scale(model, Vec3f(0.2f)); // a smaller cube
 
-			m_lightCubeshader.setUniformMatrix4f("u_Model", model);
+			m_lightMaterial.setUniformMatrix4f("u_Projection", m_projection);
+			m_lightMaterial.setUniformMatrix4f("u_View", m_view);
+			m_lightMaterial.setUniformMatrix4f("u_Model", model);
 
-			glCheck(glBindVertexArray(m_vaoLight));
-			glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_vertices.size())));
+			m_lightMesh.draw();
 		}
 
 		glCheck(glBindVertexArray(0));
@@ -271,12 +204,11 @@ struct Program final : ProgramBase
 
 	virtual void dispose() final
 	{
-		glCheck(glDeleteVertexArrays(1, &m_vaoLight));
-		glCheck(glDeleteVertexArrays(1, &m_vao));
-		glCheck(glDeleteBuffers(1, &m_vbo));
-		glCheck(glDeleteBuffers(1, &m_ebo));
-		m_lightingShader.dispose();
-		m_lightCubeshader.dispose();
+		m_lightMesh.dispose();
+		m_lightMaterial.dispose();
+
+		m_cubeMaterial.dispose();
+		m_cubeMesh.dispose();
 	}
 
 	virtual void onMouseMove(const f64 inX, const f64 inY) final

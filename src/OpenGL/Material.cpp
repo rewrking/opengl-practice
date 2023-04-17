@@ -187,6 +187,13 @@ void Material::setUniform1i(const char* inName, i32 inValue)
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform1i(location, inValue));
 }
+/*****************************************************************************/
+void Material::setUniformMatrix3f(const char* inName, const Mat3f& inValue)
+{
+	this->bind();
+	i32 location = getUniformLocation(m_id, inName);
+	glCheck(glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(inValue)));
+}
 
 /*****************************************************************************/
 void Material::setUniformMatrix4f(const char* inName, const Mat4f& inValue)

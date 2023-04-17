@@ -49,6 +49,12 @@ Mat4f Camera::getViewMatrix() const
 }
 
 /*****************************************************************************/
+const Vec3f& Camera::position() const noexcept
+{
+	return m_position;
+}
+
+/*****************************************************************************/
 void Camera::processKeyboard(const CameraMovement inDirection, const f32 inDeltaTime)
 {
 	const f32 velocity = m_movementSpeed * inDeltaTime;
