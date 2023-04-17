@@ -8,6 +8,8 @@ struct Material;
 struct Mesh
 {
 	Mesh() = default;
+	OGL_DEFAULT_COPY_MOVE(Mesh);
+	virtual ~Mesh() = default;
 
 	void dispose();
 

@@ -82,7 +82,6 @@ struct Program final : ProgramBase
 
 	Mat4f m_view;
 	Mat4f m_projection;
-	Mat4f m_model;
 
 	Camera m_camera = Camera(Vec3f{ 1.0f, 1.0f, 5.0f });
 
@@ -110,8 +109,7 @@ struct Program final : ProgramBase
 
 	virtual void init() final
 	{
-		glCheck(glEnable(GL_DEPTH_TEST));
-
+		useDepthBuffer();
 		setClearColor(25, 25, 25);
 
 		m_lastMouse.x = static_cast<f32>(m_width / 2);
@@ -203,7 +201,7 @@ struct Program final : ProgramBase
 
 	virtual void update() final
 	{
-		glCheck(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+		clearContext();
 
 		// f32 timeValue = glfwGetTime();
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
@@ -246,9 +244,9 @@ struct Program final : ProgramBase
 			m_lightingShader.setUniformMatrix4f("u_View", m_view);
 
 			// f32 angle = 20.0f * 0.0f + (10.0f * delta);
-			m_model = Mat4f(1.0f);
+			auto model = Mat4f(1.0f);
 			// m_model = glm::rotate(m_model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
-			m_lightingShader.setUniformMatrix4f("u_Model", m_model);
+			m_lightingShader.setUniformMatrix4f("u_Model", model);
 
 			glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_vertices.size())));
 		}
@@ -259,10 +257,10 @@ struct Program final : ProgramBase
 			m_lightCubeshader.setUniformMatrix4f("u_Projection", m_projection);
 			m_lightCubeshader.setUniformMatrix4f("u_View", m_view);
 
-			m_model = glm::translate(Mat4f(1.0f), lightPos);
-			m_model = glm::scale(m_model, Vec3f(0.2f)); // a smaller cube
+			auto model = glm::translate(Mat4f(1.0f), lightPos);
+			model = glm::scale(model, Vec3f(0.2f)); // a smaller cube
 
-			m_lightCubeshader.setUniformMatrix4f("u_Model", m_model);
+			m_lightCubeshader.setUniformMatrix4f("u_Model", model);
 
 			glCheck(glBindVertexArray(m_vaoLight));
 			glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_vertices.size())));

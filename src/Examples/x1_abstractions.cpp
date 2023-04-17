@@ -1,8 +1,6 @@
 #include "OpenGL/ProgramBase.hpp"
 
 #include "OpenGL/BufferAttribList.hpp"
-#include "OpenGL/Mesh.hpp"
-#include "OpenGL/Texture.hpp"
 
 namespace ogl
 {
@@ -139,7 +137,7 @@ struct Program final : ProgramBase
 			auto model = glm::translate(Mat4f(1.0f), m_cubePositions[i]);
 			f32 angle = 20.0f * static_cast<f32>(i) + (10.0f * deltaTime);
 			model = glm::rotate(model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
-			m_material.setUniformMatrix4f("u_MVP", m_projection * m_view * model);
+			m_material.setUniformMatrix4f("u_Transform", m_projection * m_view * model);
 			m_mesh.draw();
 		}
 	}

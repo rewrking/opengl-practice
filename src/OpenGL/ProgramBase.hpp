@@ -6,6 +6,8 @@
 #include "OpenGL/GLM.hpp"
 #include "OpenGL/OpenGL.hpp"
 #include "OpenGL/Material.hpp"
+#include "OpenGL/Mesh.hpp"
+#include "OpenGL/Texture.hpp"
 
 namespace ogl
 {
