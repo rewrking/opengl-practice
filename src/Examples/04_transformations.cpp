@@ -43,10 +43,7 @@ struct Program final : ProgramBase
 	{
 		setClearColor(100, 149, 237);
 
-		shaderProgram = Material::make({
-			"04_transformations.vert",
-			"04_transformations.frag",
-		});
+		shaderProgram = Material::make("04_transformations.glsl");
 
 		{
 			auto image = Image::make("wall.jpg");

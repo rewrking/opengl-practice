@@ -91,10 +91,7 @@ struct Program final : ProgramBase
 		useDepthBuffer();
 		setClearColor(100, 149, 237);
 
-		m_material = Material::make({
-			"x1_abstractions/main.vert",
-			"x1_abstractions/main.frag",
-		});
+		m_material = Material::make("x1_abstractions/main.glsl");
 
 		m_material.setUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
 		m_material.setUniform1i("u_Texture", 0);

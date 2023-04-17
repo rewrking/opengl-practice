@@ -126,10 +126,7 @@ struct Program final : ProgramBase
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
-		shaderProgram = Material::make({
-			"06_camera.vert",
-			"06_camera.frag",
-		});
+		shaderProgram = Material::make("06_camera.glsl");
 
 		{
 			auto image = Image::make("container.jpg");

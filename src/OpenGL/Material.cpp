@@ -1,5 +1,6 @@
 #include "OpenGL/Material.hpp"
 
+#include "Core/Helpers.hpp"
 #include "OpenGL/Mesh.hpp"
 
 namespace ogl
@@ -38,7 +39,7 @@ bool Material::loadFromFiles(const StringList& inShaderFiles)
 {
 	dispose();
 
-	std::vector<Shader> shaders;
+	ShaderList shaders;
 	auto disposeShaders = [&shaders]() -> void {
 		for (auto& shader : shaders)
 			shader.dispose();
@@ -52,7 +53,7 @@ bool Material::loadFromFiles(const StringList& inShaderFiles)
 		bool result = shader.loadFromFile(file);
 		if (!result)
 		{
-			log_error("Failed to load shader program:", file);
+			log_error("Failed to load material:", file);
 			disposeShaders();
 			return false;
 		}
@@ -60,24 +61,111 @@ bool Material::loadFromFiles(const StringList& inShaderFiles)
 		shaders.emplace_back(std::move(shader));
 	}
 
-	std::vector<Shader::Type> shaderTypes;
+	bool result = loadFromShaders(shaders);
+	disposeShaders();
+	return result;
+}
 
-	m_id = glCreateProgram();
-	for (auto& shader : shaders)
+/*****************************************************************************/
+bool Material::loadFromFile(const std::string& inFile)
+{
+	if (!String::endsWith(".glsl", inFile))
 	{
-		auto type = shader.type();
-		for (auto shaderType : shaderTypes)
-		{
-			if (type == shaderType)
-			{
-				log_error("Shader program cannot contain duplicate shader types");
-				disposeShaders();
-				return false;
-			}
-		}
-		shaderTypes.emplace_back(shader.type());
+		log_error("Material failed to load (type unknown - expected .glsl)");
+		return false;
+	}
 
-		glCheck(glAttachShader(m_id, shader.id()));
+	dispose();
+
+	ShaderList shaders;
+	auto disposeShaders = [&shaders]() -> void {
+		for (auto& shader : shaders)
+			shader.dispose();
+
+		shaders.clear();
+	};
+
+	auto getShaderTypeFromString = [](const std::string& inType) -> Shader::Type {
+		if (inType == "vertex")
+			return Shader::Type::Vertex;
+
+		if (inType == "fragment")
+			return Shader::Type::Fragment;
+
+		if (inType == "geometry")
+			return Shader::Type::Geometry;
+
+		if (inType == "compute")
+			return Shader::Type::Compute;
+
+		return Shader::Type::None;
+	};
+
+	auto source = Shader::readFile(inFile);
+
+	const std::string kToken("#pragma type :");
+	auto pos = source.find(kToken, 0);
+	while (pos != std::string::npos)
+	{
+		auto eol = source.find_first_of("\r\n", pos);
+		if (eol == std::string::npos)
+		{
+			log_error("Failed to load material:", inFile);
+			disposeShaders();
+			return false;
+		}
+
+		auto beginType = pos + kToken.size() + 1;
+		auto endType = eol - beginType;
+		std::string type = source.substr(beginType, endType);
+
+		Shader::Type shaderType = getShaderTypeFromString(type);
+
+		auto beginSource = source.find_first_not_of("\r\n", eol);
+		pos = source.find(kToken, beginSource);
+		auto endSource = pos - (beginSource == std::string::npos ? source.size() - 1 : beginSource);
+		auto shaderSource = source.substr(beginSource, endSource);
+
+		Shader shader;
+		bool result = shader.loadFromSource(shaderSource, shaderType);
+		if (!result)
+		{
+			log_error("Failed to load material:", inFile);
+			disposeShaders();
+			return false;
+		}
+
+		shaders.emplace_back(std::move(shader));
+	}
+
+	bool result = loadFromShaders(shaders);
+	disposeShaders();
+	return result;
+}
+
+/*****************************************************************************/
+bool Material::loadFromShaders(const ShaderList& inShaders)
+{
+	m_id = glCreateProgram();
+
+	{
+		std::vector<Shader::Type> shaderTypes;
+		for (auto& shader : inShaders)
+		{
+			auto type = shader.type();
+			for (Shader::Type shaderType : shaderTypes)
+			{
+				if (type == shaderType)
+				{
+					log_error("Shader program cannot contain duplicate shader types");
+					dispose();
+					return false;
+				}
+			}
+
+			shaderTypes.emplace_back(shader.type());
+			glCheck(glAttachShader(m_id, shader.id()));
+		}
 	}
 
 	glCheck(glLinkProgram(m_id));
@@ -92,11 +180,8 @@ bool Material::loadFromFiles(const StringList& inShaderFiles)
 		dispose();
 
 		log_error("Shader program linking failed:", infoLog.data());
-		disposeShaders();
 		return false;
 	}
-
-	disposeShaders();
 
 	return true;
 }

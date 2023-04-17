@@ -17,13 +17,13 @@
 			"name": "LLDB",
 			"type": "lldb",
 			"request": "launch",
-			"program": "${workspaceFolder}/build/Debug/01_triangles",
+			"program": "${workspaceFolder}/build/Debug/x1_abstractions",
 			"args": [],
 			"stopOnEntry": false,
 			"cwd": "${workspaceFolder}",
 			"preLaunchTask": "Build: Debug",
 			"osx": {
-				"program": "${workspaceFolder}/build/x86_64-apple-darwin_Debug/01_triangles"
+				"program": "${workspaceFolder}/build/x86_64-apple-darwin_Debug/x1_abstractions"
 			}
 		},
 		{

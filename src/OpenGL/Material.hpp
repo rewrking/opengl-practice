@@ -15,7 +15,10 @@ struct Material
 	virtual ~Material() = default;
 
 	template <base_of<Material> T = Material>
-	[[nodiscard]] static T make(const StringList& inShaderFiles);
+	[[nodiscard]] static T make(const std::string& inFile);
+
+	template <base_of<Material> T = Material>
+	[[nodiscard]] static T makeFromFiles(const StringList& inShaderFiles);
 
 	u32 id() const noexcept;
 	bool valid() const noexcept;
@@ -39,6 +42,8 @@ struct Material
 
 protected:
 	bool loadFromFiles(const StringList& inShaderFiles);
+	bool loadFromFile(const std::string& inFile);
+	bool loadFromShaders(const ShaderList& inShaders);
 
 	u32 m_id = 0;
 

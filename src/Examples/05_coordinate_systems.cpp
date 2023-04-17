@@ -93,10 +93,7 @@ struct Program final : ProgramBase
 
 		setClearColor(100, 149, 237);
 
-		shaderProgram = Material::make({
-			"05_coordinate_systems.vert",
-			"05_coordinate_systems.frag",
-		});
+		shaderProgram = Material::make("05_coordinate_systems.glsl");
 
 		{
 			auto image = Image::make("container.jpg");
