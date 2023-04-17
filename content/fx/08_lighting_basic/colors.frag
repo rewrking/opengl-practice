@@ -2,11 +2,10 @@
 
 in vec3 v_Normal;
 in vec3 v_FragPos;
+in vec3 v_LightPos;
 
 uniform vec4 u_ObjectColor;
 uniform vec4 u_LightColor;
-uniform vec3 u_lightPos;
-uniform vec3 u_viewPos;
 
 out vec4 FragColor;
 
@@ -21,12 +20,12 @@ void main()
 
     // Diffuse lighting
     vec3 norm = normalize(v_Normal);
-    vec3 lightDir = normalize(u_lightPos - v_FragPos);
+    vec3 lightDir = normalize(v_LightPos - v_FragPos);
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = diff * u_LightColor.rgb;
 
     // Specular highlights
-    vec3 viewDir = normalize(u_viewPos - v_FragPos);
+    vec3 viewDir = normalize(-v_FragPos);
     vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), SHININESS);
     vec3 specular = SPECULAR_STRENGTH * spec * u_LightColor.rgb;

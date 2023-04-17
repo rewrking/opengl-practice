@@ -168,8 +168,8 @@ struct Program final : ProgramBase
 
 		m_cubeMaterial.setUniform4f("u_LightColor", getColor(255, 255, 255));
 		m_cubeMaterial.setUniform4f("u_ObjectColor", getColor(255, 128, 79));
-		m_cubeMaterial.setUniform3f("u_lightPos", lightPos);
-		m_cubeMaterial.setUniform3f("u_viewPos", m_camera.position());
+		m_cubeMaterial.setUniform3f("u_LightPos", lightPos);
+		// m_cubeMaterial.setUniform3f("u_ViewPos", m_camera.position());
 
 		// f32 delta = static_cast<f32>(glfwGetTime());
 
@@ -178,11 +178,11 @@ struct Program final : ProgramBase
 			auto model = Mat4f(1.0f);
 			// model = glm::rotate(m_model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
 
-			auto normalMatrix = Mat3f(glm::transpose(glm::inverse(model)));
+			auto normalMatrix = Mat3f(glm::transpose(glm::inverse(m_view * model)));
 
-			m_cubeMaterial.setUniformMatrix4f("u_Projection", m_projection);
+			m_cubeMaterial.setUniformMatrix4f("u_ProjectionViewModel", m_projection * m_view * model);
+			m_cubeMaterial.setUniformMatrix4f("u_ViewModel", m_view * model);
 			m_cubeMaterial.setUniformMatrix4f("u_View", m_view);
-			m_cubeMaterial.setUniformMatrix4f("u_Model", model);
 			m_cubeMaterial.setUniformMatrix3f("u_NormalMatrix", normalMatrix);
 
 			m_cubeMesh.draw();
