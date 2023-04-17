@@ -38,7 +38,7 @@ out vec4 FragColor;
 
 #define AMBIENT_STRENGTH 0.5
 #define SPECULAR_STRENGTH 0.5
-#define SHININESS 64
+#define SHININESS 32
 
 void main()
 {
