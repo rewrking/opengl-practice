@@ -77,8 +77,8 @@ struct Program final : ProgramBase
 	f32 m_yaw = 0.0f;
 	f32 m_pitch = 0.0f;
 
-	ShaderProgram m_lightingShader;
-	ShaderProgram m_lightCubeshader;
+	Material m_lightingShader;
+	Material m_lightCubeshader;
 
 	Mat4f m_view;
 	Mat4f m_projection;
@@ -119,11 +119,11 @@ struct Program final : ProgramBase
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
-		m_lightingShader = ShaderProgram::make({
+		m_lightingShader = Material::make({
 			"07_lighting_color/colors.vert",
 			"07_lighting_color/colors.frag",
 		});
-		m_lightCubeshader = ShaderProgram::make({
+		m_lightCubeshader = Material::make({
 			"07_lighting_color/light_cube.vert",
 			"07_lighting_color/light_cube.frag",
 		});
@@ -232,7 +232,7 @@ struct Program final : ProgramBase
 
 		glCheck(glBindVertexArray(m_vao));
 
-		m_lightingShader.use();
+		m_lightingShader.bind();
 		m_lightingShader.setUniform4f("u_LightColor", getColor(255, 255, 255));
 		m_lightingShader.setUniform4f("u_ObjectColor", getColor(255, 128, 79));
 
@@ -250,7 +250,7 @@ struct Program final : ProgramBase
 			glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_vertices.size())));
 		}
 
-		m_lightCubeshader.use();
+		m_lightCubeshader.bind();
 
 		Vec3f lightPos{ 1.2f, 1.0f, 2.0f };
 

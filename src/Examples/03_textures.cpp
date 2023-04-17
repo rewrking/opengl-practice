@@ -32,7 +32,7 @@ struct Program final : ProgramBase
 
 	u32 m_texture = 0;
 
-	ShaderProgram shaderProgram;
+	Material shaderProgram;
 
 	virtual Settings getSettings() const final
 	{
@@ -43,7 +43,7 @@ struct Program final : ProgramBase
 	{
 		setClearColor(100, 149, 237);
 
-		shaderProgram = ShaderProgram::make({
+		shaderProgram = Material::make({
 			"03_textures.vert",
 			"03_textures.frag",
 		});
@@ -108,7 +108,7 @@ struct Program final : ProgramBase
 
 			glCheck(glBindVertexArray(0));
 
-			shaderProgram.use();
+			shaderProgram.bind();
 			shaderProgram.setUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
 			shaderProgram.setUniform1i("u_Texture", 0);
 		}
@@ -121,7 +121,7 @@ struct Program final : ProgramBase
 	{
 		glCheck(glClear(GL_COLOR_BUFFER_BIT));
 
-		shaderProgram.use();
+		shaderProgram.bind();
 
 		// f32 timeValue = glfwGetTime();
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;

@@ -1,6 +1,7 @@
 #include "OpenGL/Mesh.hpp"
 
 #include "OpenGL/BufferAttribList.hpp"
+#include "OpenGL/Material.hpp"
 #include "OpenGL/OpenGL.hpp"
 
 namespace ogl
@@ -82,6 +83,12 @@ Mesh& Mesh::setGeometry(const std::vector<MeshAttribute>& inAttribs, const std::
 }
 
 /*****************************************************************************/
+void Mesh::setMaterial(const Material& inMaterial)
+{
+	m_material = &inMaterial;
+}
+
+/*****************************************************************************/
 void Mesh::initialize()
 {
 	if (m_vao == 0)
@@ -103,6 +110,17 @@ void Mesh::initialize()
 /*****************************************************************************/
 void Mesh::draw() const
 {
+	if (m_material != nullptr)
+	{
+		m_material->bind();
+	}
+	else
+	{
+		// We have no shader!
+		log_error("draw() called on a mesh without a shader:", m_vao);
+		return;
+	}
+
 	if (m_vao > 0)
 	{
 		glCheck(glBindVertexArray(m_vao));
@@ -133,5 +151,10 @@ void Mesh::dispose()
 	// 	glCheck(glDeleteBuffers(1, &m_ebo));
 	// 	m_ebo = 0;
 	// }
+
+	if (m_material != nullptr)
+	{
+		m_material = nullptr;
+	}
 }
 }

@@ -78,7 +78,7 @@ struct Program final : ProgramBase
 	Texture m_texture;
 	Mesh m_mesh;
 
-	ShaderProgram m_shader;
+	Material m_material;
 
 	Mat4f m_projection;
 	Mat4f m_view;
@@ -93,18 +93,18 @@ struct Program final : ProgramBase
 		useDepthBuffer();
 		setClearColor(100, 149, 237);
 
-		m_shader = ShaderProgram::make({
+		m_material = Material::make({
 			"x1_abstractions/main.vert",
 			"x1_abstractions/main.frag",
 		});
 
-		m_shader.use();
-		m_shader.setUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
-		m_shader.setUniform1i("u_Texture", 0);
+		m_material.setUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
+		m_material.setUniform1i("u_Texture", 0);
 
 		m_texture.load("container.jpg");
 
 		m_mesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::TexCoord }, m_vertices);
+		m_mesh.setMaterial(m_material);
 
 		{
 			constexpr f32 fov = 45.0f;
@@ -126,29 +126,29 @@ struct Program final : ProgramBase
 	{
 		clearContext();
 
-		// f32 timeValue = glfwGetTime();
+		f32 deltaTime = static_cast<f32>(glfwGetTime());
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
 		// shaderProgram.setUniform4f("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
 
-		m_shader.use();
-		m_texture.use(0);
+		m_texture.assign(0);
+		m_texture.bind();
 
 		for (u32 i = 0; i < m_cubePositions.size(); ++i)
 		{
 			// calculate the model matrix for each object and pass it to shader before drawing
 			auto model = glm::translate(Mat4f(1.0f), m_cubePositions[i]);
-			f32 angle = 20.0f * static_cast<f32>(i) + (10.0f * static_cast<f32>(glfwGetTime()));
+			f32 angle = 20.0f * static_cast<f32>(i) + (10.0f * deltaTime);
 			model = glm::rotate(model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
-			m_shader.setUniformMatrix4f("u_MVP", m_projection * m_view * model);
-			m_shader.draw(m_mesh);
+			m_material.setUniformMatrix4f("u_MVP", m_projection * m_view * model);
+			m_mesh.draw();
 		}
 	}
 
 	virtual void dispose() final
 	{
-		m_texture.dispose();
 		m_mesh.dispose();
-		m_shader.dispose();
+		m_texture.dispose();
+		m_material.dispose();
 	}
 };
 }

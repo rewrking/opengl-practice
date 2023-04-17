@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/Concepts.hpp"
 #include "OpenGL/GLM.hpp"
 #include "OpenGL/OpenGL.hpp"
 #include "OpenGL/Shader.hpp"
@@ -7,16 +8,19 @@
 namespace ogl
 {
 struct Mesh;
-struct ShaderProgram
+struct Material
 {
-	ShaderProgram() = default;
+	Material() = default;
+	OGL_DEFAULT_COPY_MOVE(Material);
+	virtual ~Material() = default;
 
-	[[nodiscard]] static ShaderProgram make(const StringList& inShaderFiles);
+	template <base_of<Material> T = Material>
+	[[nodiscard]] static T make(const StringList& inShaderFiles);
 
 	u32 id() const noexcept;
 	bool valid() const noexcept;
 
-	void use() const;
+	void bind() const;
 
 	void dispose();
 
@@ -32,11 +36,14 @@ struct ShaderProgram
 
 	void setUniformMatrix4f(const char* inName, const Mat4f& inValue);
 
-	void draw(const Mesh& inMesh) const;
-
-private:
+protected:
 	bool loadFromFiles(const StringList& inShaderFiles);
 
 	u32 m_id = 0;
+
+private:
+	static const Material* kCurrentMaterial;
 };
 }
+
+#include "OpenGL/Material.inl"

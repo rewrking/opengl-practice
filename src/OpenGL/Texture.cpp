@@ -46,6 +46,9 @@ constexpr i32 getTextureSlot(const u32 inSlot)
 }
 
 /*****************************************************************************/
+const Texture* Texture::kCurrentTexture = nullptr;
+
+/*****************************************************************************/
 bool Texture::load(const char* inPath)
 {
 	auto image = Image::make(inPath);
@@ -92,6 +95,9 @@ bool Texture::load(const Image& inImage)
 /*****************************************************************************/
 void Texture::dispose()
 {
+	if (kCurrentTexture == this)
+		kCurrentTexture = nullptr;
+
 	if (m_texture > 0)
 	{
 		glCheck(glDeleteTextures(1, &m_texture));
@@ -100,12 +106,21 @@ void Texture::dispose()
 }
 
 /*****************************************************************************/
-void Texture::use(const u32 inSlot) const
+void Texture::assign(const u32 inSlot) const
 {
 	if (m_texture > 0)
 	{
 		glCheck(glActiveTexture(getTextureSlot(inSlot)));
+	}
+}
+
+/*****************************************************************************/
+void Texture::bind() const
+{
+	if (kCurrentTexture != this && m_texture > 0)
+	{
 		glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
+		kCurrentTexture = this;
 	}
 }
 }

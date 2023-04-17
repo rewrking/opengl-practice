@@ -85,7 +85,7 @@ struct Program final : ProgramBase
 	f32 m_yaw = 0.0f;
 	f32 m_pitch = 0.0f;
 
-	ShaderProgram shaderProgram;
+	Material shaderProgram;
 
 	Mat4f m_view;
 	Mat4f m_projection;
@@ -126,7 +126,7 @@ struct Program final : ProgramBase
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
-		shaderProgram = ShaderProgram::make({
+		shaderProgram = Material::make({
 			"06_camera.vert",
 			"06_camera.frag",
 		});
@@ -191,7 +191,7 @@ struct Program final : ProgramBase
 
 			glCheck(glBindVertexArray(0));
 
-			shaderProgram.use();
+			shaderProgram.bind();
 			shaderProgram.setUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
 			shaderProgram.setUniform1i("u_Texture", 0);
 		}
@@ -204,7 +204,7 @@ struct Program final : ProgramBase
 	{
 		glCheck(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-		shaderProgram.use();
+		shaderProgram.bind();
 
 		// f32 timeValue = glfwGetTime();
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;

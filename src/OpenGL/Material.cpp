@@ -1,4 +1,4 @@
-#include "OpenGL/ShaderProgram.hpp"
+#include "OpenGL/Material.hpp"
 
 #include "OpenGL/Mesh.hpp"
 
@@ -19,41 +19,31 @@ inline i32 getUniformLocation(u32 id, const char* inName)
 }
 
 /*****************************************************************************/
-[[nodiscard]] ShaderProgram ShaderProgram::make(const StringList& inShaderFiles)
-{
-	ShaderProgram ret;
-	bool result = ret.loadFromFiles(inShaderFiles);
-	if (!result)
-	{
-		throw std::runtime_error(std::string("Failed to load shader program!"));
-	}
-	return ret;
-}
+const Material* Material::kCurrentMaterial = nullptr;
 
 /*****************************************************************************/
-u32 ShaderProgram::id() const noexcept
+u32 Material::id() const noexcept
 {
 	return m_id;
 }
 
 /*****************************************************************************/
-bool ShaderProgram::valid() const noexcept
+bool Material::valid() const noexcept
 {
 	return m_id > 0;
 }
 
 /*****************************************************************************/
-bool ShaderProgram::loadFromFiles(const StringList& inShaderFiles)
+bool Material::loadFromFiles(const StringList& inShaderFiles)
 {
 	dispose();
 
 	std::vector<Shader> shaders;
-	auto disposeShaders = [&shaders]() -> bool {
+	auto disposeShaders = [&shaders]() -> void {
 		for (auto& shader : shaders)
 			shader.dispose();
 
 		shaders.clear();
-		return false;
 	};
 
 	for (auto& file : inShaderFiles)
@@ -61,7 +51,11 @@ bool ShaderProgram::loadFromFiles(const StringList& inShaderFiles)
 		Shader shader;
 		bool result = shader.loadFromFile(file);
 		if (!result)
-			return disposeShaders();
+		{
+			log_error("Failed to load shader program:", file);
+			disposeShaders();
+			return false;
+		}
 
 		shaders.emplace_back(std::move(shader));
 	}
@@ -77,7 +71,8 @@ bool ShaderProgram::loadFromFiles(const StringList& inShaderFiles)
 			if (type == shaderType)
 			{
 				log_error("Shader program cannot contain duplicate shader types");
-				return disposeShaders();
+				disposeShaders();
+				return false;
 			}
 		}
 		shaderTypes.emplace_back(shader.type());
@@ -97,7 +92,8 @@ bool ShaderProgram::loadFromFiles(const StringList& inShaderFiles)
 		dispose();
 
 		log_error("Shader program linking failed:", infoLog.data());
-		return disposeShaders();
+		disposeShaders();
+		return false;
 	}
 
 	disposeShaders();
@@ -106,14 +102,21 @@ bool ShaderProgram::loadFromFiles(const StringList& inShaderFiles)
 }
 
 /*****************************************************************************/
-void ShaderProgram::use() const
+void Material::bind() const
 {
-	glCheck(glUseProgram(m_id));
+	if (kCurrentMaterial != this)
+	{
+		glCheck(glUseProgram(m_id));
+		kCurrentMaterial = this;
+	}
 }
 
 /*****************************************************************************/
-void ShaderProgram::dispose()
+void Material::dispose()
 {
+	if (kCurrentMaterial == this)
+		kCurrentMaterial = nullptr;
+
 	if (m_id > 0)
 	{
 		glCheck(glDeleteProgram(m_id));
@@ -122,72 +125,75 @@ void ShaderProgram::dispose()
 }
 
 /*****************************************************************************/
-void ShaderProgram::setUniform1f(const char* inName, f32 inValue)
+void Material::setUniform1f(const char* inName, f32 inValue)
 {
+	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform1f(location, inValue));
 }
 
 /*****************************************************************************/
-void ShaderProgram::setUniform2f(const char* inName, f32 inX, f32 inY)
+void Material::setUniform2f(const char* inName, f32 inX, f32 inY)
 {
+	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform2f(location, inX, inY));
 }
 
 /*****************************************************************************/
-void ShaderProgram::setUniform2f(const char* inName, const Vec2f& inVec)
+void Material::setUniform2f(const char* inName, const Vec2f& inVec)
 {
+	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform2f(location, inVec.x, inVec.y));
 }
 
 /*****************************************************************************/
-void ShaderProgram::setUniform3f(const char* inName, f32 inX, f32 inY, f32 inZ)
+void Material::setUniform3f(const char* inName, f32 inX, f32 inY, f32 inZ)
 {
+	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform3f(location, inX, inY, inZ));
 }
 
 /*****************************************************************************/
-void ShaderProgram::setUniform3f(const char* inName, const Vec3f& inVec)
+void Material::setUniform3f(const char* inName, const Vec3f& inVec)
 {
+	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform3f(location, inVec.x, inVec.y, inVec.z));
 }
 
 /*****************************************************************************/
-void ShaderProgram::setUniform4f(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW)
+void Material::setUniform4f(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW)
 {
+	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform4f(location, inX, inY, inZ, inW));
 }
 
 /*****************************************************************************/
-void ShaderProgram::setUniform4f(const char* inName, const Color& inColor)
+void Material::setUniform4f(const char* inName, const Color& inColor)
 {
+	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform4f(location, inColor.r, inColor.g, inColor.b, inColor.a));
 }
 
 /*****************************************************************************/
-void ShaderProgram::setUniform1i(const char* inName, i32 inValue)
+void Material::setUniform1i(const char* inName, i32 inValue)
 {
+	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform1i(location, inValue));
 }
 
 /*****************************************************************************/
-void ShaderProgram::setUniformMatrix4f(const char* inName, const Mat4f& inValue)
+void Material::setUniformMatrix4f(const char* inName, const Mat4f& inValue)
 {
+	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(inValue)));
-}
-
-/*****************************************************************************/
-void ShaderProgram::draw(const Mesh& inMesh) const
-{
-	inMesh.draw();
 }
 
 }

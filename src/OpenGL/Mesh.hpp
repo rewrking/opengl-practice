@@ -4,6 +4,7 @@
 
 namespace ogl
 {
+struct Material;
 struct Mesh
 {
 	Mesh() = default;
@@ -13,11 +14,14 @@ struct Mesh
 	Mesh& setGeometry(const std::vector<MeshAttribute>& inAttribs, std::vector<f32>&& inData);
 	Mesh& setGeometry(const std::vector<MeshAttribute>& inAttribs, const std::vector<f32>& inData);
 
-private:
-	friend struct ShaderProgram;
+	void setMaterial(const Material& inMaterial);
 
-	void initialize();
 	void draw() const;
+
+private:
+	void initialize();
+
+	const Material* m_material = nullptr;
 
 	std::vector<f32> m_data;
 

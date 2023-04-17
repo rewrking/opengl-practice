@@ -5,7 +5,7 @@
 #include "OpenGL/Camera.hpp"
 #include "OpenGL/GLM.hpp"
 #include "OpenGL/OpenGL.hpp"
-#include "OpenGL/ShaderProgram.hpp"
+#include "OpenGL/Material.hpp"
 
 namespace ogl
 {

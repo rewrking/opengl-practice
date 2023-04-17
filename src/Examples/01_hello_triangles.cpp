@@ -27,7 +27,7 @@ struct Program final : ProgramBase
 
 	u32 m_vao = 0;
 
-	ShaderProgram shaderProgram;
+	Material shaderProgram;
 
 	virtual Settings getSettings() const final
 	{
@@ -38,7 +38,7 @@ struct Program final : ProgramBase
 	{
 		setClearColor(100, 149, 237);
 
-		shaderProgram = ShaderProgram::make({
+		shaderProgram = Material::make({
 			"01_basic.vert",
 			"01_basic.frag",
 		});
@@ -77,7 +77,7 @@ struct Program final : ProgramBase
 	{
 		glCheck(glClear(GL_COLOR_BUFFER_BIT));
 
-		shaderProgram.use();
+		shaderProgram.bind();
 		glCheck(glBindVertexArray(m_vao));
 		// glCheck(glDrawArrays(GL_TRIANGLES, 0, 6));
 		glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));

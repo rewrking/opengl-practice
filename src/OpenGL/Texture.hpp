@@ -12,9 +12,12 @@ struct Texture
 	bool load(const Image& inImage);
 	void dispose();
 
-	void use(const u32 inSlot) const;
+	void assign(const u32 inSlot) const;
+	void bind() const;
 
 private:
+	static const Texture* kCurrentTexture;
+
 	u32 m_texture = 0;
 };
 }
