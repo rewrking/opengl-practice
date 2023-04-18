@@ -19,6 +19,7 @@ struct Shader
 	};
 
 	Shader() = default;
+	explicit Shader(const std::string& inFilePath);
 
 	u32 id() const noexcept;
 	Type type() const noexcept;

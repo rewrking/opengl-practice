@@ -7,6 +7,12 @@
 namespace ogl
 {
 /*****************************************************************************/
+Shader::Shader(const std::string& inFilePath) :
+	m_filename(inFilePath)
+{
+}
+
+/*****************************************************************************/
 u32 Shader::id() const noexcept
 {
 	return m_id;

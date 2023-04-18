@@ -151,6 +151,9 @@
 		"08_lighting_basic": {
 			"kind": "executable"
 		},
+		"09_lighting_materials": {
+			"kind": "executable"
+		},
 		"x1_abstractions": {
 			"kind": "executable"
 		}

@@ -126,7 +126,7 @@ bool Material::loadFromFile(const std::string& inFile)
 		auto endSource = pos - (beginSource == std::string::npos ? source.size() - 1 : beginSource);
 		auto shaderSource = source.substr(beginSource, endSource);
 
-		Shader shader;
+		Shader shader(inFile);
 		bool result = shader.loadFromSource(shaderSource, shaderType);
 		if (!result)
 		{
