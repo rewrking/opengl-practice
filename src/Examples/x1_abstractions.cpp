@@ -93,8 +93,8 @@ struct Program final : ProgramBase
 
 		m_material = Material::make("x1_abstractions/main.glsl");
 
-		m_material.setUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
-		m_material.setUniform1i("u_Texture", 0);
+		m_material.setVec4("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
+		m_material.setInt("u_Texture", 0);
 
 		m_texture.load("container.jpg");
 
@@ -123,7 +123,7 @@ struct Program final : ProgramBase
 
 		f32 deltaTime = static_cast<f32>(glfwGetTime());
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
-		// shaderProgram.setUniform4f("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
+		// shaderProgram.setVec4("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
 
 		m_texture.assign(0);
 		m_texture.bind();
@@ -134,7 +134,7 @@ struct Program final : ProgramBase
 			auto model = glm::translate(Mat4f(1.0f), m_cubePositions[i]);
 			f32 angle = 20.0f * static_cast<f32>(i) + (10.0f * deltaTime);
 			model = glm::rotate(model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
-			m_material.setUniformMatrix4f("u_Transform", m_projection * m_view * model);
+			m_material.setMat4("u_Transform", m_projection * m_view * model);
 			m_mesh.draw();
 		}
 	}

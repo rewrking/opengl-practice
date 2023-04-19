@@ -86,14 +86,14 @@ struct Program final : ProgramBase
 	{
 		bool res = ProgramBase::processInput(window);
 
-		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			m_camera.processKeyboard(CameraMovement::Forward, Clock.deltaTime);
-		else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 			m_camera.processKeyboard(CameraMovement::Backward, Clock.deltaTime);
 
-		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 			m_camera.processKeyboard(CameraMovement::Left, Clock.deltaTime);
-		else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 			m_camera.processKeyboard(CameraMovement::Right, Clock.deltaTime);
 
 		return res;
@@ -135,7 +135,7 @@ struct Program final : ProgramBase
 
 		// f32 timeValue = glfwGetTime();
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
-		// shaderProgram.setUniform4f("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
+		// shaderProgram.setVec4("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
 
 		{
 			constexpr f32 near = 0.1f;
@@ -160,10 +160,29 @@ struct Program final : ProgramBase
 
 		Vec3f lightPos{ 0.0f, -0.25f, 2.0f };
 
-		m_cubeMaterial.setUniform4f("u_LightColor", getColor(255, 255, 255));
-		m_cubeMaterial.setUniform4f("u_ObjectColor", getColor(255, 128, 79));
-		m_cubeMaterial.setUniform3f("u_LightPos", lightPos);
-		// m_cubeMaterial.setUniform3f("u_ViewPos", m_camera.position());
+		// m_cubeMaterial.setVec4("u_LightColor", getColor(255, 255, 255));
+		// m_cubeMaterial.setVec4("u_ObjectColor", getColor(255, 128, 79));
+		m_cubeMaterial.setVec3("u_LightPos", lightPos);
+		// m_cubeMaterial.setVec3("u_ViewPos", m_camera.position());
+
+		m_cubeMaterial.setVec3("u_Material.ambient", 1.0f, 0.5f, 0.31f); // object color
+		m_cubeMaterial.setVec3("u_Material.diffuse", 1.0f, 0.5f, 0.31f);
+		m_cubeMaterial.setVec3("u_Material.specular", 0.5f, 0.5f, 0.5f);
+		m_cubeMaterial.setFloat("u_Material.shininess", 32.0f);
+
+		f64 delta = glfwGetTime();
+
+		glm::vec3 lightColor;
+		lightColor.x = static_cast<f32>(std::sin(delta * 2.0));
+		lightColor.y = static_cast<f32>(std::sin(delta * 0.7));
+		lightColor.z = static_cast<f32>(std::sin(delta * 1.3));
+
+		auto diffuseColor = lightColor * glm::vec3(0.5f);
+		auto ambientColor = diffuseColor * glm::vec3(0.2f);
+
+		m_cubeMaterial.setVec3("u_Light.ambient", ambientColor);
+		m_cubeMaterial.setVec3("u_Light.diffuse", diffuseColor); // darken diffuse light a bit
+		m_cubeMaterial.setVec3("u_Light.specular", 1.0f, 1.0f, 1.0f);
 
 		// f32 delta = static_cast<f32>(glfwGetTime());
 
@@ -174,10 +193,10 @@ struct Program final : ProgramBase
 
 			auto normalMatrix = Mat3f(glm::transpose(glm::inverse(m_view * model)));
 
-			m_cubeMaterial.setUniformMatrix4f("u_ProjectionViewModel", m_projection * m_view * model);
-			m_cubeMaterial.setUniformMatrix4f("u_ViewModel", m_view * model);
-			m_cubeMaterial.setUniformMatrix4f("u_View", m_view);
-			m_cubeMaterial.setUniformMatrix3f("u_NormalMatrix", normalMatrix);
+			m_cubeMaterial.setMat4("u_ProjectionViewModel", m_projection * m_view * model);
+			m_cubeMaterial.setMat4("u_ViewModel", m_view * model);
+			m_cubeMaterial.setMat4("u_View", m_view);
+			m_cubeMaterial.setMat3("u_NormalMatrix", normalMatrix);
 
 			m_cubeMesh.draw();
 		}
@@ -186,9 +205,9 @@ struct Program final : ProgramBase
 			auto model = glm::translate(Mat4f(1.0f), lightPos);
 			model = glm::scale(model, Vec3f(0.2f)); // a smaller cube
 
-			m_lightMaterial.setUniformMatrix4f("u_Projection", m_projection);
-			m_lightMaterial.setUniformMatrix4f("u_View", m_view);
-			m_lightMaterial.setUniformMatrix4f("u_Model", model);
+			m_lightMaterial.setMat4("u_Projection", m_projection);
+			m_lightMaterial.setMat4("u_View", m_view);
+			m_lightMaterial.setMat4("u_Model", model);
 
 			m_lightMesh.draw();
 		}

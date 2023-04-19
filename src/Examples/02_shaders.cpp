@@ -72,7 +72,7 @@ struct Program final : ProgramBase
 			glCheck(glBindVertexArray(0));
 
 			shaderProgram.bind();
-			shaderProgram.setUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
+			shaderProgram.setVec4("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
 		}
 
 		// wireframe!
@@ -87,7 +87,7 @@ struct Program final : ProgramBase
 
 		// f32 timeValue = glfwGetTime();
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
-		// shaderProgram.setUniform4f("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
+		// shaderProgram.setVec4("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
 
 		glCheck(glBindVertexArray(m_vao));
 		// glCheck(glDrawArrays(GL_TRIANGLES, 0, 6));

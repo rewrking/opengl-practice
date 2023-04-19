@@ -210,7 +210,7 @@ void Material::dispose()
 }
 
 /*****************************************************************************/
-void Material::setUniform1f(const char* inName, f32 inValue)
+void Material::setFloat(const char* inName, f32 inValue)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -218,7 +218,7 @@ void Material::setUniform1f(const char* inName, f32 inValue)
 }
 
 /*****************************************************************************/
-void Material::setUniform2f(const char* inName, f32 inX, f32 inY)
+void Material::setVec2(const char* inName, f32 inX, f32 inY)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -226,7 +226,7 @@ void Material::setUniform2f(const char* inName, f32 inX, f32 inY)
 }
 
 /*****************************************************************************/
-void Material::setUniform2f(const char* inName, const Vec2f& inVec)
+void Material::setVec2(const char* inName, const Vec2f& inVec)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -234,7 +234,7 @@ void Material::setUniform2f(const char* inName, const Vec2f& inVec)
 }
 
 /*****************************************************************************/
-void Material::setUniform3f(const char* inName, f32 inX, f32 inY, f32 inZ)
+void Material::setVec3(const char* inName, f32 inX, f32 inY, f32 inZ)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -242,7 +242,7 @@ void Material::setUniform3f(const char* inName, f32 inX, f32 inY, f32 inZ)
 }
 
 /*****************************************************************************/
-void Material::setUniform3f(const char* inName, const Vec3f& inVec)
+void Material::setVec3(const char* inName, const Vec3f& inVec)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -250,7 +250,7 @@ void Material::setUniform3f(const char* inName, const Vec3f& inVec)
 }
 
 /*****************************************************************************/
-void Material::setUniform4f(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW)
+void Material::setVec4(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -258,7 +258,7 @@ void Material::setUniform4f(const char* inName, f32 inX, f32 inY, f32 inZ, f32 i
 }
 
 /*****************************************************************************/
-void Material::setUniform4f(const char* inName, const Color& inColor)
+void Material::setVec4(const char* inName, const Color& inColor)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -266,14 +266,14 @@ void Material::setUniform4f(const char* inName, const Color& inColor)
 }
 
 /*****************************************************************************/
-void Material::setUniform1i(const char* inName, i32 inValue)
+void Material::setInt(const char* inName, i32 inValue)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform1i(location, inValue));
 }
 /*****************************************************************************/
-void Material::setUniformMatrix3f(const char* inName, const Mat3f& inValue)
+void Material::setMat3(const char* inName, const Mat3f& inValue)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -281,7 +281,7 @@ void Material::setUniformMatrix3f(const char* inName, const Mat3f& inValue)
 }
 
 /*****************************************************************************/
-void Material::setUniformMatrix4f(const char* inName, const Mat4f& inValue)
+void Material::setMat4(const char* inName, const Mat4f& inValue)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);

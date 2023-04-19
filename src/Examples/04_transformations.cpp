@@ -106,8 +106,8 @@ struct Program final : ProgramBase
 			glCheck(glBindVertexArray(0));
 
 			shaderProgram.bind();
-			shaderProgram.setUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
-			shaderProgram.setUniform1i("u_Texture", 0);
+			shaderProgram.setVec4("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
+			shaderProgram.setInt("u_Texture", 0);
 		}
 
 		// wireframe!
@@ -122,12 +122,12 @@ struct Program final : ProgramBase
 
 		// f32 timeValue = glfwGetTime();
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
-		// shaderProgram.setUniform4f("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
+		// shaderProgram.setVec4("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
 
 		Mat4f trans = Mat4f(1.0f);
 		// trans = glm::translate(trans, Vec3f{ 0.5f, -0.5f, 0.0f });
 		trans = glm::rotate(trans, (float)glfwGetTime(), Vec3f{ 1.0f, 1.0f, 1.0f });
-		shaderProgram.setUniformMatrix4f("u_Transform", trans);
+		shaderProgram.setMat4("u_Transform", trans);
 
 		glCheck(glActiveTexture(GL_TEXTURE0));
 		glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));

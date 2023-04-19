@@ -97,14 +97,14 @@ struct Program final : ProgramBase
 	{
 		bool res = ProgramBase::processInput(window);
 
-		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			m_camera.processKeyboard(CameraMovement::Forward, Clock.deltaTime);
-		else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 			m_camera.processKeyboard(CameraMovement::Backward, Clock.deltaTime);
 
-		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 			m_camera.processKeyboard(CameraMovement::Left, Clock.deltaTime);
-		else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 			m_camera.processKeyboard(CameraMovement::Right, Clock.deltaTime);
 
 		return res;
@@ -189,8 +189,8 @@ struct Program final : ProgramBase
 			glCheck(glBindVertexArray(0));
 
 			shaderProgram.bind();
-			shaderProgram.setUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
-			shaderProgram.setUniform1i("u_Texture", 0);
+			shaderProgram.setVec4("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
+			shaderProgram.setInt("u_Texture", 0);
 		}
 
 		// wireframe!
@@ -205,7 +205,7 @@ struct Program final : ProgramBase
 
 		// f32 timeValue = glfwGetTime();
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
-		// shaderProgram.setUniform4f("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
+		// shaderProgram.setVec4("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
 
 		glCheck(glActiveTexture(GL_TEXTURE0));
 		glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
@@ -240,7 +240,7 @@ struct Program final : ProgramBase
 			m_model = glm::translate(m_model, m_cubePositions[i]);
 			f32 angle = 20.0f * static_cast<f32>(i) + (10.0f * static_cast<f32>(glfwGetTime()));
 			m_model = glm::rotate(m_model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
-			shaderProgram.setUniformMatrix4f("u_Transform", m_projection * m_view * m_model);
+			shaderProgram.setMat4("u_Transform", m_projection * m_view * m_model);
 
 			glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_vertices.size())));
 		}

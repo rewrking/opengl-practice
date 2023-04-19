@@ -27,18 +27,18 @@ struct Material
 
 	void dispose();
 
-	void setUniform1f(const char* inName, f32 inValue);
-	void setUniform2f(const char* inName, f32 inX, f32 inY);
-	void setUniform2f(const char* inName, const Vec2f& inVec);
-	void setUniform3f(const char* inName, f32 inX, f32 inY, f32 inZ);
-	void setUniform3f(const char* inName, const Vec3f& inVec);
-	void setUniform4f(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW);
-	void setUniform4f(const char* inName, const Color& inColor);
+	void setFloat(const char* inName, f32 inValue);
+	void setVec2(const char* inName, f32 inX, f32 inY);
+	void setVec2(const char* inName, const Vec2f& inVec);
+	void setVec3(const char* inName, f32 inX, f32 inY, f32 inZ);
+	void setVec3(const char* inName, const Vec3f& inVec);
+	void setVec4(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW);
+	void setVec4(const char* inName, const Color& inColor);
 
-	void setUniform1i(const char* inName, i32 inValue);
+	void setInt(const char* inName, i32 inValue);
 
-	void setUniformMatrix3f(const char* inName, const Mat3f& inValue);
-	void setUniformMatrix4f(const char* inName, const Mat4f& inValue);
+	void setMat3(const char* inName, const Mat3f& inValue);
+	void setMat4(const char* inName, const Mat4f& inValue);
 
 protected:
 	bool loadFromFiles(const StringList& inShaderFiles);

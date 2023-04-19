@@ -90,14 +90,14 @@ struct Program final : ProgramBase
 	{
 		bool res = ProgramBase::processInput(window);
 
-		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 			m_camera.processKeyboard(CameraMovement::Forward, Clock.deltaTime);
-		else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 			m_camera.processKeyboard(CameraMovement::Backward, Clock.deltaTime);
 
-		if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 			m_camera.processKeyboard(CameraMovement::Left, Clock.deltaTime);
-		else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 			m_camera.processKeyboard(CameraMovement::Right, Clock.deltaTime);
 
 		return res;
@@ -201,7 +201,7 @@ struct Program final : ProgramBase
 
 		// f32 timeValue = glfwGetTime();
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
-		// shaderProgram.setUniform4f("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
+		// shaderProgram.setVec4("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
 
 		{
 			constexpr f32 near = 0.1f;
@@ -227,19 +227,19 @@ struct Program final : ProgramBase
 		glCheck(glBindVertexArray(m_vao));
 
 		m_lightingShader.bind();
-		m_lightingShader.setUniform4f("u_LightColor", getColor(255, 255, 255));
-		m_lightingShader.setUniform4f("u_ObjectColor", getColor(255, 128, 79));
+		m_lightingShader.setVec4("u_LightColor", getColor(255, 255, 255));
+		m_lightingShader.setVec4("u_ObjectColor", getColor(255, 128, 79));
 
 		// f32 delta = static_cast<f32>(glfwGetTime());
 
 		{
-			m_lightingShader.setUniformMatrix4f("u_Projection", m_projection);
-			m_lightingShader.setUniformMatrix4f("u_View", m_view);
+			m_lightingShader.setMat4("u_Projection", m_projection);
+			m_lightingShader.setMat4("u_View", m_view);
 
 			// f32 angle = 20.0f * 0.0f + (10.0f * delta);
 			m_model = Mat4f(1.0f);
 			// m_model = glm::rotate(m_model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
-			m_lightingShader.setUniformMatrix4f("u_Model", m_model);
+			m_lightingShader.setMat4("u_Model", m_model);
 
 			glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_vertices.size())));
 		}
@@ -249,13 +249,13 @@ struct Program final : ProgramBase
 		Vec3f lightPos{ 1.2f, 1.0f, 2.0f };
 
 		{
-			m_lightCubeshader.setUniformMatrix4f("u_Projection", m_projection);
-			m_lightCubeshader.setUniformMatrix4f("u_View", m_view);
+			m_lightCubeshader.setMat4("u_Projection", m_projection);
+			m_lightCubeshader.setMat4("u_View", m_view);
 
 			m_model = glm::translate(Mat4f(1.0f), lightPos);
 			m_model = glm::scale(m_model, Vec3f(0.2f)); // a smaller cube
 
-			m_lightCubeshader.setUniformMatrix4f("u_Model", m_model);
+			m_lightCubeshader.setMat4("u_Model", m_model);
 
 			glCheck(glBindVertexArray(m_vaoLight));
 			glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_vertices.size())));

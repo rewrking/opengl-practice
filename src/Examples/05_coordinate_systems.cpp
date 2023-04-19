@@ -156,8 +156,8 @@ struct Program final : ProgramBase
 			glCheck(glBindVertexArray(0));
 
 			shaderProgram.bind();
-			shaderProgram.setUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
-			shaderProgram.setUniform1i("u_Texture", 0);
+			shaderProgram.setVec4("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
+			shaderProgram.setInt("u_Texture", 0);
 		}
 
 		// wireframe!
@@ -172,7 +172,7 @@ struct Program final : ProgramBase
 
 		// f32 timeValue = glfwGetTime();
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
-		// shaderProgram.setUniform4f("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
+		// shaderProgram.setVec4("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
 
 		glCheck(glActiveTexture(GL_TEXTURE0));
 		glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
@@ -185,14 +185,14 @@ struct Program final : ProgramBase
 			constexpr f32 far = 100.0f;
 			auto projection = Mat4f(1.0f);
 			projection = glm::perspective(glm::radians(fov), static_cast<f32>(m_width) / static_cast<f32>(m_height), near, far);
-			shaderProgram.setUniformMatrix4f("u_Projection", projection);
+			shaderProgram.setMat4("u_Projection", projection);
 		}
 
 		{
 			auto view = Mat4f(1.0f);
 			// note that we're translating the scene in the reverse direction of where we want to move
 			view = glm::translate(view, Vec3f{ 0.0f, 0.0f, -3.0f });
-			shaderProgram.setUniformMatrix4f("u_View", view);
+			shaderProgram.setMat4("u_View", view);
 		}
 
 		glCheck(glBindVertexArray(m_vao));
@@ -204,7 +204,7 @@ struct Program final : ProgramBase
 			model = glm::translate(model, m_cubePositions[i]);
 			f32 angle = 20.0f * static_cast<f32>(i) + (10.0f * static_cast<f32>(glfwGetTime()));
 			model = glm::rotate(model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
-			shaderProgram.setUniformMatrix4f("u_Model", model);
+			shaderProgram.setMat4("u_Model", model);
 
 			glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_vertices.size())));
 		}
