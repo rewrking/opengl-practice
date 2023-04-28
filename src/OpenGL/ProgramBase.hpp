@@ -4,9 +4,9 @@
 #include "Core/Image/Image.hpp"
 #include "OpenGL/Camera.hpp"
 #include "OpenGL/GLM.hpp"
-#include "OpenGL/OpenGL.hpp"
 #include "OpenGL/Material.hpp"
 #include "OpenGL/Mesh.hpp"
+#include "OpenGL/OpenGL.hpp"
 #include "OpenGL/Texture.hpp"
 
 namespace ogl
@@ -45,6 +45,9 @@ struct ProgramBase
 	virtual i32 run() final;
 
 	virtual void onMouseMove(const f64 inX, const f64 inY);
+
+	bool keyPressed(const i32 inKey) const;
+	void processCameraControls(Camera& inCamera);
 
 	void updateMouse();
 	void clearContext();

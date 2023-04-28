@@ -31,7 +31,7 @@ ProgramBase::Settings::Settings(u32 inWidth, u32 inHeight) :
 /*****************************************************************************/
 bool ProgramBase::processInput(GLFWwindow* window)
 {
-	bool shouldClose = glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS;
+	bool shouldClose = keyPressed(GLFW_KEY_ESCAPE);
 	if (shouldClose)
 	{
 		glfwSetWindowShouldClose(window, true);
@@ -202,6 +202,26 @@ void ProgramBase::updateMouse()
 void ProgramBase::onMouseMove(const f64 inX, const f64 inY)
 {
 	UNUSED(inX, inY);
+}
+
+/*****************************************************************************/
+bool ProgramBase::keyPressed(const i32 inKey) const
+{
+	return glfwGetKey(m_window, inKey) == GLFW_PRESS;
+}
+
+/*****************************************************************************/
+void ProgramBase::processCameraControls(Camera& inCamera)
+{
+	if (keyPressed(GLFW_KEY_UP) || keyPressed(GLFW_KEY_W))
+		inCamera.processKeyboard(CameraMovement::Forward, Clock.deltaTime);
+	else if (keyPressed(GLFW_KEY_DOWN) || keyPressed(GLFW_KEY_S))
+		inCamera.processKeyboard(CameraMovement::Backward, Clock.deltaTime);
+
+	if (keyPressed(GLFW_KEY_LEFT) || keyPressed(GLFW_KEY_A))
+		inCamera.processKeyboard(CameraMovement::Left, Clock.deltaTime);
+	else if (keyPressed(GLFW_KEY_RIGHT) || keyPressed(GLFW_KEY_D))
+		inCamera.processKeyboard(CameraMovement::Right, Clock.deltaTime);
 }
 
 /*****************************************************************************/
