@@ -96,17 +96,7 @@ struct Program final : ProgramBase
 	virtual bool processInput(GLFWwindow* window) final
 	{
 		bool res = ProgramBase::processInput(window);
-
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-			m_camera.processKeyboard(CameraMovement::Forward, Clock.deltaTime);
-		else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-			m_camera.processKeyboard(CameraMovement::Backward, Clock.deltaTime);
-
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-			m_camera.processKeyboard(CameraMovement::Left, Clock.deltaTime);
-		else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-			m_camera.processKeyboard(CameraMovement::Right, Clock.deltaTime);
-
+		processCameraControls(m_camera);
 		return res;
 	}
 
