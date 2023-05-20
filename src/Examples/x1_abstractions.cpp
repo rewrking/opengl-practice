@@ -91,7 +91,7 @@ struct Program final : ProgramBase
 		useDepthBuffer();
 		setClearColor(100, 149, 237);
 
-		m_material = Material::make("x1_abstractions/main.glsl");
+		m_material.loadFromFile("x1_abstractions/main.glsl");
 
 		m_material.setVec4("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
 		m_material.setInt("u_Texture", 0);

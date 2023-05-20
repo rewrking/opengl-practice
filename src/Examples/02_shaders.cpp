@@ -40,7 +40,7 @@ struct Program final : ProgramBase
 	{
 		setClearColor(100, 149, 237);
 
-		shaderProgram = Material::make("02_inout.glsl");
+		shaderProgram.loadFromFile("02_inout.glsl");
 
 		{
 			glCheck(glGenVertexArrays(1, &m_vao));

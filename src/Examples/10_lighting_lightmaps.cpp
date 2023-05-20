@@ -101,7 +101,7 @@ struct Program final : ProgramBase
 
 	virtual Settings getSettings() const final
 	{
-		return Settings("09: Lighting, Materials", 800, 600);
+		return Settings("10: Lighting, Lighting Maps", 800, 600);
 	}
 
 	virtual void init() final
@@ -114,8 +114,8 @@ struct Program final : ProgramBase
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
-		m_cubeMaterial.loadFromFile("09_lighting_materials/phong.glsl");
-		m_lightMaterial.loadFromFile("09_lighting_materials/light_cube.glsl");
+		m_cubeMaterial.loadFromFile("10_lighting_lightmaps/phong.glsl");
+		m_lightMaterial.loadFromFile("10_lighting_lightmaps/light_cube.glsl");
 
 		m_cubeMesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::Normal3D }, m_vertices);
 		m_cubeMesh.setMaterial(m_cubeMaterial);

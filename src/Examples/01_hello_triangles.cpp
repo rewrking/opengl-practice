@@ -38,7 +38,7 @@ struct Program final : ProgramBase
 	{
 		setClearColor(100, 149, 237);
 
-		shaderProgram = Material::make("01_basic.glsl");
+		shaderProgram.loadFromFile("01_basic.glsl");
 
 		{
 			glCheck(glGenVertexArrays(1, &m_vao));

@@ -119,8 +119,8 @@ struct Program final : ProgramBase
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
-		m_lightingShader = Material::make("07_lighting_color/colors.glsl");
-		m_lightCubeshader = Material::make("07_lighting_color/light_cube.glsl");
+		m_lightingShader.loadFromFile("07_lighting_color/colors.glsl");
+		m_lightCubeshader.loadFromFile("07_lighting_color/light_cube.glsl");
 
 		{
 			auto image = Image::make("container.jpg");
