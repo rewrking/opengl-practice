@@ -43,7 +43,7 @@ struct Program final : ProgramBase
 	{
 		setClearColor(100, 149, 237);
 
-		shaderProgram = Material::make("03_textures.glsl");
+		shaderProgram.loadFromFile("03_textures.glsl");
 
 		{
 			auto image = Image::make("wall.jpg");

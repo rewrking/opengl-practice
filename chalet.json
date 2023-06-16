@@ -154,6 +154,9 @@
 		"09_lighting_materials": {
 			"kind": "executable"
 		},
+		"10_lighting_lightmaps": {
+			"kind": "executable"
+		},
 		"x1_abstractions": {
 			"kind": "executable"
 		}

@@ -14,11 +14,8 @@ struct Material
 	OGL_DEFAULT_COPY_MOVE(Material);
 	virtual ~Material() = default;
 
-	template <base_of<Material> T = Material>
-	[[nodiscard]] static T make(const std::string& inFile);
-
-	template <base_of<Material> T = Material>
-	[[nodiscard]] static T makeFromFiles(const StringList& inShaderFiles);
+	bool loadFromFiles(const StringList& inShaderFiles);
+	bool loadFromFile(const std::string& inFile);
 
 	u32 id() const noexcept;
 	bool valid() const noexcept;
@@ -41,8 +38,6 @@ struct Material
 	void setMat4(const char* inName, const Mat4f& inValue);
 
 protected:
-	bool loadFromFiles(const StringList& inShaderFiles);
-	bool loadFromFile(const std::string& inFile);
 	bool loadFromShaders(const ShaderList& inShaders);
 
 	u32 m_id = 0;
@@ -51,5 +46,3 @@ private:
 	static const Material* kCurrentMaterial;
 };
 }
-
-#include "OpenGL/Material.inl"

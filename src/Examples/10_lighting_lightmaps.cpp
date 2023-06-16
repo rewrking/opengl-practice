@@ -85,13 +85,23 @@ struct Program final : ProgramBase
 	virtual bool processInput(GLFWwindow* window) final
 	{
 		bool res = ProgramBase::processInput(window);
-		processCameraControls(m_camera);
+
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+			m_camera.processKeyboard(CameraMovement::Forward, Clock.deltaTime);
+		else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+			m_camera.processKeyboard(CameraMovement::Backward, Clock.deltaTime);
+
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+			m_camera.processKeyboard(CameraMovement::Left, Clock.deltaTime);
+		else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+			m_camera.processKeyboard(CameraMovement::Right, Clock.deltaTime);
+
 		return res;
 	}
 
 	virtual Settings getSettings() const final
 	{
-		return Settings("08: Lighting, Basic", 800, 600);
+		return Settings("10: Lighting, Lighting Maps", 800, 600);
 	}
 
 	virtual void init() final
@@ -104,8 +114,8 @@ struct Program final : ProgramBase
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
-		m_cubeMaterial.loadFromFile("08_lighting_basic/phong.glsl");
-		m_lightMaterial.loadFromFile("08_lighting_basic/light_cube.glsl");
+		m_cubeMaterial.loadFromFile("10_lighting_lightmaps/phong.glsl");
+		m_lightMaterial.loadFromFile("10_lighting_lightmaps/light_cube.glsl");
 
 		m_cubeMesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::Normal3D }, m_vertices);
 		m_cubeMesh.setMaterial(m_cubeMaterial);
@@ -150,10 +160,29 @@ struct Program final : ProgramBase
 
 		Vec3f lightPos{ 0.0f, -0.25f, 2.0f };
 
-		m_cubeMaterial.setVec4("u_LightColor", getColor(255, 255, 255));
-		m_cubeMaterial.setVec4("u_ObjectColor", getColor(255, 128, 79));
+		// m_cubeMaterial.setVec4("u_LightColor", getColor(255, 255, 255));
+		// m_cubeMaterial.setVec4("u_ObjectColor", getColor(255, 128, 79));
 		m_cubeMaterial.setVec3("u_LightPos", lightPos);
 		// m_cubeMaterial.setVec3("u_ViewPos", m_camera.position());
+
+		m_cubeMaterial.setVec3("u_Material.ambient", 1.0f, 0.5f, 0.31f); // object color
+		m_cubeMaterial.setVec3("u_Material.diffuse", 1.0f, 0.5f, 0.31f);
+		m_cubeMaterial.setVec3("u_Material.specular", 0.5f, 0.5f, 0.5f);
+		m_cubeMaterial.setFloat("u_Material.shininess", 32.0f);
+
+		f64 delta = glfwGetTime();
+
+		glm::vec3 lightColor;
+		lightColor.x = static_cast<f32>(std::sin(delta * 2.0));
+		lightColor.y = static_cast<f32>(std::sin(delta * 0.7));
+		lightColor.z = static_cast<f32>(std::sin(delta * 1.3));
+
+		auto diffuseColor = lightColor * glm::vec3(0.5f);
+		auto ambientColor = diffuseColor * glm::vec3(0.2f);
+
+		m_cubeMaterial.setVec3("u_Light.ambient", ambientColor);
+		m_cubeMaterial.setVec3("u_Light.diffuse", diffuseColor); // darken diffuse light a bit
+		m_cubeMaterial.setVec3("u_Light.specular", 1.0f, 1.0f, 1.0f);
 
 		// f32 delta = static_cast<f32>(glfwGetTime());
 

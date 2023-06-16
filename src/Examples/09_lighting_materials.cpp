@@ -104,8 +104,8 @@ struct Program final : ProgramBase
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
-		m_cubeMaterial = Material::make("09_lighting_materials/phong.glsl");
-		m_lightMaterial = Material::make("09_lighting_materials/light_cube.glsl");
+		m_cubeMaterial.loadFromFile("09_lighting_materials/phong.glsl");
+		m_lightMaterial.loadFromFile("09_lighting_materials/light_cube.glsl");
 
 		m_cubeMesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::Normal3D }, m_vertices);
 		m_cubeMesh.setMaterial(m_cubeMaterial);
