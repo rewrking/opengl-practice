@@ -73,7 +73,8 @@ struct Program final : ProgramBase
 	Material m_cubeMaterial;
 	Material m_lightMaterial;
 
-	Texture m_dfiffuseMap;
+	Texture m_diffuseMap;
+	Texture m_specularMap;
 
 	Mesh m_cubeMesh;
 	Mesh m_lightMesh;
@@ -104,10 +105,11 @@ struct Program final : ProgramBase
 		m_lightMesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::Normal3D, MeshAttribute::TexCoord }, m_vertices);
 		m_lightMesh.setMaterial(m_lightMaterial);
 
-		if (!m_dfiffuseMap.load("container2.png"))
+		if (!m_diffuseMap.load("container2.png"))
 			return;
 
-		m_dfiffuseMap.assign(0);
+		if (!m_specularMap.load("container2_specular.png"))
+			return;
 
 		// wireframe!
 		// glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
@@ -144,7 +146,8 @@ struct Program final : ProgramBase
 			m_view = camera().getViewMatrix();
 		}
 
-		m_dfiffuseMap.bind();
+		m_diffuseMap.bind(0);
+		m_specularMap.bind(1);
 
 		Vec3f lightPos{ 0.0f, -0.25f, 2.0f };
 
@@ -154,8 +157,8 @@ struct Program final : ProgramBase
 		// m_cubeMaterial.setVec3("u_ViewPos", m_camera.position());
 
 		// m_cubeMaterial.setVec3("u_Material.ambient", 1.0f, 0.5f, 0.31f); // object color
-		m_cubeMaterial.setInt("u_Material.diffuse", 0); // texture 0
-		m_cubeMaterial.setVec3("u_Material.specular", 0.5f, 0.5f, 0.5f);
+		m_cubeMaterial.setTexture("u_Material.diffuse", m_diffuseMap);
+		m_cubeMaterial.setTexture("u_Material.specular", m_specularMap);
 		m_cubeMaterial.setFloat("u_Material.shininess", 32.0f);
 
 		// f64 delta = glfwGetTime();

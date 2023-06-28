@@ -2,6 +2,7 @@
 
 #include "Core/Helpers.hpp"
 #include "OpenGL/Mesh.hpp"
+#include "OpenGL/Texture.hpp"
 
 namespace ogl
 {
@@ -272,6 +273,13 @@ void Material::setInt(const char* inName, i32 inValue)
 	i32 location = getUniformLocation(m_id, inName);
 	glCheck(glUniform1i(location, inValue));
 }
+
+/*****************************************************************************/
+void Material::setTexture(const char* inName, const Texture& inTexture)
+{
+	return this->setInt(inName, inTexture.slot());
+}
+
 /*****************************************************************************/
 void Material::setMat3(const char* inName, const Mat3f& inValue)
 {

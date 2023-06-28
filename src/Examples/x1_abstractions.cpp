@@ -125,7 +125,6 @@ struct Program final : ProgramBase
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
 		// shaderProgram.setVec4("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
 
-		m_texture.assign(0);
 		m_texture.bind();
 
 		for (u32 i = 0; i < m_cubePositions.size(); ++i)

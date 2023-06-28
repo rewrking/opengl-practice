@@ -105,24 +105,41 @@ void Texture::dispose()
 		glCheck(glDeleteTextures(1, &m_texture));
 		m_texture = 0;
 	}
+
+	m_slot = -1;
 }
 
 /*****************************************************************************/
-void Texture::assign(const u32 inSlot) const
+void Texture::bind(const i32 inSlot) const
+{
+	if (kCurrentTexture != this && m_texture > 0)
+	{
+		assign(inSlot);
+
+		glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
+		kCurrentTexture = this;
+	}
+}
+
+/*****************************************************************************/
+void Texture::assign(const i32 inSlot) const
 {
 	if (m_texture > 0)
 	{
+		m_slot = inSlot;
 		glCheck(glActiveTexture(getTextureSlot(inSlot)));
 	}
 }
 
 /*****************************************************************************/
-void Texture::bind() const
+i32 Texture::slot() const noexcept
 {
-	if (kCurrentTexture != this && m_texture > 0)
+	if (m_slot < 0)
 	{
-		glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
-		kCurrentTexture = this;
+		log_debug("texture not assigned a slot:", m_slot);
+		return 0;
 	}
+
+	return m_slot;
 }
 }
