@@ -45,6 +45,8 @@ private:
 	void updateLookCamera();
 	void updateCameraVectors();
 
+	f32 getZoomFactor() const noexcept;
+
 	// camera Attributes
 	Vec3f m_position{ 0.0f, 0.0f, 0.0f };
 	Vec3f m_front{ 0.0f, 0.0f, -1.0f };

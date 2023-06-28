@@ -4,6 +4,10 @@
 
 namespace ogl
 {
+constexpr f32 kMinZoom = 1.0f;
+constexpr f32 kMaxZoom = 45.0f;
+constexpr f32 kMaxPitch = 89.0f;
+
 /*****************************************************************************/
 Camera::Camera(const Vec3f& inPosition) :
 	m_position(inPosition)
@@ -71,11 +75,11 @@ void Camera::update(const f32 inDeltaTime)
 				break;
 
 			case CameraMovement::Left:
-				m_position -= m_right * velocity;
+				m_position -= (m_right * velocity) * getZoomFactor();
 				break;
 
 			case CameraMovement::Right:
-				m_position += m_right * velocity;
+				m_position += (m_right * velocity) * getZoomFactor();
 				break;
 
 			default: break;
@@ -123,8 +127,9 @@ void Camera::processMouseButton(const MouseButton inButton)
 /*****************************************************************************/
 void Camera::processMouseMovement(f32 offsetX, f32 offsetY)
 {
-	m_velocity.x = offsetX * m_mouseSensitivity;
-	m_velocity.y = offsetY * m_mouseSensitivity;
+	f32 zoomFactor = getZoomFactor();
+	m_velocity.x = (offsetX * m_mouseSensitivity) * zoomFactor;
+	m_velocity.y = (offsetY * m_mouseSensitivity) * zoomFactor;
 }
 
 /*****************************************************************************/
@@ -137,11 +142,11 @@ void Camera::updateLookCamera()
 
 		if (m_constrainPitch)
 		{
-			if (m_pitch > 89.0f)
-				m_pitch = 89.0f;
+			if (m_pitch > kMaxPitch)
+				m_pitch = kMaxPitch;
 
-			if (m_pitch < -89.0f)
-				m_pitch = -89.0f;
+			if (m_pitch < -kMaxPitch)
+				m_pitch = -kMaxPitch;
 		}
 	}
 	updateCameraVectors();
@@ -152,11 +157,11 @@ void Camera::processMouseScroll(const f32 inYOffset)
 {
 	m_zoom -= inYOffset;
 
-	if (m_zoom < 1.0f)
-		m_zoom = 1.0f;
+	if (m_zoom < kMinZoom)
+		m_zoom = kMinZoom;
 
-	if (m_zoom > 45.0f)
-		m_zoom = 45.0f;
+	if (m_zoom > kMaxZoom)
+		m_zoom = kMaxZoom;
 }
 
 /*****************************************************************************/
@@ -170,6 +175,12 @@ void Camera::updateCameraVectors()
 
 	m_right = glm::normalize(glm::cross(m_front, m_worldUp));
 	m_up = glm::normalize(glm::cross(m_right, m_front));
+}
+
+/*****************************************************************************/
+f32 Camera::getZoomFactor() const noexcept
+{
+	return ((m_zoom - kMinZoom) / (kMaxZoom - kMinZoom));
 }
 
 }
