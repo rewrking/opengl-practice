@@ -63,12 +63,21 @@ protected:
 
 	bool m_mouseInView = true;
 
+	const Camera& camera() const noexcept;
+	void setCameraEnabled(const bool inValue);
+
+	const Vec2f& lastMousePosition() const noexcept;
+
 private:
 	void initializeLogger();
+
+	Camera m_camera = Camera(Vec3f{ 1.25f, 1.0f, 4.0f });
+	Vec2f m_lastMousePosition{ 0.0f, 0.0f };
 
 	GLFWwindow* m_window = nullptr;
 
 	bool m_usingDepthBuffer = false;
+	bool m_cameraEnabled = false;
 };
 }
 

@@ -80,8 +80,6 @@ struct Program final : ProgramBase
 
 	u32 m_texture = 0;
 
-	Vec2f m_lastMouse{ 0.0f, 0.0f };
-
 	f32 m_yaw = 0.0f;
 	f32 m_pitch = 0.0f;
 
@@ -91,15 +89,6 @@ struct Program final : ProgramBase
 	Mat4f m_projection;
 	Mat4f m_model;
 
-	Camera m_camera = Camera(Vec3f{ 0.0f, 0.0f, 3.0f });
-
-	virtual bool processInput(GLFWwindow* window) final
-	{
-		bool res = ProgramBase::processInput(window);
-		processCameraControls(m_camera);
-		return res;
-	}
-
 	virtual Settings getSettings() const final
 	{
 		return Settings("06: Camera", 800, 600);
@@ -107,12 +96,10 @@ struct Program final : ProgramBase
 
 	virtual void init() final
 	{
-		glCheck(glEnable(GL_DEPTH_TEST));
-
+		useDepthBuffer();
 		setClearColor(100, 149, 237);
+		setCameraEnabled(true);
 
-		m_lastMouse.x = static_cast<f32>(m_width / 2);
-		m_lastMouse.y = static_cast<f32>(m_height / 2);
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
@@ -204,7 +191,7 @@ struct Program final : ProgramBase
 			constexpr f32 near = 0.1f;
 			constexpr f32 far = 100.0f;
 			// m_projection = Mat4f(1.0f);
-			m_projection = glm::perspective(m_camera.getFieldOfView(), static_cast<f32>(m_width) / static_cast<f32>(m_height), near, far);
+			m_projection = glm::perspective(camera().getFieldOfView(), static_cast<f32>(m_width) / static_cast<f32>(m_height), near, far);
 		}
 
 		{
@@ -218,7 +205,7 @@ struct Program final : ProgramBase
 			// f32 camZ = static_cast<f32>(std::cos(glfwGetTime()) * radius);
 			// auto cameraPos = Vec3f{ camX, 0.0, camZ };
 
-			m_view = m_camera.getViewMatrix();
+			m_view = camera().getViewMatrix();
 		}
 
 		glCheck(glBindVertexArray(m_vao));
@@ -245,19 +232,6 @@ struct Program final : ProgramBase
 		glCheck(glDeleteBuffers(1, &m_vbo));
 		glCheck(glDeleteBuffers(1, &m_ebo));
 		shaderProgram.dispose();
-	}
-
-	virtual void onMouseMove(const f64 inX, const f64 inY) final
-	{
-		f32 xpos = static_cast<f32>(inX);
-		f32 ypos = static_cast<f32>(inY);
-
-		f32 xoffset = xpos - m_lastMouse.x;
-		f32 yoffset = m_lastMouse.y - ypos;
-		m_lastMouse.x = xpos;
-		m_lastMouse.y = ypos;
-
-		m_camera.processMouseMovement(xoffset, yoffset);
 	}
 };
 }

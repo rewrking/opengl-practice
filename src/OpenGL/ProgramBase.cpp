@@ -37,6 +37,11 @@ bool ProgramBase::processInput(GLFWwindow* window)
 		glfwSetWindowShouldClose(window, true);
 	}
 
+	if (m_cameraEnabled)
+	{
+		processCameraControls(m_camera);
+	}
+
 	return !shouldClose;
 }
 
@@ -145,6 +150,9 @@ i32 ProgramBase::run()
 
 	try
 	{
+		m_lastMousePosition.x = static_cast<f32>(m_width / 2);
+		m_lastMousePosition.y = static_cast<f32>(m_height / 2);
+
 		this->init();
 
 		updateMouse();
@@ -201,7 +209,18 @@ void ProgramBase::updateMouse()
 /*****************************************************************************/
 void ProgramBase::onMouseMove(const f64 inX, const f64 inY)
 {
-	UNUSED(inX, inY);
+	f32 xpos = static_cast<f32>(inX);
+	f32 ypos = static_cast<f32>(inY);
+
+	f32 xoffset = xpos - m_lastMousePosition.x;
+	f32 yoffset = m_lastMousePosition.y - ypos;
+	m_lastMousePosition.x = xpos;
+	m_lastMousePosition.y = ypos;
+
+	if (m_cameraEnabled)
+	{
+		m_camera.processMouseMovement(xoffset, yoffset);
+	}
 }
 
 /*****************************************************************************/
@@ -257,6 +276,24 @@ Color ProgramBase::getColor(const i32 inR, const i32 inG, const i32 inB, const i
 		static_cast<f32>(inB) / 255.0f,
 		static_cast<f32>(inA) / 255.0f,
 	};
+}
+
+/*****************************************************************************/
+const Camera& ProgramBase::camera() const noexcept
+{
+	return m_camera;
+}
+
+/*****************************************************************************/
+void ProgramBase::setCameraEnabled(const bool inValue)
+{
+	m_cameraEnabled = inValue;
+}
+
+/*****************************************************************************/
+const Vec2f& ProgramBase::lastMousePosition() const noexcept
+{
+	return m_lastMousePosition;
 }
 
 /*****************************************************************************/

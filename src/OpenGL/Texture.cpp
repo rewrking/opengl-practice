@@ -86,7 +86,9 @@ bool Texture::load(const Image& inImage)
 	glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
 	glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
 
-	glCheck(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, static_cast<GLsizei>(inImage.width), static_cast<GLsizei>(inImage.height), 0, GL_RGB, GL_UNSIGNED_BYTE, inImage.pixels.data()));
+	auto format = inImage.channels == 3 ? GL_RGB : GL_RGBA;
+
+	glCheck(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, static_cast<GLsizei>(inImage.width), static_cast<GLsizei>(inImage.height), 0, format, GL_UNSIGNED_BYTE, inImage.pixels.data()));
 	glCheck(glGenerateMipmap(GL_TEXTURE_2D));
 
 	return true;

@@ -9,47 +9,48 @@ struct Program final : ProgramBase
 	// a single cube (no indices)
 	const std::vector<f32> m_vertices = {
 		// clang-format off
-        -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
-         0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
-         0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
-         0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
-        -0.5f,  0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
-        -0.5f, -0.5f, -0.5f,    0.0f,  0.0f, -1.0f,
+		// positions          // normals           // texture coords
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 
-        -0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,
-         0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,
-        -0.5f,  0.5f,  0.5f,    0.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f,  0.5f,    0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
 
-        -0.5f,  0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,   -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f,   -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-         0.5f,  0.5f,  0.5f,    1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,    1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,    1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,    1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,    1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,    1.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-        -0.5f, -0.5f, -0.5f,    0.0f,  -1.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,    0.0f,  -1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,    0.0f,  -1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,    0.0f,  -1.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f,    0.0f,  -1.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,    0.0f,  -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
 
-        -0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f,    0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,    0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
 		// clang-format on
 	};
 
@@ -66,38 +67,19 @@ struct Program final : ProgramBase
 		{ -1.3f, 1.0f, -1.5f }
 	};
 
-	Vec2f m_lastMouse{ 0.0f, 0.0f };
-
 	f32 m_yaw = 0.0f;
 	f32 m_pitch = 0.0f;
 
 	Material m_cubeMaterial;
 	Material m_lightMaterial;
 
+	Texture m_dfiffuseMap;
+
 	Mesh m_cubeMesh;
 	Mesh m_lightMesh;
 
 	Mat4f m_view;
 	Mat4f m_projection;
-
-	Camera m_camera = Camera(Vec3f{ 1.25f, 1.0f, 4.0f });
-
-	virtual bool processInput(GLFWwindow* window) final
-	{
-		bool res = ProgramBase::processInput(window);
-
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-			m_camera.processKeyboard(CameraMovement::Forward, Clock.deltaTime);
-		else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-			m_camera.processKeyboard(CameraMovement::Backward, Clock.deltaTime);
-
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-			m_camera.processKeyboard(CameraMovement::Left, Clock.deltaTime);
-		else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-			m_camera.processKeyboard(CameraMovement::Right, Clock.deltaTime);
-
-		return res;
-	}
 
 	virtual Settings getSettings() const final
 	{
@@ -108,20 +90,24 @@ struct Program final : ProgramBase
 	{
 		useDepthBuffer();
 		setClearColor(25, 25, 25);
+		setCameraEnabled(true);
 
-		m_lastMouse.x = static_cast<f32>(m_width / 2);
-		m_lastMouse.y = static_cast<f32>(m_height / 2);
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
 		m_cubeMaterial.loadFromFile("10_lighting_lightmaps/phong.glsl");
 		m_lightMaterial.loadFromFile("10_lighting_lightmaps/light_cube.glsl");
 
-		m_cubeMesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::Normal3D }, m_vertices);
+		m_cubeMesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::Normal3D, MeshAttribute::TexCoord }, m_vertices);
 		m_cubeMesh.setMaterial(m_cubeMaterial);
 
-		m_lightMesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::Normal3D }, m_vertices);
+		m_lightMesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::Normal3D, MeshAttribute::TexCoord }, m_vertices);
 		m_lightMesh.setMaterial(m_lightMaterial);
+
+		if (!m_dfiffuseMap.load("container2.png"))
+			return;
+
+		m_dfiffuseMap.assign(0);
 
 		// wireframe!
 		// glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
@@ -141,7 +127,7 @@ struct Program final : ProgramBase
 			constexpr f32 near = 0.1f;
 			constexpr f32 far = 100.0f;
 			// m_projection = Mat4f(1.0f);
-			m_projection = glm::perspective(m_camera.getFieldOfView(), static_cast<f32>(m_width) / static_cast<f32>(m_height), near, far);
+			m_projection = glm::perspective(camera().getFieldOfView(), static_cast<f32>(m_width) / static_cast<f32>(m_height), near, far);
 		}
 
 		{
@@ -155,8 +141,10 @@ struct Program final : ProgramBase
 			// f32 camZ = static_cast<f32>(std::cos(glfwGetTime()) * radius);
 			// auto cameraPos = Vec3f{ camX, 0.0, camZ };
 
-			m_view = m_camera.getViewMatrix();
+			m_view = camera().getViewMatrix();
 		}
+
+		m_dfiffuseMap.bind();
 
 		Vec3f lightPos{ 0.0f, -0.25f, 2.0f };
 
@@ -165,17 +153,17 @@ struct Program final : ProgramBase
 		m_cubeMaterial.setVec3("u_LightPos", lightPos);
 		// m_cubeMaterial.setVec3("u_ViewPos", m_camera.position());
 
-		m_cubeMaterial.setVec3("u_Material.ambient", 1.0f, 0.5f, 0.31f); // object color
-		m_cubeMaterial.setVec3("u_Material.diffuse", 1.0f, 0.5f, 0.31f);
+		// m_cubeMaterial.setVec3("u_Material.ambient", 1.0f, 0.5f, 0.31f); // object color
+		m_cubeMaterial.setInt("u_Material.diffuse", 0); // texture 0
 		m_cubeMaterial.setVec3("u_Material.specular", 0.5f, 0.5f, 0.5f);
 		m_cubeMaterial.setFloat("u_Material.shininess", 32.0f);
 
-		f64 delta = glfwGetTime();
+		// f64 delta = glfwGetTime();
 
-		glm::vec3 lightColor;
-		lightColor.x = static_cast<f32>(std::sin(delta * 2.0));
-		lightColor.y = static_cast<f32>(std::sin(delta * 0.7));
-		lightColor.z = static_cast<f32>(std::sin(delta * 1.3));
+		glm::vec3 lightColor{ 1.0f, 1.0f, 1.0f };
+		// lightColor.x = static_cast<f32>(std::sin(delta * 2.0));
+		// lightColor.y = static_cast<f32>(std::sin(delta * 0.7));
+		// lightColor.z = static_cast<f32>(std::sin(delta * 1.3));
 
 		auto diffuseColor = lightColor * glm::vec3(0.5f);
 		auto ambientColor = diffuseColor * glm::vec3(0.2f);
@@ -222,19 +210,6 @@ struct Program final : ProgramBase
 
 		m_cubeMaterial.dispose();
 		m_cubeMesh.dispose();
-	}
-
-	virtual void onMouseMove(const f64 inX, const f64 inY) final
-	{
-		f32 xpos = static_cast<f32>(inX);
-		f32 ypos = static_cast<f32>(inY);
-
-		f32 xoffset = xpos - m_lastMouse.x;
-		f32 yoffset = m_lastMouse.y - ypos;
-		m_lastMouse.x = xpos;
-		m_lastMouse.y = ypos;
-
-		m_camera.processMouseMovement(xoffset, yoffset);
 	}
 };
 }
