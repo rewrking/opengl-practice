@@ -45,8 +45,10 @@ struct ProgramBase
 	virtual i32 run() final;
 
 	virtual void onMouseMove(const f64 inX, const f64 inY);
+	virtual void onMouseScroll(const f64 inX, const f64 inY);
 
 	bool keyPressed(const i32 inKey) const;
+	bool mouseButtonPressed(const i32 inKey) const;
 	void processCameraControls(Camera& inCamera);
 
 	void updateMouse();
@@ -65,8 +67,6 @@ protected:
 
 	const Camera& camera() const noexcept;
 	void setCameraEnabled(const bool inValue);
-
-	const Vec2f& lastMousePosition() const noexcept;
 
 private:
 	void initializeLogger();

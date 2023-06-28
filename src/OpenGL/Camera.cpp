@@ -55,50 +55,95 @@ const Vec3f& Camera::position() const noexcept
 }
 
 /*****************************************************************************/
-void Camera::processKeyboard(const CameraMovement inDirection, const f32 inDeltaTime)
+void Camera::update(const f32 inDeltaTime)
 {
-	const f32 velocity = m_movementSpeed * inDeltaTime;
-
-	switch (inDirection)
+	if (m_lastMove != CameraMovement::None)
 	{
-		case CameraMovement::Forward:
-			m_position += m_front * velocity;
-			break;
+		const f32 velocity = m_movementSpeed * inDeltaTime;
+		switch (m_lastMove)
+		{
+			case CameraMovement::Forward:
+				m_position += m_front * velocity;
+				break;
 
-		case CameraMovement::Backward:
-			m_position -= m_front * velocity;
-			break;
+			case CameraMovement::Backward:
+				m_position -= m_front * velocity;
+				break;
 
-		case CameraMovement::Left:
-			m_position -= m_right * velocity;
-			break;
+			case CameraMovement::Left:
+				m_position -= m_right * velocity;
+				break;
 
-		case CameraMovement::Right:
-			m_position += m_right * velocity;
-			break;
+			case CameraMovement::Right:
+				m_position += m_right * velocity;
+				break;
 
-		default: break;
+			default: break;
+		}
+	}
+
+	if (m_velocity.x != 0.0f || m_velocity.y != 0.0f || m_isRotating)
+	{
+		updateLookCamera();
+
+		f32 amount = 0.00005f;
+		f32 dirX = m_velocity.x >= 0.0f ? amount : -amount;
+		f32 dirY = m_velocity.y >= 0.0f ? amount : -amount;
+
+		if (m_velocity.x > 0.0f)
+			m_velocity.x = std::max(m_velocity.x - (dirX * inDeltaTime * amount), 0.0f);
+		else if (m_velocity.x < 0.0f)
+			m_velocity.x = std::min(m_velocity.x + (dirX * inDeltaTime * amount), 0.0f);
+
+		if (m_velocity.y > 0.0f)
+			m_velocity.y = std::max(m_velocity.y - (dirY * inDeltaTime * amount), 0.0f);
+		else if (m_velocity.y < 0.0f)
+			m_velocity.y = std::min(m_velocity.y + (dirY * inDeltaTime * amount), 0.0f);
+
+		m_isRotating = true;
+	}
+	else
+	{
+		m_isRotating = false;
 	}
 }
 
 /*****************************************************************************/
-void Camera::processMouseMovement(f32 offsetX, f32 offsetY, const bool inConstrainPitch)
+void Camera::processKeyboard(const CameraMovement inDirection)
 {
-	offsetX *= m_mouseSensitivity;
-	offsetY *= m_mouseSensitivity;
+	m_lastMove = inDirection;
+}
 
-	m_yaw += offsetX;
-	m_pitch += offsetY;
+/*****************************************************************************/
+void Camera::processMouseButton(const MouseButton inButton)
+{
+	m_isRotating = inButton == MouseButton::Left;
+}
 
-	if (inConstrainPitch)
+/*****************************************************************************/
+void Camera::processMouseMovement(f32 offsetX, f32 offsetY)
+{
+	m_velocity.x = offsetX * m_mouseSensitivity;
+	m_velocity.y = offsetY * m_mouseSensitivity;
+}
+
+/*****************************************************************************/
+void Camera::updateLookCamera()
+{
+	if (m_isRotating)
 	{
-		if (m_pitch > 89.0f)
-			m_pitch = 89.0f;
+		m_yaw += m_velocity.x;
+		m_pitch += m_velocity.y;
 
-		if (m_pitch < -89.0f)
-			m_pitch = -89.0f;
+		if (m_constrainPitch)
+		{
+			if (m_pitch > 89.0f)
+				m_pitch = 89.0f;
+
+			if (m_pitch < -89.0f)
+				m_pitch = -89.0f;
+		}
 	}
-
 	updateCameraVectors();
 }
 

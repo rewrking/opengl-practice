@@ -176,7 +176,7 @@ struct Program final : ProgramBase
 
 	virtual void update() final
 	{
-		glCheck(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+		clearContext();
 
 		shaderProgram.bind();
 

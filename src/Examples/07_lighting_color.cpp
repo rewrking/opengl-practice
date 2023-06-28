@@ -174,7 +174,7 @@ struct Program final : ProgramBase
 
 	virtual void update() final
 	{
-		glCheck(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+		clearContext();
 
 		// f32 timeValue = glfwGetTime();
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;

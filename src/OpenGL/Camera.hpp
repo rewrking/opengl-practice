@@ -6,10 +6,19 @@ namespace ogl
 {
 enum class CameraMovement
 {
+	None,
 	Forward,
 	Backward,
 	Left,
 	Right
+};
+
+enum class MouseButton
+{
+	None,
+	Left,
+	Middle,
+	Right,
 };
 
 struct Camera
@@ -25,11 +34,15 @@ struct Camera
 
 	const Vec3f& position() const noexcept;
 
-	void processKeyboard(const CameraMovement inDirection, const f32 inDeltaTime);
-	void processMouseMovement(f32 offsetX, f32 offsetY, const bool inConstrainPitch = true);
+	void processKeyboard(const CameraMovement inDirection);
+	void processMouseButton(const MouseButton inButton);
+	void processMouseMovement(f32 offsetX, f32 offsetY);
 	void processMouseScroll(const f32 inYOffset);
 
+	void update(const f32 inDeltaTime);
+
 private:
+	void updateLookCamera();
 	void updateCameraVectors();
 
 	// camera Attributes
@@ -39,13 +52,20 @@ private:
 	Vec3f m_right{ 0.0f, 0.0f, 0.0f };
 	Vec3f m_worldUp{ 0.0f, 1.0f, 0.0f };
 
+	Vec2f m_velocity{ 0.0f, 0.0f };
+
 	// euler Angles
 	f32 m_yaw = -90.0f;
 	f32 m_pitch = 0.0f;
 
 	// camera options
 	f32 m_movementSpeed = 2.5f;
-	f32 m_mouseSensitivity = 0.05f;
+	f32 m_mouseSensitivity = 0.1f;
 	f32 m_zoom = 45.0f;
+
+	CameraMovement m_lastMove = CameraMovement::None;
+
+	bool m_isRotating = false;
+	bool m_constrainPitch = true;
 };
 }

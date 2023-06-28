@@ -30,13 +30,13 @@
 			"name": "LLDB (arm64)",
 			"type": "lldb",
 			"request": "launch",
-			"program": "${workspaceFolder}/build/Debug/01_triangles",
+			"program": "${workspaceFolder}/build/Debug/10_lighting_lightmaps",
 			"args": [],
 			"stopOnEntry": false,
 			"cwd": "${workspaceFolder}",
 			"preLaunchTask": "Build: Debug",
 			"osx": {
-				"program": "${workspaceFolder}/build/arm64-apple-darwin_Debug/01_hello_triangles"
+				"program": "${workspaceFolder}/build/arm64-apple-darwin_Debug/10_lighting_lightmaps"
 			}
 		},
 		{

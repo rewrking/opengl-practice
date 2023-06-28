@@ -128,6 +128,14 @@ i32 ProgramBase::run()
 		}
 	});
 
+	glfwSetScrollCallback(m_window, [](GLFWwindow* win, f64 xoffset, f64 yoffset) {
+		if (win)
+		{
+			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
+			self->onMouseScroll(xoffset, yoffset);
+		}
+	});
+
 	int version = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	if (version == 0)
 	{
@@ -166,6 +174,11 @@ i32 ProgramBase::run()
 
 			if (!processInput(m_window))
 				break;
+
+			if (m_cameraEnabled)
+			{
+				m_camera.update(Clock.deltaTime);
+			}
 
 			this->update();
 
@@ -224,23 +237,51 @@ void ProgramBase::onMouseMove(const f64 inX, const f64 inY)
 }
 
 /*****************************************************************************/
+void ProgramBase::onMouseScroll(const f64 inX, const f64 inY)
+{
+	f32 xpos = static_cast<f32>(inX);
+	f32 ypos = static_cast<f32>(inY);
+
+	if (m_cameraEnabled)
+	{
+		UNUSED(xpos);
+		m_camera.processMouseScroll(ypos);
+	}
+}
+
+/*****************************************************************************/
 bool ProgramBase::keyPressed(const i32 inKey) const
 {
 	return glfwGetKey(m_window, inKey) == GLFW_PRESS;
+}
+bool ProgramBase::mouseButtonPressed(const i32 inKey) const
+{
+	return glfwGetMouseButton(m_window, inKey) == GLFW_PRESS;
 }
 
 /*****************************************************************************/
 void ProgramBase::processCameraControls(Camera& inCamera)
 {
+	if (mouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+		inCamera.processMouseButton(MouseButton::Left);
+	else if (mouseButtonPressed(GLFW_MOUSE_BUTTON_MIDDLE))
+		inCamera.processMouseButton(MouseButton::Middle);
+	else if (mouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT))
+		inCamera.processMouseButton(MouseButton::Right);
+	else
+		inCamera.processMouseButton(MouseButton::None);
+
+	inCamera.processKeyboard(CameraMovement::None);
+
 	if (keyPressed(GLFW_KEY_UP) || keyPressed(GLFW_KEY_W))
-		inCamera.processKeyboard(CameraMovement::Forward, Clock.deltaTime);
+		inCamera.processKeyboard(CameraMovement::Forward);
 	else if (keyPressed(GLFW_KEY_DOWN) || keyPressed(GLFW_KEY_S))
-		inCamera.processKeyboard(CameraMovement::Backward, Clock.deltaTime);
+		inCamera.processKeyboard(CameraMovement::Backward);
 
 	if (keyPressed(GLFW_KEY_LEFT) || keyPressed(GLFW_KEY_A))
-		inCamera.processKeyboard(CameraMovement::Left, Clock.deltaTime);
+		inCamera.processKeyboard(CameraMovement::Left);
 	else if (keyPressed(GLFW_KEY_RIGHT) || keyPressed(GLFW_KEY_D))
-		inCamera.processKeyboard(CameraMovement::Right, Clock.deltaTime);
+		inCamera.processKeyboard(CameraMovement::Right);
 }
 
 /*****************************************************************************/
@@ -288,12 +329,6 @@ const Camera& ProgramBase::camera() const noexcept
 void ProgramBase::setCameraEnabled(const bool inValue)
 {
 	m_cameraEnabled = inValue;
-}
-
-/*****************************************************************************/
-const Vec2f& ProgramBase::lastMousePosition() const noexcept
-{
-	return m_lastMousePosition;
 }
 
 /*****************************************************************************/
