@@ -157,6 +157,9 @@
 		"10_lighting_lightmaps": {
 			"kind": "executable"
 		},
+		"11_lighting_casters": {
+			"kind": "executable"
+		},
 		"x1_abstractions": {
 			"kind": "executable"
 		}
