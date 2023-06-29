@@ -1,6 +1,7 @@
 #include "OpenGL/ProgramBase.hpp"
 
 #include <array>
+#include <thread>
 
 #include "Core/Log/LogManager.hpp"
 #include "Core/Platform.hpp"
@@ -184,6 +185,9 @@ i32 ProgramBase::run()
 
 			glfwSwapBuffers(m_window);
 			glfwPollEvents();
+
+			// We just want to slow rendering down "enough" until this is done properly
+			std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<u64>((1.0 / 65.0) * 1000.0)));
 		}
 	}
 	catch (const std::exception& err)
