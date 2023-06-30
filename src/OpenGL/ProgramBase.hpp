@@ -69,6 +69,8 @@ protected:
 	void setCameraEnabled(const bool inValue);
 
 private:
+	void setFullscreen(const bool inValue);
+
 	void initializeLogger();
 
 	Camera m_camera = Camera(Vec3f{ 1.25f, 1.0f, 4.0f });
@@ -76,8 +78,18 @@ private:
 
 	GLFWwindow* m_window = nullptr;
 
+	struct
+	{
+		i32 x = 0;
+		i32 y = 0;
+		i32 width = 0;
+		i32 height = 0;
+		bool fullscreen = false;
+	} m_windowProps;
+
 	bool m_usingDepthBuffer = false;
 	bool m_cameraEnabled = false;
+	bool m_keyPressed = false;
 };
 }
 

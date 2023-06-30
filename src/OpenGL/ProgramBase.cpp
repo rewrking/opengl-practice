@@ -57,6 +57,9 @@ i32 ProgramBase::run()
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
 
 	Settings settings = getSettings();
+	m_windowProps.width = static_cast<i32>(settings.width);
+	m_windowProps.height = static_cast<i32>(settings.height);
+	m_windowProps.fullscreen = false;
 
 	auto glfwVersion = glfwGetVersionString();
 	log_info("GLFW", glfwVersion);
@@ -286,6 +289,19 @@ void ProgramBase::processCameraControls(Camera& inCamera)
 		inCamera.processKeyboard(CameraMovement::Left);
 	else if (keyPressed(GLFW_KEY_RIGHT) || keyPressed(GLFW_KEY_D))
 		inCamera.processKeyboard(CameraMovement::Right);
+
+	if (keyPressed(GLFW_KEY_F4))
+	{
+		if (!m_keyPressed)
+		{
+			setFullscreen(!m_windowProps.fullscreen);
+			m_keyPressed = true;
+		}
+	}
+	else
+	{
+		m_keyPressed = false;
+	}
 }
 
 /*****************************************************************************/
@@ -333,6 +349,37 @@ const Camera& ProgramBase::camera() const noexcept
 void ProgramBase::setCameraEnabled(const bool inValue)
 {
 	m_cameraEnabled = inValue;
+}
+
+/*****************************************************************************/
+void ProgramBase::setFullscreen(const bool inValue)
+{
+	if (!m_windowProps.fullscreen)
+	{
+		glfwGetWindowPos(m_window, &m_windowProps.x, &m_windowProps.y);
+	}
+
+	if (inValue)
+	{
+		GLFWmonitor* monitor = glfwGetWindowMonitor(m_window);
+		if (monitor == nullptr)
+			monitor = glfwGetPrimaryMonitor();
+
+		if (monitor)
+		{
+			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+			glfwSetWindowMonitor(m_window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+		}
+	}
+	else
+	{
+		i32 xpos = m_windowProps.x;
+		i32 ypos = m_windowProps.y;
+		i32 width = m_windowProps.width;
+		i32 height = m_windowProps.height;
+		glfwSetWindowMonitor(m_window, NULL, xpos, ypos, width, height, 0);
+	}
+	m_windowProps.fullscreen = inValue;
 }
 
 /*****************************************************************************/
