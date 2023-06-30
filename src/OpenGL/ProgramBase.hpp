@@ -47,8 +47,9 @@ struct ProgramBase
 	virtual void onMouseMove(const f64 inX, const f64 inY);
 	virtual void onMouseScroll(const f64 inX, const f64 inY);
 
+	bool keyHeld(const i32 inKey) const;
 	bool keyPressed(const i32 inKey) const;
-	bool mouseButtonPressed(const i32 inKey) const;
+	bool mouseButtonHeld(const i32 inKey) const;
 	void processCameraControls(Camera& inCamera);
 
 	void updateMouse();
@@ -89,7 +90,7 @@ private:
 
 	bool m_usingDepthBuffer = false;
 	bool m_cameraEnabled = false;
-	bool m_keyPressed = false;
+	mutable bool m_keyPressed = false;
 };
 }
 

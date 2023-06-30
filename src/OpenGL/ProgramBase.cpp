@@ -32,10 +32,10 @@ ProgramBase::Settings::Settings(u32 inWidth, u32 inHeight) :
 /*****************************************************************************/
 bool ProgramBase::processInput(GLFWwindow* window)
 {
-	bool shouldClose = keyPressed(GLFW_KEY_ESCAPE);
-	if (shouldClose)
+	if (keyHeld(GLFW_KEY_ESCAPE))
 	{
 		glfwSetWindowShouldClose(window, true);
+		return false;
 	}
 
 	if (m_cameraEnabled)
@@ -43,7 +43,7 @@ bool ProgramBase::processInput(GLFWwindow* window)
 		processCameraControls(m_camera);
 	}
 
-	return !shouldClose;
+	return true;
 }
 
 /*****************************************************************************/
@@ -257,11 +257,32 @@ void ProgramBase::onMouseScroll(const f64 inX, const f64 inY)
 }
 
 /*****************************************************************************/
-bool ProgramBase::keyPressed(const i32 inKey) const
+bool ProgramBase::keyHeld(const i32 inKey) const
 {
 	return glfwGetKey(m_window, inKey) == GLFW_PRESS;
 }
-bool ProgramBase::mouseButtonPressed(const i32 inKey) const
+
+/*****************************************************************************/
+bool ProgramBase::keyPressed(const i32 inKey) const
+{
+	if (keyHeld(inKey))
+	{
+		if (!m_keyPressed)
+		{
+			m_keyPressed = true;
+			return true;
+		}
+	}
+	else
+	{
+		m_keyPressed = false;
+	}
+
+	return false;
+}
+
+/*****************************************************************************/
+bool ProgramBase::mouseButtonHeld(const i32 inKey) const
 {
 	return glfwGetMouseButton(m_window, inKey) == GLFW_PRESS;
 }
@@ -269,39 +290,29 @@ bool ProgramBase::mouseButtonPressed(const i32 inKey) const
 /*****************************************************************************/
 void ProgramBase::processCameraControls(Camera& inCamera)
 {
-	if (mouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+	if (mouseButtonHeld(GLFW_MOUSE_BUTTON_LEFT))
 		inCamera.processMouseButton(MouseButton::Left);
-	else if (mouseButtonPressed(GLFW_MOUSE_BUTTON_MIDDLE))
+	else if (mouseButtonHeld(GLFW_MOUSE_BUTTON_MIDDLE))
 		inCamera.processMouseButton(MouseButton::Middle);
-	else if (mouseButtonPressed(GLFW_MOUSE_BUTTON_RIGHT))
+	else if (mouseButtonHeld(GLFW_MOUSE_BUTTON_RIGHT))
 		inCamera.processMouseButton(MouseButton::Right);
 	else
 		inCamera.processMouseButton(MouseButton::None);
 
 	inCamera.processKeyboard(CameraMovement::None);
 
-	if (keyPressed(GLFW_KEY_UP) || keyPressed(GLFW_KEY_W))
+	if (keyHeld(GLFW_KEY_UP) || keyHeld(GLFW_KEY_W))
 		inCamera.processKeyboard(CameraMovement::Forward);
-	else if (keyPressed(GLFW_KEY_DOWN) || keyPressed(GLFW_KEY_S))
+	else if (keyHeld(GLFW_KEY_DOWN) || keyHeld(GLFW_KEY_S))
 		inCamera.processKeyboard(CameraMovement::Backward);
 
-	if (keyPressed(GLFW_KEY_LEFT) || keyPressed(GLFW_KEY_A))
+	if (keyHeld(GLFW_KEY_LEFT) || keyHeld(GLFW_KEY_A))
 		inCamera.processKeyboard(CameraMovement::Left);
-	else if (keyPressed(GLFW_KEY_RIGHT) || keyPressed(GLFW_KEY_D))
+	else if (keyHeld(GLFW_KEY_RIGHT) || keyHeld(GLFW_KEY_D))
 		inCamera.processKeyboard(CameraMovement::Right);
 
 	if (keyPressed(GLFW_KEY_F4))
-	{
-		if (!m_keyPressed)
-		{
-			setFullscreen(!m_windowProps.fullscreen);
-			m_keyPressed = true;
-		}
-	}
-	else
-	{
-		m_keyPressed = false;
-	}
+		setFullscreen(!m_windowProps.fullscreen);
 }
 
 /*****************************************************************************/
