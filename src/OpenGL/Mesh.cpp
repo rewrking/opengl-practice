@@ -7,7 +7,7 @@
 namespace ogl
 {
 /*****************************************************************************/
-Mesh& Mesh::setGeometry(const std::vector<MeshAttribute>& inAttribs, std::vector<f32>&& inData)
+Mesh& Mesh::setGeometry(const std::vector<Attrib>& inAttribs, std::vector<f32>&& inData)
 {
 	if (inData.empty() || inAttribs.empty())
 		return *this;
@@ -45,7 +45,7 @@ Mesh& Mesh::setGeometry(const std::vector<MeshAttribute>& inAttribs, std::vector
 }
 
 /*****************************************************************************/
-Mesh& Mesh::setGeometry(const std::vector<MeshAttribute>& inAttribs, const std::vector<f32>& inData)
+Mesh& Mesh::setGeometry(const std::vector<Attrib>& inAttribs, const std::vector<f32>& inData)
 {
 	if (inData.empty() || inAttribs.empty())
 		return *this;

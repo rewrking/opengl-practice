@@ -98,7 +98,7 @@ struct Program final : ProgramBase
 
 		m_texture.load("container.jpg");
 
-		m_mesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::TexCoord }, m_vertices);
+		m_mesh.setGeometry({ Attrib::Position3D, Attrib::TexCoord }, m_vertices);
 		m_mesh.setMaterial(m_material);
 
 		{

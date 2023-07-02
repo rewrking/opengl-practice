@@ -1,6 +1,6 @@
 #pragma once
 
-#include "OpenGL/MeshAttribute.hpp"
+#include "OpenGL/Attrib.hpp"
 
 namespace ogl
 {
@@ -15,6 +15,6 @@ struct BufferAttribList
 	std::vector<BufferAttrib> attribs;
 	i32 size = 0;
 
-	explicit BufferAttribList(const std::vector<MeshAttribute>& inAttribs);
+	explicit BufferAttribList(const std::vector<Attrib>& inAttribs);
 };
 }

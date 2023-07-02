@@ -3,7 +3,7 @@
 namespace ogl
 {
 /*****************************************************************************/
-BufferAttribList::BufferAttribList(const std::vector<MeshAttribute>& inAttribs)
+BufferAttribList::BufferAttribList(const std::vector<Attrib>& inAttribs)
 {
 	i32 position = 0;
 	size = 0;

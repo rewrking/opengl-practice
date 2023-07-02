@@ -95,10 +95,10 @@ struct Program final : ProgramBase
 		m_cubeMaterial.loadFromFile("08_lighting_basic/phong.glsl");
 		m_lightMaterial.loadFromFile("08_lighting_basic/light_cube.glsl");
 
-		m_cubeMesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::Normal3D }, m_vertices);
+		m_cubeMesh.setGeometry({ Attrib::Position3D, Attrib::Normal3D }, m_vertices);
 		m_cubeMesh.setMaterial(m_cubeMaterial);
 
-		m_lightMesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::Normal3D }, m_vertices);
+		m_lightMesh.setGeometry({ Attrib::Position3D, Attrib::Normal3D }, m_vertices);
 		m_lightMesh.setMaterial(m_lightMaterial);
 
 		// wireframe!

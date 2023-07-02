@@ -2,7 +2,7 @@
 
 namespace ogl
 {
-enum MeshAttribute
+enum Attrib
 {
 	Position2D = 2,
 	Position3D = 3,

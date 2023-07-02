@@ -99,10 +99,10 @@ struct Program final : ProgramBase
 		m_cubeMaterial.loadFromFile("10_lighting_lightmaps/phong.glsl");
 		m_lightMaterial.loadFromFile("10_lighting_lightmaps/light_cube.glsl");
 
-		m_cubeMesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::Normal3D, MeshAttribute::TexCoord }, m_vertices);
+		m_cubeMesh.setGeometry({ Attrib::Position3D, Attrib::Normal3D, Attrib::TexCoord }, m_vertices);
 		m_cubeMesh.setMaterial(m_cubeMaterial);
 
-		m_lightMesh.setGeometry({ MeshAttribute::Position3D, MeshAttribute::Normal3D, MeshAttribute::TexCoord }, m_vertices);
+		m_lightMesh.setGeometry({ Attrib::Position3D, Attrib::Normal3D, Attrib::TexCoord }, m_vertices);
 		m_lightMesh.setMaterial(m_lightMaterial);
 
 		if (!m_diffuseMap.load("container2.png"))

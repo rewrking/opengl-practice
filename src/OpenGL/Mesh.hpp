@@ -1,6 +1,6 @@
 #pragma once
 
-#include "OpenGL/MeshAttribute.hpp"
+#include "OpenGL/Attrib.hpp"
 
 namespace ogl
 {
@@ -13,8 +13,8 @@ struct Mesh
 
 	void dispose();
 
-	Mesh& setGeometry(const std::vector<MeshAttribute>& inAttribs, std::vector<f32>&& inData);
-	Mesh& setGeometry(const std::vector<MeshAttribute>& inAttribs, const std::vector<f32>& inData);
+	Mesh& setGeometry(const std::vector<Attrib>& inAttribs, std::vector<f32>&& inData);
+	Mesh& setGeometry(const std::vector<Attrib>& inAttribs, const std::vector<f32>& inData);
 
 	void setMaterial(const Material& inMaterial);
 

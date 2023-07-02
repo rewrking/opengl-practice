@@ -56,7 +56,7 @@ struct Program final : ProgramBase
 			glCheck(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW));
 
 			{
-				BufferAttribList attribList({ MeshAttribute::Position3D, MeshAttribute::ColorRGBA });
+				BufferAttribList attribList({ Attrib::Position3D, Attrib::ColorRGBA });
 				for (auto& attrib : attribList.attribs)
 				{
 					glCheck(glVertexAttribPointer(attrib.position, attrib.size, GL_FLOAT, GL_FALSE, sizeof(f32) * attribList.size, (void*)(attrib.offset * sizeof(f32))));
