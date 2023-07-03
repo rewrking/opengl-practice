@@ -7,15 +7,11 @@ layout (location = 2) in vec2 a_TexCoords;
 
 uniform mat4 u_ProjectionViewModel;
 uniform mat4 u_ViewModel;
-uniform mat4 u_View;
 uniform mat3 u_NormalMatrix;
-
-uniform vec3 u_LightPos;
 
 out vec3 v_FragPos;
 out vec3 v_Normal;
 out vec2 v_TexCoords;
-out vec3 v_LightPos;
 
 void main()
 {
@@ -26,7 +22,6 @@ void main()
     v_Normal = u_NormalMatrix * a_Normal;
     v_TexCoords = a_TexCoords;
 
-    v_LightPos = vec3(u_View * vec4(u_LightPos, 1.0));
 }
 
 #pragma type : fragment
@@ -38,6 +33,8 @@ struct Material {
     float shininess;
 };
 struct Light {
+    vec3 direction;
+
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
@@ -46,7 +43,6 @@ struct Light {
 in vec3 v_FragPos;
 in vec3 v_Normal;
 in vec2 v_TexCoords;
-in vec3 v_LightPos;
 
 uniform Material u_Material;
 uniform Light u_Light;
@@ -60,7 +56,7 @@ void main()
 
     // Diffuse lighting
     vec3 norm = normalize(v_Normal);
-    vec3 lightDir = normalize(v_LightPos - v_FragPos);
+    vec3 lightDir = normalize(-u_Light.direction);
     float diff = max(dot(norm, lightDir), 0.0);
     vec3 diffuse = u_Light.diffuse * (diff * vec3(texture(u_Material.diffuse, v_TexCoords)));
 

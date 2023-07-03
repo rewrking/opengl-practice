@@ -234,6 +234,7 @@ void ProgramBase::onMouseMove(const f64 inX, const f64 inY)
 
 	f32 xoffset = xpos - m_lastMousePosition.x;
 	f32 yoffset = m_lastMousePosition.y - ypos;
+
 	m_lastMousePosition.x = xpos;
 	m_lastMousePosition.y = ypos;
 

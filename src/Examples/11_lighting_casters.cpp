@@ -149,11 +149,11 @@ struct Program final : ProgramBase
 		m_diffuseMap.bind(0);
 		m_specularMap.bind(1);
 
-		Vec3f lightPos{ 0.0f, -0.25f, 2.0f };
+		Vec3f lightPos{ -0.2f, -1.0f, -0.3f };
 
 		// m_cubeMaterial.setVec4("u_LightColor", getColor(255, 255, 255));
 		// m_cubeMaterial.setVec4("u_ObjectColor", getColor(255, 128, 79));
-		m_cubeMaterial.setVec3("u_LightPos", lightPos);
+		// m_cubeMaterial.setVec3("u_LightPos", lightPos);
 		// m_cubeMaterial.setVec3("u_ViewPos", m_camera.position());
 
 		// m_cubeMaterial.setVec3("u_Material.ambient", 1.0f, 0.5f, 0.31f); // object color
@@ -171,37 +171,37 @@ struct Program final : ProgramBase
 		auto diffuseColor = lightColor * glm::vec3(0.5f);
 		auto ambientColor = diffuseColor * glm::vec3(0.2f);
 
+		m_cubeMaterial.setVec3("u_Light.direction", lightPos);
 		m_cubeMaterial.setVec3("u_Light.ambient", ambientColor);
 		m_cubeMaterial.setVec3("u_Light.diffuse", diffuseColor); // darken diffuse light a bit
 		m_cubeMaterial.setVec3("u_Light.specular", 1.0f, 1.0f, 1.0f);
 
 		// f32 delta = static_cast<f32>(glfwGetTime());
 
+		for (size_t i = 0; i < m_cubePositions.size(); ++i)
 		{
-			// f32 angle = 20.0f * 0.0f + (10.0f * delta);
-			auto model = Mat4f(1.0f);
-			// model = glm::rotate(m_model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
-
+			f32 angle = 20.0f * static_cast<f32>(i);
+			auto model = glm::translate(Mat4f(1.0f), m_cubePositions.at(i));
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 			auto normalMatrix = Mat3f(glm::transpose(glm::inverse(m_view * model)));
 
 			m_cubeMaterial.setMat4("u_ProjectionViewModel", m_projection * m_view * model);
 			m_cubeMaterial.setMat4("u_ViewModel", m_view * model);
-			m_cubeMaterial.setMat4("u_View", m_view);
 			m_cubeMaterial.setMat3("u_NormalMatrix", normalMatrix);
 
 			m_cubeMesh.draw();
 		}
 
-		{
-			auto model = glm::translate(Mat4f(1.0f), lightPos);
-			model = glm::scale(model, Vec3f(0.2f)); // a smaller cube
+		// {
+		// 	auto model = glm::translate(Mat4f(1.0f), lightPos);
+		// 	model = glm::scale(model, Vec3f(0.2f)); // a smaller cube
 
-			m_lightMaterial.setMat4("u_Projection", m_projection);
-			m_lightMaterial.setMat4("u_View", m_view);
-			m_lightMaterial.setMat4("u_Model", model);
+		// 	m_lightMaterial.setMat4("u_Projection", m_projection);
+		// 	m_lightMaterial.setMat4("u_View", m_view);
+		// 	m_lightMaterial.setMat4("u_Model", model);
 
-			m_lightMesh.draw();
-		}
+		// 	m_lightMesh.draw();
+		// }
 
 		glCheck(glBindVertexArray(0));
 	}
