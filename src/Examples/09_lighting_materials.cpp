@@ -88,6 +88,7 @@ struct Program final : ProgramBase
 		useDepthBuffer();
 		setClearColor(25, 25, 25);
 		setCameraEnabled(true);
+		setWireframe(false);
 
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
@@ -100,9 +101,6 @@ struct Program final : ProgramBase
 
 		m_lightMesh.setGeometry({ Attrib::Position3D, Attrib::Normal3D }, m_vertices);
 		m_lightMesh.setMaterial(m_lightMaterial);
-
-		// wireframe!
-		// glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 
 		onMouseMove(static_cast<f64>(m_width), static_cast<f64>(m_height));
 	}

@@ -90,6 +90,7 @@ struct Program final : ProgramBase
 	{
 		useDepthBuffer();
 		setClearColor(100, 149, 237);
+		setWireframe(false);
 
 		m_material.loadFromFile("x1_abstractions/main.glsl");
 
@@ -112,9 +113,6 @@ struct Program final : ProgramBase
 			// note that we're translating the scene in the reverse direction of where we want to move
 			m_view = glm::translate(Mat4f(1.0f), Vec3f{ 0.0f, 0.0f, -3.0f });
 		}
-
-		// wireframe!
-		// glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 	}
 
 	virtual void update() final

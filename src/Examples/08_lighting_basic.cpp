@@ -101,8 +101,7 @@ struct Program final : ProgramBase
 		m_lightMesh.setGeometry({ Attrib::Position3D, Attrib::Normal3D }, m_vertices);
 		m_lightMesh.setMaterial(m_lightMaterial);
 
-		// wireframe!
-		// glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+		setWireframe(false);
 
 		onMouseMove(static_cast<f64>(m_width), static_cast<f64>(m_height));
 	}

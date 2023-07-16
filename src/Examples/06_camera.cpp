@@ -99,6 +99,7 @@ struct Program final : ProgramBase
 		useDepthBuffer();
 		setClearColor(100, 149, 237);
 		setCameraEnabled(true);
+		setWireframe(false);
 
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
@@ -169,9 +170,6 @@ struct Program final : ProgramBase
 			shaderProgram.setVec4("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
 			shaderProgram.setInt("u_Texture", 0);
 		}
-
-		// wireframe!
-		// glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 	}
 
 	virtual void update() final

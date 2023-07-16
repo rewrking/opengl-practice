@@ -69,6 +69,8 @@ protected:
 	const Camera& camera() const noexcept;
 	void setCameraEnabled(const bool inValue);
 
+	void setWireframe(const bool inValue) const;
+
 private:
 	void setFullscreen(const bool inValue);
 
@@ -90,6 +92,7 @@ private:
 
 	bool m_usingDepthBuffer = false;
 	bool m_cameraEnabled = false;
+	mutable bool m_wireframe = false;
 	mutable bool m_keyPressed = false;
 };
 }

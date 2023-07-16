@@ -92,6 +92,7 @@ struct Program final : ProgramBase
 		useDepthBuffer();
 		setClearColor(25, 25, 25);
 		setCameraEnabled(true);
+		setWireframe(false);
 
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
@@ -110,9 +111,6 @@ struct Program final : ProgramBase
 
 		if (!m_specularMap.load("container2_specular.png"))
 			return;
-
-		// wireframe!
-		// glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 
 		onMouseMove(static_cast<f64>(m_width), static_cast<f64>(m_height));
 	}

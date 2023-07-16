@@ -89,9 +89,9 @@ struct Program final : ProgramBase
 
 	virtual void init() final
 	{
-		glCheck(glEnable(GL_DEPTH_TEST));
-
+		useDepthBuffer();
 		setClearColor(100, 149, 237);
+		setWireframe(false);
 
 		shaderProgram.loadFromFile("05_coordinate_systems.glsl");
 
@@ -159,14 +159,11 @@ struct Program final : ProgramBase
 			shaderProgram.setVec4("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
 			shaderProgram.setInt("u_Texture", 0);
 		}
-
-		// wireframe!
-		// glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 	}
 
 	virtual void update() final
 	{
-		glCheck(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+		clearContext();
 
 		shaderProgram.bind();
 

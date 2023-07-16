@@ -364,6 +364,22 @@ void ProgramBase::setCameraEnabled(const bool inValue)
 }
 
 /*****************************************************************************/
+void ProgramBase::setWireframe(const bool inValue) const
+{
+	if (m_wireframe != inValue)
+	{
+		m_wireframe = inValue;
+
+		// also, GL_POINT
+
+		if (m_wireframe)
+			glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+		else
+			glCheck(glPolygonMode(GL_FRONT_AND_BACK, GL_FILL));
+	}
+}
+
+/*****************************************************************************/
 void ProgramBase::setFullscreen(const bool inValue)
 {
 	if (!m_windowProps.fullscreen)

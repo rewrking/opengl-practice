@@ -17,7 +17,7 @@ struct Program final : ProgramBase
 
 	virtual void update() final
 	{
-		glCheck(glClear(GL_COLOR_BUFFER_BIT));
+		clearContext();
 	}
 
 	virtual void dispose() final
