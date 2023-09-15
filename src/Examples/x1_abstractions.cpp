@@ -102,12 +102,7 @@ struct Program final : ProgramBase
 		m_mesh.setGeometry({ Attrib::Position3D, Attrib::TexCoord }, m_vertices);
 		m_mesh.setMaterial(m_material);
 
-		{
-			constexpr f32 fov = 45.0f;
-			constexpr f32 near = 0.1f;
-			constexpr f32 far = 100.0f;
-			m_projection = glm::perspective(glm::radians(fov), static_cast<f32>(m_width) / static_cast<f32>(m_height), near, far);
-		}
+		m_projection = getProjectionMatrix();
 
 		{
 			// note that we're translating the scene in the reverse direction of where we want to move

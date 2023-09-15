@@ -185,12 +185,7 @@ struct Program final : ProgramBase
 		glCheck(glActiveTexture(GL_TEXTURE0));
 		glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
 
-		{
-			constexpr f32 near = 0.1f;
-			constexpr f32 far = 100.0f;
-			// m_projection = Mat4f(1.0f);
-			m_projection = glm::perspective(camera().getFieldOfView(), static_cast<f32>(m_width) / static_cast<f32>(m_height), near, far);
-		}
+		m_projection = getProjectionMatrix();
 
 		{
 			// auto cameraPos = Vec3f{ 0.0f, 0.0f, -3.0f };

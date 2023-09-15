@@ -380,6 +380,19 @@ void ProgramBase::setWireframe(const bool inValue) const
 }
 
 /*****************************************************************************/
+Mat4f ProgramBase::getProjectionMatrix() const
+{
+	// distance from camera to clip front (must be greater than 0)
+	constexpr f32 near = 0.0001f;
+
+	// distance from camera to clip rear
+	constexpr f32 far = 50.0f;
+
+	// return Mat4f(1.0f);
+	return glm::perspective(m_camera.getFieldOfView(), static_cast<f32>(m_width) / static_cast<f32>(m_height), near, far);
+}
+
+/*****************************************************************************/
 void ProgramBase::setFullscreen(const bool inValue)
 {
 	if (!m_windowProps.fullscreen)
