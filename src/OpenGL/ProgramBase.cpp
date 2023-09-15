@@ -383,7 +383,7 @@ void ProgramBase::setWireframe(const bool inValue) const
 Mat4f ProgramBase::getProjectionMatrix() const
 {
 	// distance from camera to clip front (must be greater than 0)
-	constexpr f32 near = 0.0001f;
+	constexpr f32 near = 0.1f;
 
 	// distance from camera to clip rear
 	constexpr f32 far = 50.0f;
