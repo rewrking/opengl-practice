@@ -179,20 +179,7 @@ struct Program final : ProgramBase
 		// shaderProgram.setVec4("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
 
 		m_projection = getProjectionMatrix();
-
-		{
-			// auto cameraPos = Vec3f{ 0.0f, 0.0f, -3.0f };
-			// note that we're translating the scene in the reverse direction of where we want to move
-			// m_view = Mat4f(1.0f);
-			// m_view = glm::translate(Mat4f(1.0f), cameraPos);
-
-			// constexpr f64 radius = 10.0;
-			// f32 camX = static_cast<f32>(std::sin(glfwGetTime()) * radius);
-			// f32 camZ = static_cast<f32>(std::cos(glfwGetTime()) * radius);
-			// auto cameraPos = Vec3f{ camX, 0.0, camZ };
-
-			m_view = camera().getViewMatrix();
-		}
+		m_view = getViewMatrix();
 
 		glCheck(glBindVertexArray(m_vao));
 

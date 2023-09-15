@@ -72,6 +72,7 @@ protected:
 	void setWireframe(const bool inValue) const;
 
 	Mat4f getProjectionMatrix() const;
+	Mat4f getViewMatrix() const;
 
 private:
 	void setFullscreen(const bool inValue);
