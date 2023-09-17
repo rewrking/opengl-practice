@@ -143,13 +143,13 @@ struct Program final : ProgramBase
 
 		// f64 delta = glfwGetTime();
 
-		glm::vec3 lightColor{ 1.0f, 1.0f, 1.0f };
+		Vec3f lightColor{ 1.0f, 1.0f, 1.0f };
 		// lightColor.x = static_cast<f32>(std::sin(delta * 2.0));
 		// lightColor.y = static_cast<f32>(std::sin(delta * 0.7));
 		// lightColor.z = static_cast<f32>(std::sin(delta * 1.3));
 
-		auto diffuseColor = lightColor * glm::vec3(0.5f);
-		auto ambientColor = diffuseColor * glm::vec3(0.2f);
+		auto diffuseColor = lightColor * Vec3f(0.5f);
+		auto ambientColor = diffuseColor * Vec3f(0.2f);
 
 		m_cubeMaterial.setVec3("u_Light.direction", lightPos);
 		m_cubeMaterial.setVec3("u_Light.ambient", ambientColor);
@@ -162,7 +162,7 @@ struct Program final : ProgramBase
 		{
 			f32 angle = 20.0f * static_cast<f32>(i);
 			auto model = glm::translate(Mat4f(1.0f), m_cubePositions.at(i));
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+			model = glm::rotate(model, glm::radians(angle), Vec3f(1.0f, 0.3f, 0.5f));
 			auto normalMatrix = Mat3f(glm::transpose(glm::inverse(m_view * model)));
 
 			m_cubeMaterial.setMat4("u_ProjectionViewModel", m_projection * m_view * model);

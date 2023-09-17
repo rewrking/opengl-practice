@@ -130,13 +130,13 @@ struct Program final : ProgramBase
 
 		f64 delta = glfwGetTime();
 
-		glm::vec3 lightColor;
+		Vec3f lightColor;
 		lightColor.x = static_cast<f32>(std::sin(delta * 2.0));
 		lightColor.y = static_cast<f32>(std::sin(delta * 0.7));
 		lightColor.z = static_cast<f32>(std::sin(delta * 1.3));
 
-		auto diffuseColor = lightColor * glm::vec3(0.5f);
-		auto ambientColor = diffuseColor * glm::vec3(0.2f);
+		auto diffuseColor = lightColor * Vec3f(0.5f);
+		auto ambientColor = diffuseColor * Vec3f(0.2f);
 
 		m_cubeMaterial.setVec3("u_Light.ambient", ambientColor);
 		m_cubeMaterial.setVec3("u_Light.diffuse", diffuseColor); // darken diffuse light a bit
