@@ -33,6 +33,9 @@ struct Camera
 	Mat4f getViewMatrix() const;
 
 	const Vec3f& position() const noexcept;
+	void setPosition(const f32 posX, const f32 posY, const f32 posZ) noexcept;
+
+	const Vec3f& front() const noexcept;
 
 	void processKeyboard(const CameraMovement inDirection);
 	void processMouseButton(const MouseButton inButton);

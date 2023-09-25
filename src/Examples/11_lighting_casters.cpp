@@ -94,6 +94,8 @@ struct Program final : ProgramBase
 		setCameraEnabled(true);
 		setWireframe(false);
 
+		camera().setPosition(0.0f, 0.0f, 3.0f);
+
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
@@ -136,7 +138,6 @@ struct Program final : ProgramBase
 		// m_cubeMaterial.setVec3("u_LightPos", lightPos);
 		// m_cubeMaterial.setVec3("u_ViewPos", m_camera.position());
 
-		// m_cubeMaterial.setVec3("u_Material.ambient", 1.0f, 0.5f, 0.31f); // object color
 		m_cubeMaterial.setTexture("u_Material.diffuse", m_diffuseMap);
 		m_cubeMaterial.setTexture("u_Material.specular", m_specularMap);
 		m_cubeMaterial.setFloat("u_Material.shininess", 32.0f);
@@ -148,13 +149,26 @@ struct Program final : ProgramBase
 		// lightColor.y = static_cast<f32>(std::sin(delta * 0.7));
 		// lightColor.z = static_cast<f32>(std::sin(delta * 1.3));
 
-		auto diffuseColor = lightColor * Vec3f(0.5f);
-		auto ambientColor = diffuseColor * Vec3f(0.2f);
+		auto diffuseColor = lightColor * Vec3f(0.8f);
+		auto ambientColor = diffuseColor * Vec3f(0.1f);
 
-		m_cubeMaterial.setVec3("u_Light.direction", lightPos);
+		m_cubeMaterial.setVec3("u_Light.position", camera().position());
+		m_cubeMaterial.setVec3("u_Light.direction", camera().front());
+		m_cubeMaterial.setFloat("u_Light.cutOff", glm::cos(glm::radians(12.5f)));
+		m_cubeMaterial.setVec3("u_ViewPos", camera().position());
+
+		UNUSED(lightPos);
+		// m_cubeMaterial.setVec3("u_Light.position", lightPos);
+
 		m_cubeMaterial.setVec3("u_Light.ambient", ambientColor);
 		m_cubeMaterial.setVec3("u_Light.diffuse", diffuseColor); // darken diffuse light a bit
 		m_cubeMaterial.setVec3("u_Light.specular", 1.0f, 1.0f, 1.0f);
+
+		// https://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
+		//
+		m_cubeMaterial.setFloat("u_Light.constant", 1.0f);
+		m_cubeMaterial.setFloat("u_Light.linear", 0.09f);
+		m_cubeMaterial.setFloat("u_Light.quadratic", 0.032f);
 
 		// f32 delta = static_cast<f32>(glfwGetTime());
 

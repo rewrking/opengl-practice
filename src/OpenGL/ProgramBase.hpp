@@ -66,6 +66,7 @@ protected:
 
 	bool m_mouseInView = true;
 
+	Camera& camera() noexcept;
 	const Camera& camera() const noexcept;
 	void setCameraEnabled(const bool inValue);
 

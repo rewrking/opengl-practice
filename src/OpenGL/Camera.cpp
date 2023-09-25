@@ -57,6 +57,18 @@ const Vec3f& Camera::position() const noexcept
 {
 	return m_position;
 }
+void Camera::setPosition(const f32 posX, const f32 posY, const f32 posZ) noexcept
+{
+	m_position.x = posX;
+	m_position.y = posY;
+	m_position.z = posZ;
+}
+
+/*****************************************************************************/
+const Vec3f& Camera::front() const noexcept
+{
+	return m_front;
+}
 
 /*****************************************************************************/
 void Camera::update(const f32 inDeltaTime)

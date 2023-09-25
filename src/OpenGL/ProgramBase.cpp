@@ -352,6 +352,12 @@ Color ProgramBase::getColor(const i32 inR, const i32 inG, const i32 inB, const i
 }
 
 /*****************************************************************************/
+Camera& ProgramBase::camera() noexcept
+{
+	return m_camera;
+}
+
+/*****************************************************************************/
 const Camera& ProgramBase::camera() const noexcept
 {
 	return m_camera;

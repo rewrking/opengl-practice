@@ -33,17 +33,24 @@ struct Material {
     float shininess;
 };
 struct Light {
+    vec3 position;
     vec3 direction;
+    float cutOff;
 
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
+
+    float constant;
+    float linear;
+    float quadratic;
 };
 
 in vec3 v_FragPos;
 in vec3 v_Normal;
 in vec2 v_TexCoords;
 
+uniform vec3 u_ViewPos;
 uniform Material u_Material;
 uniform Light u_Light;
 
@@ -51,23 +58,43 @@ out vec4 FragColor;
 
 void main()
 {
+    vec3 lightDir = normalize(u_Light.position - v_FragPos);
+
     // Ambient lighting
     vec3 ambient = u_Light.ambient * vec3(texture(u_Material.diffuse, v_TexCoords));
 
-    // Diffuse lighting
-    vec3 norm = normalize(v_Normal);
-    vec3 lightDir = normalize(-u_Light.direction);
-    float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = u_Light.diffuse * (diff * vec3(texture(u_Material.diffuse, v_TexCoords)));
+    // check if lighting is inside the spotlight cone
+    float theta = dot(lightDir, normalize(-u_Light.direction));
+    if (theta > u_Light.cutOff)
+    {
 
-    // Specular highlights
-    vec3 viewDir = normalize(-v_FragPos);
-    vec3 reflectDir = reflect(-lightDir, norm);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_Material.shininess);
-    vec3 specular = u_Light.specular * (spec * vec3(texture(u_Material.specular, v_TexCoords)));
+        // Diffuse lighting
+        vec3 norm = normalize(v_Normal);
+        float diff = max(dot(norm, lightDir), 0.0);
+        vec3 diffuse = u_Light.diffuse * diff * texture(u_Material.diffuse, v_TexCoords).rgb;
 
-    // output RGB
-    vec3 result = (ambient + diffuse + specular);
+        // Specular highlights
+        vec3 viewDir = normalize(u_ViewPos - v_FragPos);
+        vec3 reflectDir = reflect(-lightDir, norm);
+        float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_Material.shininess);
+        vec3 specular = u_Light.specular * spec * texture(u_Material.specular, v_TexCoords).rgb;
 
-    FragColor = vec4(result, 1.0);
+        // Attenuation
+        float dist = length(u_Light.position - v_FragPos);
+        float attenuation = 1.0 / (u_Light.constant + u_Light.linear * dist + u_Light.quadratic * (dist * dist));
+
+        // ambient  *= attenuation;
+        diffuse  *= attenuation;
+        specular *= attenuation;
+
+        // output RGB
+        vec3 result = (ambient + diffuse + specular);
+        FragColor = vec4(result, 1.0);
+    }
+    else
+    {
+        // else, use ambient light so scene isn't completely dark outside the spotlight.
+        FragColor = vec4(ambient, 1.0);
+    }
+
 }
