@@ -155,6 +155,7 @@ struct Program final : ProgramBase
 		m_cubeMaterial.setVec3("u_Light.position", camera().position());
 		m_cubeMaterial.setVec3("u_Light.direction", camera().front());
 		m_cubeMaterial.setFloat("u_Light.cutOff", glm::cos(glm::radians(12.5f)));
+		m_cubeMaterial.setFloat("u_Light.outerCutOff", glm::cos(glm::radians(17.5f)));
 		m_cubeMaterial.setVec3("u_ViewPos", camera().position());
 
 		UNUSED(lightPos);
