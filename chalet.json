@@ -160,6 +160,9 @@
 		"11_lighting_casters": {
 			"kind": "executable"
 		},
+		"12_multiple_lights": {
+			"kind": "executable"
+		},
 		"x1_abstractions": {
 			"kind": "executable"
 		}
