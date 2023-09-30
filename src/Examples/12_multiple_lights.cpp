@@ -152,7 +152,7 @@ struct Program final : ProgramBase
 		auto diffuseColor = lightColor * Vec3f(0.8f);
 		auto ambientColor = diffuseColor * Vec3f(0.1f);
 
-		m_cubeMaterial.setVec3("u_Light.position", camera().position());
+		m_cubeMaterial.setVec3("u_Light.position", Vec3f(0.0f));
 		m_cubeMaterial.setVec3("u_Light.direction", camera().front());
 		m_cubeMaterial.setFloat("u_Light.cutOff", glm::cos(glm::radians(12.5f)));
 		m_cubeMaterial.setFloat("u_Light.outerCutOff", glm::cos(glm::radians(17.5f)));
