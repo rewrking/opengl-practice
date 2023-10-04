@@ -2,6 +2,11 @@
 	"name": "chalet-example-glfw",
 	"version": "1.0.0",
 	"externalDependencies": {
+		"assimp": {
+			"kind": "git",
+			"repository": "git@github.com:assimp/assimp.git",
+			"tag": "v5.3.1"
+		},
 		"fmt": {
 			"kind": "git",
 			"repository": "git@github.com:fmtlib/fmt.git",
@@ -99,6 +104,16 @@
 			"rebuild": false,
 			"defines[:linux]": [
 				"CMAKE_POSITION_INDEPENDENT_CODE=ON"
+			]
+		},
+		"assimp": {
+			"kind": "cmakeProject",
+			"location": "${external:assimp}",
+			"recheck": false,
+			"rebuild": false,
+			"defines": [
+				"BUILD_STATIC_LIBS=OFF",
+				"BUILD_SHARED_LIBS=ON"
 			]
 		},
 		"spdlog": {

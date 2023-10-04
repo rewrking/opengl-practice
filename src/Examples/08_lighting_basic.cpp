@@ -151,8 +151,6 @@ struct Program final : ProgramBase
 
 			m_lightMesh.draw();
 		}
-
-		glCheck(glBindVertexArray(0));
 	}
 
 	virtual void dispose() final

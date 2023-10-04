@@ -106,7 +106,7 @@ struct Program final : ProgramBase
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
-		m_cubeMaterial.loadFromFile("12_multiple_lights/full_lighting.glsl");
+		m_cubeMaterial.loadFromFile("12_multiple_lights/phong.glsl");
 		m_lightMaterial.loadFromFile("12_multiple_lights/light_cube.glsl");
 
 		m_cubeMesh.setGeometry({ Attrib::Position3D, Attrib::Normal3D, Attrib::TexCoord }, m_vertices);
@@ -197,7 +197,8 @@ struct Program final : ProgramBase
 		m_cubeMaterial.setFloat("u_PointLights[3].linear", 0.09f);
 		m_cubeMaterial.setFloat("u_PointLights[3].quadratic", 0.032f);
 		// u_SpotLight
-		m_cubeMaterial.setVec3("u_SpotLight.position", Vec3f(0.0f));
+		// m_cubeMaterial.setVec3("u_SpotLight.position", Vec3f(0.0f));
+		m_cubeMaterial.setVec3("u_SpotLight.position", camera().front());
 		m_cubeMaterial.setVec3("u_SpotLight.direction", camera().front());
 		m_cubeMaterial.setVec3("u_SpotLight.ambient", 0.0f, 0.0f, 0.0f);
 		m_cubeMaterial.setVec3("u_SpotLight.diffuse", 1.0f, 1.0f, 1.0f);
@@ -235,8 +236,6 @@ struct Program final : ProgramBase
 
 			m_lightMesh.draw();
 		}
-
-		glCheck(glBindVertexArray(0));
 	}
 
 	virtual void dispose() final
