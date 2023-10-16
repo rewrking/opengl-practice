@@ -1,6 +1,10 @@
 {
 	"name": "chalet-example-glfw",
 	"version": "1.0.0",
+	"defaultConfigurations": [
+		"Debug",
+		"Release"
+	],
 	"externalDependencies": {
 		"assimp": {
 			"kind": "git",
