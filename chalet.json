@@ -1,5 +1,5 @@
 {
-	"name": "chalet-example-glfw",
+	"name": "opengl-practice",
 	"version": "1.0.0",
 	"defaultConfigurations": [
 		"Debug",
