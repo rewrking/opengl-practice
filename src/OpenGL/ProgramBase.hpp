@@ -100,12 +100,3 @@ private:
 	mutable bool m_keyPressed = false;
 };
 }
-
-#define OGL_RUN_MAIN(x)       \
-	int main()                \
-	{                         \
-		x program;            \
-		return program.run(); \
-	}
-
-#define BUFFER_OFFSET(offset) ((void*)(offset))

@@ -90,15 +90,9 @@
 				"OpenGL",
 				"IOKit"
 			],
-			"windowsSubSystem[:!debug]": "windows",
 			"windowsApplicationIcon": "platform/windows/app.ico",
 			"windowsApplicationManifest": "platform/windows/app.manifest"
-		},
-		"files": [
-			"src/Examples/${name}.cpp",
-			"src/OpenGL/**.cpp",
-			"src/Core/**.cpp"
-		]
+		}
 	},
 	"targets": {
 		"glad": {
@@ -143,47 +137,14 @@
 			"targets": "glfw",
 			"recheck": false
 		},
-		"00_hello_window": {
-			"kind": "executable"
-		},
-		"01_hello_triangles": {
-			"kind": "executable"
-		},
-		"02_shaders": {
-			"kind": "executable"
-		},
-		"03_textures": {
-			"kind": "executable"
-		},
-		"04_transformations": {
-			"kind": "executable"
-		},
-		"05_coordinate_systems": {
-			"kind": "executable"
-		},
-		"06_camera": {
-			"kind": "executable"
-		},
-		"07_lighting_color": {
-			"kind": "executable"
-		},
-		"08_lighting_basic": {
-			"kind": "executable"
-		},
-		"09_lighting_materials": {
-			"kind": "executable"
-		},
-		"10_lighting_lightmaps": {
-			"kind": "executable"
-		},
-		"11_lighting_casters": {
-			"kind": "executable"
-		},
-		"12_multiple_lights": {
-			"kind": "executable"
-		},
-		"x1_abstractions": {
-			"kind": "executable"
+		"opengl-practice": {
+			"kind": "executable",
+			"files": [
+				"src/**.cpp"
+			],
+			"defaultRunArguments": [
+				"12"
+			]
 		}
 	},
 	"distribution": {

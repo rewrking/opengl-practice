@@ -1,8 +1,8 @@
 #include "OpenGL/ProgramBase.hpp"
 
-namespace ogl
+namespace ogl::Program
 {
-struct Program final : ProgramBase
+struct HelloWindow final : ogl::ProgramBase
 {
 	virtual Settings getSettings() const final
 	{
@@ -25,5 +25,3 @@ struct Program final : ProgramBase
 	}
 };
 }
-
-OGL_RUN_MAIN(ogl::Program);

@@ -1,8 +1,8 @@
 #include "OpenGL/ProgramBase.hpp"
 
-namespace ogl
+namespace ogl::Program
 {
-struct Program final : ProgramBase
+struct HelloTriangles final : ogl::ProgramBase
 {
 	const std::vector<f32> m_vertices = {
 		// clang-format off
@@ -89,5 +89,3 @@ struct Program final : ProgramBase
 	}
 };
 }
-
-OGL_RUN_MAIN(ogl::Program);

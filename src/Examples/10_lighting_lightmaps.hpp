@@ -2,9 +2,9 @@
 
 #include "OpenGL/BufferAttribList.hpp"
 
-namespace ogl
+namespace ogl::Program
 {
-struct Program final : ProgramBase
+struct LightingLightmaps final : ogl::ProgramBase
 {
 	// a single cube (no indices)
 	const std::vector<f32> m_vertices = {
@@ -67,13 +67,6 @@ struct Program final : ProgramBase
 		{ -1.3f, 1.0f, -1.5f }
 	};
 
-	const std::vector<Vec3f> m_pointLightPositions = {
-		{ 0.7f, 0.2f, 2.0f },
-		{ 2.3f, -3.3f, -4.0f },
-		{ -4.0f, 2.0f, -12.0f },
-		{ 0.0f, 0.0f, -3.0f }
-	};
-
 	f32 m_yaw = 0.0f;
 	f32 m_pitch = 0.0f;
 
@@ -91,7 +84,7 @@ struct Program final : ProgramBase
 
 	virtual Settings getSettings() const final
 	{
-		return Settings("12: Lighting, Mutliple Lights", 800, 600);
+		return Settings("10: Lighting, Lighting Maps", 800, 600);
 	}
 
 	virtual void init() final
@@ -101,13 +94,11 @@ struct Program final : ProgramBase
 		setCameraEnabled(true);
 		setWireframe(false);
 
-		camera().setPosition(0.0f, 0.0f, 3.0f);
-
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
-		m_cubeMaterial.loadFromFile("12_multiple_lights/phong.glsl");
-		m_lightMaterial.loadFromFile("12_multiple_lights/light_cube.glsl");
+		m_cubeMaterial.loadFromFile("10_lighting_lightmaps/phong.glsl");
+		m_lightMaterial.loadFromFile("10_lighting_lightmaps/light_cube.glsl");
 
 		m_cubeMesh.setGeometry({ Attrib::Position3D, Attrib::Normal3D, Attrib::TexCoord }, m_vertices);
 		m_cubeMesh.setMaterial(m_cubeMaterial);
@@ -138,96 +129,51 @@ struct Program final : ProgramBase
 		m_diffuseMap.bind(0);
 		m_specularMap.bind(1);
 
+		Vec3f lightPos{ 0.0f, -0.25f, 2.0f };
+
 		// m_cubeMaterial.setVec4("u_LightColor", getColor(255, 255, 255));
 		// m_cubeMaterial.setVec4("u_ObjectColor", getColor(255, 128, 79));
-		// m_cubeMaterial.setVec3("u_LightPos", lightPos);
+		m_cubeMaterial.setVec3("u_LightPos", lightPos);
 		// m_cubeMaterial.setVec3("u_ViewPos", m_camera.position());
 
+		// m_cubeMaterial.setVec3("u_Material.ambient", 1.0f, 0.5f, 0.31f); // object color
 		m_cubeMaterial.setTexture("u_Material.diffuse", m_diffuseMap);
 		m_cubeMaterial.setTexture("u_Material.specular", m_specularMap);
+		m_cubeMaterial.setFloat("u_Material.shininess", 32.0f);
 
 		// f64 delta = glfwGetTime();
 
-		// Vec3f lightColor{ 1.0f, 1.0f, 1.0f };
+		Vec3f lightColor{ 1.0f, 1.0f, 1.0f };
 		// lightColor.x = static_cast<f32>(std::sin(delta * 2.0));
 		// lightColor.y = static_cast<f32>(std::sin(delta * 0.7));
 		// lightColor.z = static_cast<f32>(std::sin(delta * 1.3));
 
-		// auto diffuseColor = lightColor * Vec3f(0.8f);
-		// auto ambientColor = diffuseColor * Vec3f(0.1f);
+		auto diffuseColor = lightColor * Vec3f(0.5f);
+		auto ambientColor = diffuseColor * Vec3f(0.2f);
 
-		m_cubeMaterial.setVec3("u_ViewPos", camera().position());
-		m_cubeMaterial.setFloat("u_Material.shininess", 32.0f);
-
-		// Directional light
-		m_cubeMaterial.setVec3("u_DirLight.direction", -0.2f, -1.0f, -0.3f);
-		m_cubeMaterial.setVec3("u_DirLight.ambient", 0.05f, 0.05f, 0.05f);
-		m_cubeMaterial.setVec3("u_DirLight.diffuse", 0.4f, 0.4f, 0.4f);
-		m_cubeMaterial.setVec3("u_DirLight.specular", 0.5f, 0.5f, 0.5f);
-		// point light 1
-		m_cubeMaterial.setVec3("u_PointLights[0].position", m_pointLightPositions[0]);
-		m_cubeMaterial.setVec3("u_PointLights[0].ambient", 0.05f, 0.05f, 0.05f);
-		m_cubeMaterial.setVec3("u_PointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
-		m_cubeMaterial.setVec3("u_PointLights[0].specular", 1.0f, 1.0f, 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[0].constant", 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[0].linear", 0.09f);
-		m_cubeMaterial.setFloat("u_PointLights[0].quadratic", 0.032f);
-		// point light 2
-		m_cubeMaterial.setVec3("u_PointLights[1].position", m_pointLightPositions[1]);
-		m_cubeMaterial.setVec3("u_PointLights[1].ambient", 0.05f, 0.05f, 0.05f);
-		m_cubeMaterial.setVec3("u_PointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
-		m_cubeMaterial.setVec3("u_PointLights[1].specular", 1.0f, 1.0f, 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[1].constant", 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[1].linear", 0.09f);
-		m_cubeMaterial.setFloat("u_PointLights[1].quadratic", 0.032f);
-		// point light 3
-		m_cubeMaterial.setVec3("u_PointLights[2].position", m_pointLightPositions[2]);
-		m_cubeMaterial.setVec3("u_PointLights[2].ambient", 0.05f, 0.05f, 0.05f);
-		m_cubeMaterial.setVec3("u_PointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
-		m_cubeMaterial.setVec3("u_PointLights[2].specular", 1.0f, 1.0f, 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[2].constant", 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[2].linear", 0.09f);
-		m_cubeMaterial.setFloat("u_PointLights[2].quadratic", 0.032f);
-		// point light 4
-		m_cubeMaterial.setVec3("u_PointLights[3].position", m_pointLightPositions[3]);
-		m_cubeMaterial.setVec3("u_PointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-		m_cubeMaterial.setVec3("u_PointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-		m_cubeMaterial.setVec3("u_PointLights[3].specular", 1.0f, 1.0f, 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[3].constant", 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[3].linear", 0.09f);
-		m_cubeMaterial.setFloat("u_PointLights[3].quadratic", 0.032f);
-		// u_SpotLight
-		// m_cubeMaterial.setVec3("u_SpotLight.position", Vec3f(0.0f));
-		m_cubeMaterial.setVec3("u_SpotLight.position", camera().front());
-		m_cubeMaterial.setVec3("u_SpotLight.direction", camera().front());
-		m_cubeMaterial.setVec3("u_SpotLight.ambient", 0.0f, 0.0f, 0.0f);
-		m_cubeMaterial.setVec3("u_SpotLight.diffuse", 1.0f, 1.0f, 1.0f);
-		m_cubeMaterial.setVec3("u_SpotLight.specular", 1.0f, 1.0f, 1.0f);
-		m_cubeMaterial.setFloat("u_SpotLight.constant", 1.0f);
-		m_cubeMaterial.setFloat("u_SpotLight.linear", 0.09f);
-		m_cubeMaterial.setFloat("u_SpotLight.quadratic", 0.032f);
-		m_cubeMaterial.setFloat("u_SpotLight.cutOff", glm::cos(glm::radians(12.5f)));
-		m_cubeMaterial.setFloat("u_SpotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+		m_cubeMaterial.setVec3("u_Light.ambient", ambientColor);
+		m_cubeMaterial.setVec3("u_Light.diffuse", diffuseColor); // darken diffuse light a bit
+		m_cubeMaterial.setVec3("u_Light.specular", 1.0f, 1.0f, 1.0f);
 
 		// f32 delta = static_cast<f32>(glfwGetTime());
 
-		for (size_t i = 0; i < m_cubePositions.size(); ++i)
 		{
-			f32 angle = 20.0f * static_cast<f32>(i);
-			auto model = glm::translate(Mat4f(1.0f), m_cubePositions.at(i));
-			model = glm::rotate(model, glm::radians(angle), Vec3f(1.0f, 0.3f, 0.5f));
+			// f32 angle = 20.0f * 0.0f + (10.0f * delta);
+			auto model = Mat4f(1.0f);
+			// model = glm::rotate(m_model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
+
 			auto normalMatrix = Mat3f(glm::transpose(glm::inverse(m_view * model)));
 
 			m_cubeMaterial.setMat4("u_ProjectionViewModel", m_projection * m_view * model);
 			m_cubeMaterial.setMat4("u_ViewModel", m_view * model);
+			m_cubeMaterial.setMat4("u_View", m_view);
 			m_cubeMaterial.setMat3("u_NormalMatrix", normalMatrix);
 
 			m_cubeMesh.draw();
 		}
 
-		for (auto& pos : m_pointLightPositions)
 		{
-			auto model = glm::translate(Mat4f(1.0f), pos);
+			auto model = glm::translate(Mat4f(1.0f), lightPos);
 			model = glm::scale(model, Vec3f(0.2f)); // a smaller cube
 
 			m_lightMaterial.setMat4("u_Projection", m_projection);
@@ -248,5 +194,3 @@ struct Program final : ProgramBase
 	}
 };
 }
-
-OGL_RUN_MAIN(ogl::Program);

@@ -2,9 +2,9 @@
 
 #include "OpenGL/BufferAttribList.hpp"
 
-namespace ogl
+namespace ogl::Program
 {
-struct Program final : ProgramBase
+struct LightingCasters final : ogl::ProgramBase
 {
 	// a single cube (no indices)
 	const std::vector<f32> m_vertices = {
@@ -209,5 +209,3 @@ struct Program final : ProgramBase
 	}
 };
 }
-
-OGL_RUN_MAIN(ogl::Program);

@@ -61,7 +61,7 @@
 			"",
 			"namespace ogl",
 			"{",
-			"struct Program final : ProgramBase",
+			"struct Program final : ogl::ProgramBase",
 			"{",
 			"\tvirtual Settings getSettings() const final",
 			"\t{",
@@ -84,7 +84,7 @@
 			"};",
 			"}",
 			"",
-			"OGL_RUN_MAIN(ogl::Program);",
+			"",
 			""
 		],
 	},

@@ -2,9 +2,9 @@
 
 #include "OpenGL/BufferAttribList.hpp"
 
-namespace ogl
+namespace ogl::Program
 {
-struct Program final : ProgramBase
+struct Transformations final : ogl::ProgramBase
 {
 	const std::vector<f32> m_vertices = {
 		// clang-format off
@@ -36,7 +36,7 @@ struct Program final : ProgramBase
 
 	virtual Settings getSettings() const final
 	{
-		return Settings("03: Textures", 800, 600);
+		return Settings("04: Transformations", 800, 600);
 	}
 
 	virtual void init() final
@@ -44,7 +44,7 @@ struct Program final : ProgramBase
 		setClearColor(100, 149, 237);
 		setWireframe(false);
 
-		shaderProgram.loadFromFile("03_textures.glsl");
+		shaderProgram.loadFromFile("04_transformations.glsl");
 
 		{
 			auto image = Image::make("wall.jpg");
@@ -122,6 +122,11 @@ struct Program final : ProgramBase
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
 		// shaderProgram.setVec4("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
 
+		Mat4f trans = Mat4f(1.0f);
+		// trans = glm::translate(trans, Vec3f{ 0.5f, -0.5f, 0.0f });
+		trans = glm::rotate(trans, (float)glfwGetTime(), Vec3f{ 1.0f, 1.0f, 1.0f });
+		shaderProgram.setMat4("u_Transform", trans);
+
 		glCheck(glActiveTexture(GL_TEXTURE0));
 		glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
 
@@ -142,5 +147,3 @@ struct Program final : ProgramBase
 	}
 };
 }
-
-OGL_RUN_MAIN(ogl::Program);

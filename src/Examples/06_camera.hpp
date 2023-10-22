@@ -2,56 +2,63 @@
 
 #include "OpenGL/BufferAttribList.hpp"
 
-namespace ogl
+namespace ogl::Program
 {
-struct Program final : ProgramBase
+struct Cameras final : ogl::ProgramBase
 {
 	// a single cube (no indices)
 	const std::vector<f32> m_vertices = {
 		// clang-format off
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-        -0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
 
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
 
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
 
-        -0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 		// clang-format on
 	};
+	/*const std::vector<u32> m_indices = {
+		// clang-format off
+		0, 1, 2,
+		// 0, 1, 3,   // first triangle
+		// 1, 2, 3    // second triangle
+		// clang-format on
+	};*/
 
 	const std::vector<Vec3f> m_cubePositions = {
 		{ 0.0f, 0.0f, 0.0f },
@@ -70,13 +77,13 @@ struct Program final : ProgramBase
 	u32 m_ebo = 0;
 
 	u32 m_vao = 0;
-	u32 m_vaoLight = 0;
+
+	u32 m_texture = 0;
 
 	f32 m_yaw = 0.0f;
 	f32 m_pitch = 0.0f;
 
-	Material m_lightingShader;
-	Material m_lightCubeshader;
+	Material shaderProgram;
 
 	Mat4f m_view;
 	Mat4f m_projection;
@@ -84,24 +91,26 @@ struct Program final : ProgramBase
 
 	virtual Settings getSettings() const final
 	{
-		return Settings("07: Lighting, Color", 800, 600);
+		return Settings("06: Camera", 800, 600);
 	}
 
 	virtual void init() final
 	{
 		useDepthBuffer();
-		setClearColor(25, 25, 25);
+		setClearColor(100, 149, 237);
 		setCameraEnabled(true);
 		setWireframe(false);
 
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
-		m_lightingShader.loadFromFile("07_lighting_color/colors.glsl");
-		m_lightCubeshader.loadFromFile("07_lighting_color/light_cube.glsl");
+		shaderProgram.loadFromFile("06_camera.glsl");
 
 		{
 			auto image = Image::make("container.jpg");
+
+			glCheck(glGenTextures(1, &m_texture));
+			glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
 
 			/*
 				GL_REPEAT
@@ -142,7 +151,7 @@ struct Program final : ProgramBase
 			// glCheck(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW));
 
 			{
-				BufferAttribList attribList({ Attrib::Position3D });
+				BufferAttribList attribList({ Attrib::Position3D, Attrib::TexCoord });
 				for (auto& attrib : attribList.attribs)
 				{
 					glCheck(glVertexAttribPointer(attrib.position, attrib.size, GL_FLOAT, GL_FALSE, sizeof(f32) * attribList.size, (void*)(attrib.offset * sizeof(f32))));
@@ -155,66 +164,41 @@ struct Program final : ProgramBase
 			// no!
 			// glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 
-			glCheck(glGenVertexArrays(1, &m_vaoLight));
-			glCheck(glBindVertexArray(m_vaoLight));
-
-			// we only need to bind to the VBO (to link it with glVertexAttribPointer), no need to fill it; the VBO's data already contains all we need (it's already bound, but we do it again for educational purposes)
-			glCheck(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
-
-			glCheck(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(f32) * 3, (void*)0));
-			glCheck(glEnableVertexAttribArray(0));
-
 			glCheck(glBindVertexArray(0));
-		}
 
-		onMouseMove(static_cast<f64>(m_width), static_cast<f64>(m_height));
+			shaderProgram.bind();
+			shaderProgram.setVec4("u_Color", 1.0f, 1.0f, 1.0f, 1.0f); // white
+			shaderProgram.setInt("u_Texture", 0);
+		}
 	}
 
 	virtual void update() final
 	{
 		clearContext();
 
+		shaderProgram.bind();
+
 		// f32 timeValue = glfwGetTime();
 		// f32 greenValue = (std::sin(timeValue) / 2.0f) + 0.5f;
 		// shaderProgram.setVec4("u_Color", 0.0f, greenValue, 0.0f, 1.0f);
+
+		glCheck(glActiveTexture(GL_TEXTURE0));
+		glCheck(glBindTexture(GL_TEXTURE_2D, m_texture));
 
 		m_projection = getProjectionMatrix();
 		m_view = getViewMatrix();
 
 		glCheck(glBindVertexArray(m_vao));
 
-		m_lightingShader.bind();
-		m_lightingShader.setVec4("u_LightColor", getColor(255, 255, 255));
-		m_lightingShader.setVec4("u_ObjectColor", getColor(255, 128, 79));
-
-		// f32 delta = static_cast<f32>(glfwGetTime());
-
+		for (u32 i = 0; i < m_cubePositions.size(); ++i)
 		{
-			m_lightingShader.setMat4("u_Projection", m_projection);
-			m_lightingShader.setMat4("u_View", m_view);
-
-			// f32 angle = 20.0f * 0.0f + (10.0f * delta);
+			// calculate the model matrix for each object and pass it to shader before drawing
 			m_model = Mat4f(1.0f);
-			// m_model = glm::rotate(m_model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
-			m_lightingShader.setMat4("u_Model", m_model);
+			m_model = glm::translate(m_model, m_cubePositions[i]);
+			f32 angle = 20.0f * static_cast<f32>(i) + (10.0f * static_cast<f32>(glfwGetTime()));
+			m_model = glm::rotate(m_model, glm::radians(angle), Vec3f{ 1.0f, 0.3f, 0.5f });
+			shaderProgram.setMat4("u_Transform", m_projection * m_view * m_model);
 
-			glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_vertices.size())));
-		}
-
-		m_lightCubeshader.bind();
-
-		Vec3f lightPos{ 1.2f, 1.0f, 2.0f };
-
-		{
-			m_lightCubeshader.setMat4("u_Projection", m_projection);
-			m_lightCubeshader.setMat4("u_View", m_view);
-
-			m_model = glm::translate(Mat4f(1.0f), lightPos);
-			m_model = glm::scale(m_model, Vec3f(0.2f)); // a smaller cube
-
-			m_lightCubeshader.setMat4("u_Model", m_model);
-
-			glCheck(glBindVertexArray(m_vaoLight));
 			glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_vertices.size())));
 		}
 
@@ -223,14 +207,11 @@ struct Program final : ProgramBase
 
 	virtual void dispose() final
 	{
-		glCheck(glDeleteVertexArrays(1, &m_vaoLight));
+		glCheck(glDeleteTextures(1, &m_texture));
 		glCheck(glDeleteVertexArrays(1, &m_vao));
 		glCheck(glDeleteBuffers(1, &m_vbo));
 		glCheck(glDeleteBuffers(1, &m_ebo));
-		m_lightingShader.dispose();
-		m_lightCubeshader.dispose();
+		shaderProgram.dispose();
 	}
 };
 }
-
-OGL_RUN_MAIN(ogl::Program);

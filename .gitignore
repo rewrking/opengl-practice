@@ -10,5 +10,6 @@ dist/
 .vs/
 
 # Other
+.clang-tidy
 Thumbs.db
 .DS_Store
