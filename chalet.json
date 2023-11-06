@@ -111,7 +111,8 @@
 			"rebuild": false,
 			"defines": [
 				"BUILD_STATIC_LIBS=OFF",
-				"BUILD_SHARED_LIBS=ON"
+				"BUILD_SHARED_LIBS=ON",
+				"ASSIMP_BUILD_TESTS=OFF"
 			]
 		},
 		"spdlog": {
