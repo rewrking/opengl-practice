@@ -63,7 +63,7 @@
 				"${externalBuild:spdlog}",
 				"${externalBuild:glfw}/src",
 				"${externalBuild:glm}/glm",
-				"${buildDir}/vendor/glad"
+				"${externalBuild:glad}"
 			],
 			"staticLinks": [
 				"glad-s",
