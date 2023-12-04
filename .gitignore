@@ -8,6 +8,7 @@ dist/
 # Editors
 .idea/
 .vs/
+.fleet/
 
 # Other
 .clang-tidy
