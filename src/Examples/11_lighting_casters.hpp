@@ -70,8 +70,8 @@ struct LightingCasters final : ogl::ProgramBase
 	f32 m_yaw = 0.0f;
 	f32 m_pitch = 0.0f;
 
-	Material m_cubeMaterial;
-	Material m_lightMaterial;
+	Material m_lightingShader;
+	Material m_lightCubeShader;
 
 	Texture m_diffuseMap;
 	Texture m_specularMap;
@@ -99,14 +99,14 @@ struct LightingCasters final : ogl::ProgramBase
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
-		m_cubeMaterial.loadFromFile("11_lighting_casters/phong.glsl");
-		m_lightMaterial.loadFromFile("11_lighting_casters/light_cube.glsl");
+		m_lightingShader.loadFromFile("11_lighting_casters/phong.glsl");
+		m_lightCubeShader.loadFromFile("11_lighting_casters/light_cube.glsl");
 
 		m_cubeMesh.setGeometry({ Attrib::Position3D, Attrib::Normal3D, Attrib::TexCoord }, m_vertices);
-		m_cubeMesh.setMaterial(m_cubeMaterial);
+		m_cubeMesh.setMaterial(m_lightingShader);
 
 		m_lightMesh.setGeometry({ Attrib::Position3D, Attrib::Normal3D, Attrib::TexCoord }, m_vertices);
-		m_lightMesh.setMaterial(m_lightMaterial);
+		m_lightMesh.setMaterial(m_lightCubeShader);
 
 		if (!m_diffuseMap.load("container2.png"))
 			return;
@@ -133,14 +133,14 @@ struct LightingCasters final : ogl::ProgramBase
 
 		Vec3f lightPos{ -0.2f, -1.0f, -0.3f };
 
-		// m_cubeMaterial.setVec4("u_LightColor", getColor(255, 255, 255));
-		// m_cubeMaterial.setVec4("u_ObjectColor", getColor(255, 128, 79));
-		// m_cubeMaterial.setVec3("u_LightPos", lightPos);
-		// m_cubeMaterial.setVec3("u_ViewPos", m_camera.position());
+		// m_lightingShader.setVec4("u_LightColor", getColor(255, 255, 255));
+		// m_lightingShader.setVec4("u_ObjectColor", getColor(255, 128, 79));
+		// m_lightingShader.setVec3("u_LightPos", lightPos);
+		// m_lightingShader.setVec3("u_ViewPos", m_camera.position());
 
-		m_cubeMaterial.setTexture("u_Material.diffuse", m_diffuseMap);
-		m_cubeMaterial.setTexture("u_Material.specular", m_specularMap);
-		m_cubeMaterial.setFloat("u_Material.shininess", 32.0f);
+		m_lightingShader.setTexture("u_Material.diffuse", m_diffuseMap);
+		m_lightingShader.setTexture("u_Material.specular", m_specularMap);
+		m_lightingShader.setFloat("u_Material.shininess", 32.0f);
 
 		// f64 delta = glfwGetTime();
 
@@ -152,24 +152,24 @@ struct LightingCasters final : ogl::ProgramBase
 		auto diffuseColor = lightColor * Vec3f(0.8f);
 		auto ambientColor = diffuseColor * Vec3f(0.1f);
 
-		m_cubeMaterial.setVec3("u_Light.position", camera().position());
-		m_cubeMaterial.setVec3("u_Light.direction", camera().front());
-		m_cubeMaterial.setFloat("u_Light.cutOff", glm::cos(glm::radians(12.5f)));
-		m_cubeMaterial.setFloat("u_Light.outerCutOff", glm::cos(glm::radians(17.5f)));
-		m_cubeMaterial.setVec3("u_ViewPos", camera().position());
+		m_lightingShader.setVec3("u_Light.position", camera().position());
+		m_lightingShader.setVec3("u_Light.direction", camera().front());
+		m_lightingShader.setFloat("u_Light.cutOff", glm::cos(glm::radians(12.5f)));
+		m_lightingShader.setFloat("u_Light.outerCutOff", glm::cos(glm::radians(17.5f)));
+		m_lightingShader.setVec3("u_ViewPos", camera().position());
 
 		UNUSED(lightPos);
-		// m_cubeMaterial.setVec3("u_Light.position", lightPos);
+		// m_lightingShader.setVec3("u_Light.position", lightPos);
 
-		m_cubeMaterial.setVec3("u_Light.ambient", ambientColor);
-		m_cubeMaterial.setVec3("u_Light.diffuse", diffuseColor); // darken diffuse light a bit
-		m_cubeMaterial.setVec3("u_Light.specular", 1.0f, 1.0f, 1.0f);
+		m_lightingShader.setVec3("u_Light.ambient", ambientColor);
+		m_lightingShader.setVec3("u_Light.diffuse", diffuseColor); // darken diffuse light a bit
+		m_lightingShader.setVec3("u_Light.specular", 1.0f, 1.0f, 1.0f);
 
 		// https://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation
 		//
-		m_cubeMaterial.setFloat("u_Light.constant", 1.0f);
-		m_cubeMaterial.setFloat("u_Light.linear", 0.09f);
-		m_cubeMaterial.setFloat("u_Light.quadratic", 0.032f);
+		m_lightingShader.setFloat("u_Light.constant", 1.0f);
+		m_lightingShader.setFloat("u_Light.linear", 0.09f);
+		m_lightingShader.setFloat("u_Light.quadratic", 0.032f);
 
 		// f32 delta = static_cast<f32>(glfwGetTime());
 
@@ -180,9 +180,9 @@ struct LightingCasters final : ogl::ProgramBase
 			model = glm::rotate(model, glm::radians(angle), Vec3f(1.0f, 0.3f, 0.5f));
 			auto normalMatrix = Mat3f(glm::transpose(glm::inverse(m_view * model)));
 
-			m_cubeMaterial.setMat4("u_ProjectionViewModel", m_projection * m_view * model);
-			m_cubeMaterial.setMat4("u_ViewModel", m_view * model);
-			m_cubeMaterial.setMat3("u_NormalMatrix", normalMatrix);
+			m_lightingShader.setMat4("u_ProjectionViewModel", m_projection * m_view * model);
+			m_lightingShader.setMat4("u_ViewModel", m_view * model);
+			m_lightingShader.setMat3("u_NormalMatrix", normalMatrix);
 
 			m_cubeMesh.draw();
 		}
@@ -191,9 +191,9 @@ struct LightingCasters final : ogl::ProgramBase
 		// 	auto model = glm::translate(Mat4f(1.0f), lightPos);
 		// 	model = glm::scale(model, Vec3f(0.2f)); // a smaller cube
 
-		// 	m_lightMaterial.setMat4("u_Projection", m_projection);
-		// 	m_lightMaterial.setMat4("u_View", m_view);
-		// 	m_lightMaterial.setMat4("u_Model", model);
+		// 	m_lightCubeShader.setMat4("u_Projection", m_projection);
+		// 	m_lightCubeShader.setMat4("u_View", m_view);
+		// 	m_lightCubeShader.setMat4("u_Model", model);
 
 		// 	m_lightMesh.draw();
 		// }
@@ -202,9 +202,9 @@ struct LightingCasters final : ogl::ProgramBase
 	virtual void dispose() final
 	{
 		m_lightMesh.dispose();
-		m_lightMaterial.dispose();
+		m_lightCubeShader.dispose();
 
-		m_cubeMaterial.dispose();
+		m_lightingShader.dispose();
 		m_cubeMesh.dispose();
 	}
 };

@@ -77,8 +77,8 @@ struct MultipleLights final : ogl::ProgramBase
 	f32 m_yaw = 0.0f;
 	f32 m_pitch = 0.0f;
 
-	Material m_cubeMaterial;
-	Material m_lightMaterial;
+	Material m_lightingShader;
+	Material m_lightCubeShader;
 
 	Texture m_diffuseMap;
 	Texture m_specularMap;
@@ -106,14 +106,14 @@ struct MultipleLights final : ogl::ProgramBase
 		m_yaw = 0.0f;
 		m_pitch = 0.0f;
 
-		m_cubeMaterial.loadFromFile("12_multiple_lights/phong.glsl");
-		m_lightMaterial.loadFromFile("12_multiple_lights/light_cube.glsl");
+		m_lightingShader.loadFromFile("12_multiple_lights/phong.glsl");
+		m_lightCubeShader.loadFromFile("12_multiple_lights/light_cube.glsl");
 
 		m_cubeMesh.setGeometry({ Attrib::Position3D, Attrib::Normal3D, Attrib::TexCoord }, m_vertices);
-		m_cubeMesh.setMaterial(m_cubeMaterial);
+		m_cubeMesh.setMaterial(m_lightingShader);
 
 		m_lightMesh.setGeometry({ Attrib::Position3D, Attrib::Normal3D, Attrib::TexCoord }, m_vertices);
-		m_lightMesh.setMaterial(m_lightMaterial);
+		m_lightMesh.setMaterial(m_lightCubeShader);
 
 		if (!m_diffuseMap.load("container2.png"))
 			return;
@@ -138,13 +138,13 @@ struct MultipleLights final : ogl::ProgramBase
 		m_diffuseMap.bind(0);
 		m_specularMap.bind(1);
 
-		// m_cubeMaterial.setVec4("u_LightColor", getColor(255, 255, 255));
-		// m_cubeMaterial.setVec4("u_ObjectColor", getColor(255, 128, 79));
-		// m_cubeMaterial.setVec3("u_LightPos", lightPos);
-		// m_cubeMaterial.setVec3("u_ViewPos", m_camera.position());
+		// m_lightingShader.setVec4("u_LightColor", getColor(255, 255, 255));
+		// m_lightingShader.setVec4("u_ObjectColor", getColor(255, 128, 79));
+		// m_lightingShader.setVec3("u_LightPos", lightPos);
+		// m_lightingShader.setVec3("u_ViewPos", m_camera.position());
 
-		m_cubeMaterial.setTexture("u_Material.diffuse", m_diffuseMap);
-		m_cubeMaterial.setTexture("u_Material.specular", m_specularMap);
+		m_lightingShader.setTexture("u_Material.diffuse", m_diffuseMap);
+		m_lightingShader.setTexture("u_Material.specular", m_specularMap);
 
 		// f64 delta = glfwGetTime();
 
@@ -156,83 +156,85 @@ struct MultipleLights final : ogl::ProgramBase
 		// auto diffuseColor = lightColor * Vec3f(0.8f);
 		// auto ambientColor = diffuseColor * Vec3f(0.1f);
 
-		m_cubeMaterial.setVec3("u_ViewPos", camera().position());
-		m_cubeMaterial.setFloat("u_Material.shininess", 32.0f);
+		m_lightingShader.setVec3("u_ViewPos", camera().position());
+		m_lightingShader.setFloat("u_Material.shininess", 32.0f);
 
 		// Directional light
-		m_cubeMaterial.setVec3("u_DirLight.direction", -0.2f, -1.0f, -0.3f);
-		m_cubeMaterial.setVec3("u_DirLight.ambient", 0.05f, 0.05f, 0.05f);
-		m_cubeMaterial.setVec3("u_DirLight.diffuse", 0.4f, 0.4f, 0.4f);
-		m_cubeMaterial.setVec3("u_DirLight.specular", 0.5f, 0.5f, 0.5f);
+		m_lightingShader.setVec3("u_DirLight.direction", -0.2f, -1.0f, -0.3f);
+		m_lightingShader.setVec3("u_DirLight.ambient", 0.05f, 0.05f, 0.05f);
+		m_lightingShader.setVec3("u_DirLight.diffuse", 0.4f, 0.4f, 0.4f);
+		m_lightingShader.setVec3("u_DirLight.specular", 0.5f, 0.5f, 0.5f);
 		// point light 1
-		m_cubeMaterial.setVec3("u_PointLights[0].position", m_pointLightPositions[0]);
-		m_cubeMaterial.setVec3("u_PointLights[0].ambient", 0.05f, 0.05f, 0.05f);
-		m_cubeMaterial.setVec3("u_PointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
-		m_cubeMaterial.setVec3("u_PointLights[0].specular", 1.0f, 1.0f, 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[0].constant", 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[0].linear", 0.09f);
-		m_cubeMaterial.setFloat("u_PointLights[0].quadratic", 0.032f);
+		m_lightingShader.setVec3("u_PointLights[0].position", m_pointLightPositions[0]);
+		m_lightingShader.setVec3("u_PointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+		m_lightingShader.setVec3("u_PointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+		m_lightingShader.setVec3("u_PointLights[0].specular", 1.0f, 1.0f, 1.0f);
+		m_lightingShader.setFloat("u_PointLights[0].constant", 1.0f);
+		m_lightingShader.setFloat("u_PointLights[0].linear", 0.09f);
+		m_lightingShader.setFloat("u_PointLights[0].quadratic", 0.032f);
 		// point light 2
-		m_cubeMaterial.setVec3("u_PointLights[1].position", m_pointLightPositions[1]);
-		m_cubeMaterial.setVec3("u_PointLights[1].ambient", 0.05f, 0.05f, 0.05f);
-		m_cubeMaterial.setVec3("u_PointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
-		m_cubeMaterial.setVec3("u_PointLights[1].specular", 1.0f, 1.0f, 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[1].constant", 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[1].linear", 0.09f);
-		m_cubeMaterial.setFloat("u_PointLights[1].quadratic", 0.032f);
+		m_lightingShader.setVec3("u_PointLights[1].position", m_pointLightPositions[1]);
+		m_lightingShader.setVec3("u_PointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+		m_lightingShader.setVec3("u_PointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+		m_lightingShader.setVec3("u_PointLights[1].specular", 1.0f, 1.0f, 1.0f);
+		m_lightingShader.setFloat("u_PointLights[1].constant", 1.0f);
+		m_lightingShader.setFloat("u_PointLights[1].linear", 0.09f);
+		m_lightingShader.setFloat("u_PointLights[1].quadratic", 0.032f);
 		// point light 3
-		m_cubeMaterial.setVec3("u_PointLights[2].position", m_pointLightPositions[2]);
-		m_cubeMaterial.setVec3("u_PointLights[2].ambient", 0.05f, 0.05f, 0.05f);
-		m_cubeMaterial.setVec3("u_PointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
-		m_cubeMaterial.setVec3("u_PointLights[2].specular", 1.0f, 1.0f, 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[2].constant", 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[2].linear", 0.09f);
-		m_cubeMaterial.setFloat("u_PointLights[2].quadratic", 0.032f);
+		m_lightingShader.setVec3("u_PointLights[2].position", m_pointLightPositions[2]);
+		m_lightingShader.setVec3("u_PointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+		m_lightingShader.setVec3("u_PointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+		m_lightingShader.setVec3("u_PointLights[2].specular", 1.0f, 1.0f, 1.0f);
+		m_lightingShader.setFloat("u_PointLights[2].constant", 1.0f);
+		m_lightingShader.setFloat("u_PointLights[2].linear", 0.09f);
+		m_lightingShader.setFloat("u_PointLights[2].quadratic", 0.032f);
 		// point light 4
-		m_cubeMaterial.setVec3("u_PointLights[3].position", m_pointLightPositions[3]);
-		m_cubeMaterial.setVec3("u_PointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-		m_cubeMaterial.setVec3("u_PointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-		m_cubeMaterial.setVec3("u_PointLights[3].specular", 1.0f, 1.0f, 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[3].constant", 1.0f);
-		m_cubeMaterial.setFloat("u_PointLights[3].linear", 0.09f);
-		m_cubeMaterial.setFloat("u_PointLights[3].quadratic", 0.032f);
+		m_lightingShader.setVec3("u_PointLights[3].position", m_pointLightPositions[3]);
+		m_lightingShader.setVec3("u_PointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+		m_lightingShader.setVec3("u_PointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+		m_lightingShader.setVec3("u_PointLights[3].specular", 1.0f, 1.0f, 1.0f);
+		m_lightingShader.setFloat("u_PointLights[3].constant", 1.0f);
+		m_lightingShader.setFloat("u_PointLights[3].linear", 0.09f);
+		m_lightingShader.setFloat("u_PointLights[3].quadratic", 0.032f);
+
 		// u_SpotLight
-		// m_cubeMaterial.setVec3("u_SpotLight.position", Vec3f(0.0f));
-		m_cubeMaterial.setVec3("u_SpotLight.position", camera().front());
-		m_cubeMaterial.setVec3("u_SpotLight.direction", camera().front());
-		m_cubeMaterial.setVec3("u_SpotLight.ambient", 0.0f, 0.0f, 0.0f);
-		m_cubeMaterial.setVec3("u_SpotLight.diffuse", 1.0f, 1.0f, 1.0f);
-		m_cubeMaterial.setVec3("u_SpotLight.specular", 1.0f, 1.0f, 1.0f);
-		m_cubeMaterial.setFloat("u_SpotLight.constant", 1.0f);
-		m_cubeMaterial.setFloat("u_SpotLight.linear", 0.09f);
-		m_cubeMaterial.setFloat("u_SpotLight.quadratic", 0.032f);
-		m_cubeMaterial.setFloat("u_SpotLight.cutOff", glm::cos(glm::radians(12.5f)));
-		m_cubeMaterial.setFloat("u_SpotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+		// m_lightingShader.setVec3("u_SpotLight.position", Vec3f(0.0f));
+		m_lightingShader.setVec3("u_SpotLight.position", camera().position());
+		m_lightingShader.setVec3("u_SpotLight.direction", camera().front());
+		m_lightingShader.setVec3("u_SpotLight.ambient", 0.0f, 0.0f, 0.0f);
+		m_lightingShader.setVec3("u_SpotLight.diffuse", 1.0f, 1.0f, 1.0f);
+		m_lightingShader.setVec3("u_SpotLight.specular", 1.0f, 1.0f, 1.0f);
+		m_lightingShader.setFloat("u_SpotLight.constant", 1.0f);
+		m_lightingShader.setFloat("u_SpotLight.linear", 0.09f);
+		m_lightingShader.setFloat("u_SpotLight.quadratic", 0.032f);
+		m_lightingShader.setFloat("u_SpotLight.cutOff", glm::cos(glm::radians(12.5f)));
+		m_lightingShader.setFloat("u_SpotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
 
 		// f32 delta = static_cast<f32>(glfwGetTime());
+
+		m_lightingShader.setMat4("u_View", m_view);
+		m_lightingShader.setMat4("u_Projection", m_projection);
 
 		for (size_t i = 0; i < m_cubePositions.size(); ++i)
 		{
 			f32 angle = 20.0f * static_cast<f32>(i);
 			auto model = glm::translate(Mat4f(1.0f), m_cubePositions.at(i));
 			model = glm::rotate(model, glm::radians(angle), Vec3f(1.0f, 0.3f, 0.5f));
-			auto normalMatrix = Mat3f(glm::transpose(glm::inverse(m_view * model)));
 
-			m_cubeMaterial.setMat4("u_ProjectionViewModel", m_projection * m_view * model);
-			m_cubeMaterial.setMat4("u_ViewModel", m_view * model);
-			m_cubeMaterial.setMat3("u_NormalMatrix", normalMatrix);
+			m_lightingShader.setMat4("u_Model", model);
 
 			m_cubeMesh.draw();
 		}
+
+		m_lightCubeShader.setMat4("u_View", m_view);
+		m_lightCubeShader.setMat4("u_Projection", m_projection);
 
 		for (auto& pos : m_pointLightPositions)
 		{
 			auto model = glm::translate(Mat4f(1.0f), pos);
 			model = glm::scale(model, Vec3f(0.2f)); // a smaller cube
 
-			m_lightMaterial.setMat4("u_Projection", m_projection);
-			m_lightMaterial.setMat4("u_View", m_view);
-			m_lightMaterial.setMat4("u_Model", model);
+			m_lightCubeShader.setMat4("u_Model", model);
 
 			m_lightMesh.draw();
 		}
@@ -241,9 +243,9 @@ struct MultipleLights final : ogl::ProgramBase
 	virtual void dispose() final
 	{
 		m_lightMesh.dispose();
-		m_lightMaterial.dispose();
+		m_lightCubeShader.dispose();
 
-		m_cubeMaterial.dispose();
+		m_lightingShader.dispose();
 		m_cubeMesh.dispose();
 	}
 };
