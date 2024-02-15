@@ -7,6 +7,7 @@
 #if defined(OGL_MSVC)
 	#pragma warning(push)
 	#pragma warning(disable : 4189)
+	#pragma warning(disable : 4702)
 #else
 	#pragma GCC diagnostic push
 	#pragma GCC diagnostic ignored "-Wpedantic"
@@ -14,6 +15,14 @@
 	#pragma GCC diagnostic ignored "-Wtype-limits"
 	#pragma GCC diagnostic ignored "-Wshadow"
 	#pragma GCC diagnostic ignored "-Wnon-virtual-dtor"
+
+	#if !defined(OGL_CLANG)
+		#pragma GCC diagnostic ignored "-Wstringop-overflow"
+		#pragma GCC diagnostic ignored "-Warray-bounds"
+		#if __GNUC__ > 12
+			#pragma GCC diagnostic ignored "-Wdangling-reference"
+		#endif
+	#endif
 #endif
 
 #include <fmt/color.h>

@@ -14,7 +14,7 @@
 		"fmt": {
 			"kind": "git",
 			"repository": "git@github.com:fmtlib/fmt.git",
-			"tag": "9.0.0"
+			"tag": "10.2.1"
 		},
 		"glfw": {
 			"kind": "git",
@@ -28,7 +28,7 @@
 		"spdlog": {
 			"kind": "git",
 			"repository": "git@github.com:gabime/spdlog.git",
-			"tag": "v1.11.0"
+			"tag": "v1.13.0"
 		}
 	},
 	"abstracts:*": {
