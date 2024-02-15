@@ -1,7 +1,7 @@
 #include "Core/Log/Logger.hpp"
 
+#include "Core/Libraries/SpdLog.hpp"
 #include "Core/Log/LogManager.hpp"
-#include "Core/Log/SpdLog.hpp"
 #include "Core/Log/TerminalColor.hpp"
 
 namespace ogl::priv

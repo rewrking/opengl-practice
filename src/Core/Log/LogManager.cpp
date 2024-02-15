@@ -1,7 +1,7 @@
 #include "Core/Log/LogManager.hpp"
 
-#include "Core/Format.hpp"
-#include "Core/Log/SpdLog.hpp"
+#include "Core/Libraries/Format.hpp"
+#include "Core/Libraries/SpdLog.hpp"
 #include "Core/Log/TerminalColor.hpp"
 
 #if defined(OGL_MSVC)

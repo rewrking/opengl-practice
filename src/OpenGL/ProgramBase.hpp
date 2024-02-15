@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Core/Format.hpp"
 #include "Core/Image/Image.hpp"
+#include "Core/Libraries/Format.hpp"
 #include "OpenGL/Camera.hpp"
 #include "OpenGL/GLM.hpp"
 #include "OpenGL/Material.hpp"
