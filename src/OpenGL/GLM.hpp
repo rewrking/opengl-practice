@@ -12,6 +12,8 @@
 	#pragma clang diagnostic ignored "-Wnested-anon-types"
 #endif
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <glm/glm.hpp>
 
 #include <glm/gtc/matrix_inverse.hpp>
