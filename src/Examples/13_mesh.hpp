@@ -83,15 +83,15 @@ struct MeshProgram final : ogl::ProgramBase
 	TextureBuffer m_diffuseMap;
 	TextureBuffer m_specularMap;
 
-	AbstractMesh m_cubeMesh;
-	AbstractMesh m_lightMesh;
+	MeshOld m_cubeMesh;
+	MeshOld m_lightMesh;
 
 	Mat4f m_view;
 	Mat4f m_projection;
 
 	virtual Settings getSettings() const final
 	{
-		return Settings("13: AbstractMesh", 800, 600);
+		return Settings("13: MeshOld", 800, 600);
 	}
 
 	virtual void init() final

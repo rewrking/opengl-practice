@@ -7,7 +7,7 @@
 
 namespace ogl
 {
-struct AbstractMesh;
+struct MeshOld;
 struct TextureBuffer;
 struct Material
 {

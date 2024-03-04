@@ -5,16 +5,16 @@
 namespace ogl
 {
 struct Material;
-struct AbstractMesh
+struct MeshOld
 {
-	AbstractMesh() = default;
-	OGL_DEFAULT_COPY_MOVE(AbstractMesh);
-	virtual ~AbstractMesh() = default;
+	MeshOld() = default;
+	OGL_DEFAULT_COPY_MOVE(MeshOld);
+	virtual ~MeshOld() = default;
 
 	void dispose();
 
-	AbstractMesh& setGeometry(const std::vector<Attrib>& inAttribs, std::vector<f32>&& inData);
-	AbstractMesh& setGeometry(const std::vector<Attrib>& inAttribs, const std::vector<f32>& inData);
+	MeshOld& setGeometry(const std::vector<Attrib>& inAttribs, std::vector<f32>&& inData);
+	MeshOld& setGeometry(const std::vector<Attrib>& inAttribs, const std::vector<f32>& inData);
 
 	void setMaterial(const Material& inMaterial);
 

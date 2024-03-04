@@ -1,4 +1,4 @@
-#include "OpenGL/AbstractMesh.hpp"
+#include "OpenGL/MeshOld.hpp"
 
 #include "OpenGL/BufferAttribList.hpp"
 #include "OpenGL/Material.hpp"
@@ -7,7 +7,7 @@
 namespace ogl
 {
 /*****************************************************************************/
-AbstractMesh& AbstractMesh::setGeometry(const std::vector<Attrib>& inAttribs, std::vector<f32>&& inData)
+MeshOld& MeshOld::setGeometry(const std::vector<Attrib>& inAttribs, std::vector<f32>&& inData)
 {
 	if (inData.empty() || inAttribs.empty())
 		return *this;
@@ -45,7 +45,7 @@ AbstractMesh& AbstractMesh::setGeometry(const std::vector<Attrib>& inAttribs, st
 }
 
 /*****************************************************************************/
-AbstractMesh& AbstractMesh::setGeometry(const std::vector<Attrib>& inAttribs, const std::vector<f32>& inData)
+MeshOld& MeshOld::setGeometry(const std::vector<Attrib>& inAttribs, const std::vector<f32>& inData)
 {
 	if (inData.empty() || inAttribs.empty())
 		return *this;
@@ -83,13 +83,13 @@ AbstractMesh& AbstractMesh::setGeometry(const std::vector<Attrib>& inAttribs, co
 }
 
 /*****************************************************************************/
-void AbstractMesh::setMaterial(const Material& inMaterial)
+void MeshOld::setMaterial(const Material& inMaterial)
 {
 	m_material = &inMaterial;
 }
 
 /*****************************************************************************/
-void AbstractMesh::initialize()
+void MeshOld::initialize()
 {
 	if (m_vao == 0)
 	{
@@ -108,7 +108,7 @@ void AbstractMesh::initialize()
 }
 
 /*****************************************************************************/
-void AbstractMesh::draw() const
+void MeshOld::draw() const
 {
 	if (m_material != nullptr)
 	{
@@ -132,13 +132,13 @@ void AbstractMesh::draw() const
 }
 
 /*****************************************************************************/
-u32 AbstractMesh::vbo() const
+u32 MeshOld::vbo() const
 {
 	return m_vbo;
 }
 
 /*****************************************************************************/
-void AbstractMesh::dispose()
+void MeshOld::dispose()
 {
 	if (m_vao > 0)
 	{

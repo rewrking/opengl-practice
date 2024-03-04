@@ -74,7 +74,7 @@ struct ExtraAbstractions final : ogl::ProgramBase
 	};
 
 	TextureBuffer m_texture;
-	AbstractMesh m_mesh;
+	MeshOld m_mesh;
 
 	Material m_material;
 

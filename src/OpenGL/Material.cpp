@@ -1,7 +1,7 @@
 #include "OpenGL/Material.hpp"
 
 #include "Core/Helpers.hpp"
-#include "OpenGL/AbstractMesh.hpp"
+#include "OpenGL/MeshOld.hpp"
 #include "OpenGL/TextureBuffer.hpp"
 
 namespace ogl

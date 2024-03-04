@@ -72,8 +72,8 @@ struct LightingBasic final : ogl::ProgramBase
 	Material m_cubeMaterial;
 	Material m_lightMaterial;
 
-	AbstractMesh m_cubeMesh;
-	AbstractMesh m_lightMesh;
+	MeshOld m_cubeMesh;
+	MeshOld m_lightMesh;
 
 	Mat4f m_view;
 	Mat4f m_projection;
