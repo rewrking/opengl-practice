@@ -1,37 +1,30 @@
 #pragma once
 
-#include "OpenGL/Attrib.hpp"
+#include "OpenGL/GLM.hpp"
+#include "OpenGL/Material.hpp"
+#include "OpenGL/Texture.hpp"
+#include "OpenGL/Vertex.hpp"
 
 namespace ogl
 {
-struct Material;
 struct Mesh
 {
-	Mesh() = default;
-	OGL_DEFAULT_COPY_MOVE(Mesh);
-	virtual ~Mesh() = default;
+	using VertexList = std::vector<Vertex>;
+	using IndexList = std::vector<u32>;
+	using TextureList = std::vector<Texture>;
 
-	void dispose();
+	VertexList vertices;
+	IndexList indices;
+	TextureList textures;
 
-	Mesh& setGeometry(const std::vector<Attrib>& inAttribs, std::vector<f32>&& inData);
-	Mesh& setGeometry(const std::vector<Attrib>& inAttribs, const std::vector<f32>& inData);
-
-	void setMaterial(const Material& inMaterial);
-
-	void draw() const;
-
-	u32 vbo() const; // temp?
+	Mesh(const VertexList& inVertices, const IndexList& inIndices, const TextureList& inTextures);
+	void draw(Material& material);
 
 private:
-	void initialize();
-
-	const Material* m_material = nullptr;
-
-	std::vector<f32> m_data;
-
-	u32 m_vbo = 0;
-	// u32 m_ebo = 0;
-
 	u32 m_vao = 0;
+	u32 m_vbo = 0;
+	u32 m_ebo = 0;
+
+	void setupMesh() noexcept;
 };
 }

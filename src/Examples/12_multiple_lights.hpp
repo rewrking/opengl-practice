@@ -80,11 +80,11 @@ struct MultipleLights final : ogl::ProgramBase
 	Material m_lightingShader;
 	Material m_lightCubeShader;
 
-	Texture m_diffuseMap;
-	Texture m_specularMap;
+	TextureBuffer m_diffuseMap;
+	TextureBuffer m_specularMap;
 
-	Mesh m_cubeMesh;
-	Mesh m_lightMesh;
+	AbstractMesh m_cubeMesh;
+	AbstractMesh m_lightMesh;
 
 	Mat4f m_view;
 	Mat4f m_projection;

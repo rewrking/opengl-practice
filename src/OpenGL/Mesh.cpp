@@ -1,166 +1,74 @@
 #include "OpenGL/Mesh.hpp"
 
-#include "OpenGL/BufferAttribList.hpp"
-#include "OpenGL/Material.hpp"
 #include "OpenGL/OpenGL.hpp"
 
 namespace ogl
 {
 /*****************************************************************************/
-Mesh& Mesh::setGeometry(const std::vector<Attrib>& inAttribs, std::vector<f32>&& inData)
+Mesh::Mesh(const VertexList& inVertices, const IndexList& inIndices, const TextureList& inTextures) :
+	vertices(inVertices),
+	indices(inIndices),
+	textures(inTextures)
 {
-	if (inData.empty() || inAttribs.empty())
-		return *this;
-
-	initialize();
-
-	if (m_vao > 0 && m_vbo > 0)
-	{
-		m_data = std::move(inData);
-
-		glCheck(glBindVertexArray(m_vao));
-
-		glCheck(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
-		glCheck(glBufferData(GL_ARRAY_BUFFER, sizeof(f32) * m_data.size(), m_data.data(), GL_STATIC_DRAW));
-
-		// glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));
-		// glCheck(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW));
-
-		BufferAttribList attribList(inAttribs);
-		for (auto& attrib : attribList.attribs)
-		{
-			glCheck(glVertexAttribPointer(attrib.position, attrib.size, GL_FLOAT, GL_FALSE, sizeof(f32) * attribList.size, (void*)(attrib.offset * sizeof(f32))));
-			glCheck(glEnableVertexAttribArray(attrib.position));
-		}
-
-		glCheck(glBindBuffer(GL_ARRAY_BUFFER, 0));
-
-		// no!
-		// glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-
-		glCheck(glBindVertexArray(0));
-	}
-
-	return *this;
+	setupMesh();
 }
 
 /*****************************************************************************/
-Mesh& Mesh::setGeometry(const std::vector<Attrib>& inAttribs, const std::vector<f32>& inData)
+void Mesh::setupMesh() noexcept
 {
-	if (inData.empty() || inAttribs.empty())
-		return *this;
+	glGenVertexArrays(1, &m_vao);
+	glGenBuffers(1, &m_vbo);
+	glGenBuffers(1, &m_ebo);
 
-	initialize();
+	glBindVertexArray(m_vao);
+	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
-	if (m_vao > 0 && m_vbo > 0)
-	{
-		m_data = inData;
+	constexpr i32 kVertexSize = sizeof(Vertex);
+	constexpr auto kNormalOffset = offsetof(Vertex, normal);
+	constexpr auto kTexCoordOffset = offsetof(Vertex, texCoords);
 
-		glCheck(glBindVertexArray(m_vao));
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * kVertexSize, vertices.data(), GL_STATIC_DRAW);
 
-		glCheck(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
-		glCheck(glBufferData(GL_ARRAY_BUFFER, sizeof(f32) * m_data.size(), m_data.data(), GL_STATIC_DRAW));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(u32), indices.data(), GL_STATIC_DRAW);
 
-		// glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));
-		// glCheck(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * m_indices.size(), m_indices.data(), GL_STATIC_DRAW));
+	// vertex positions
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, kVertexSize, (void*)0);
+	// vertex normals
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, kVertexSize, (void*)kNormalOffset);
+	// vertex texture coords
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, kVertexSize, (void*)kTexCoordOffset);
 
-		BufferAttribList attribList(inAttribs);
-		for (auto& attrib : attribList.attribs)
-		{
-			glCheck(glVertexAttribPointer(attrib.position, attrib.size, GL_FLOAT, GL_FALSE, sizeof(f32) * attribList.size, (void*)(attrib.offset * sizeof(f32))));
-			glCheck(glEnableVertexAttribArray(attrib.position));
-		}
-
-		glCheck(glBindBuffer(GL_ARRAY_BUFFER, 0));
-
-		// no!
-		// glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-
-		glCheck(glBindVertexArray(0));
-	}
-
-	return *this;
+	glBindVertexArray(0);
 }
 
 /*****************************************************************************/
-void Mesh::setMaterial(const Material& inMaterial)
+void Mesh::draw(Material& material)
 {
-	m_material = &inMaterial;
-}
-
-/*****************************************************************************/
-void Mesh::initialize()
-{
-	if (m_vao == 0)
+	u32 diffuseNr = 1;
+	u32 specularNr = 1;
+	for (u32 i = 0; i < textures.size(); i++)
 	{
-		glCheck(glGenVertexArrays(1, &m_vao));
+		glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
+		// retrieve texture number (the N in diffuse_textureN)
+		std::string number;
+		const auto& name = textures[i].type;
+		if (name == "texture_diffuse")
+			number = std::to_string(diffuseNr++);
+		else if (name == "texture_specular")
+			number = std::to_string(specularNr++);
+
+		material.setInt(("material." + name + number).c_str(), i);
+		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}
+	glActiveTexture(GL_TEXTURE0);
 
-	if (m_vbo == 0)
-	{
-		glCheck(glGenBuffers(1, &m_vbo));
-	}
-
-	// if (m_ebo == 0)
-	// {
-	// 	glCheck(glGenBuffers(1, &m_ebo));
-	// }
-}
-
-/*****************************************************************************/
-void Mesh::draw() const
-{
-	if (m_material != nullptr)
-	{
-		m_material->bind();
-	}
-	else
-	{
-		// We have no shader!
-		log_error("draw() called on a mesh without a shader:", m_vao);
-		return;
-	}
-
-	if (m_vao > 0)
-	{
-		glCheck(glBindVertexArray(m_vao));
-
-		glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(m_data.size())));
-
-		glCheck(glBindVertexArray(0));
-	}
-}
-
-/*****************************************************************************/
-u32 Mesh::vbo() const
-{
-	return m_vbo;
-}
-
-/*****************************************************************************/
-void Mesh::dispose()
-{
-	if (m_vao > 0)
-	{
-		glCheck(glDeleteVertexArrays(1, &m_vao));
-		m_vao = 0;
-	}
-
-	if (m_vbo > 0)
-	{
-		glCheck(glDeleteBuffers(1, &m_vbo));
-		m_vbo = 0;
-	}
-
-	// if (m_ebo > 0)
-	// {
-	// 	glCheck(glDeleteBuffers(1, &m_ebo));
-	// 	m_ebo = 0;
-	// }
-
-	if (m_material != nullptr)
-	{
-		m_material = nullptr;
-	}
+	// draw mesh
+	glBindVertexArray(m_vao);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }
 }

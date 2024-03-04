@@ -73,8 +73,8 @@ struct ExtraAbstractions final : ogl::ProgramBase
 		{ -1.3f, 1.0f, -1.5f }
 	};
 
-	Texture m_texture;
-	Mesh m_mesh;
+	TextureBuffer m_texture;
+	AbstractMesh m_mesh;
 
 	Material m_material;
 

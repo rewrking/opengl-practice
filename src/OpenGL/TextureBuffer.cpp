@@ -1,4 +1,4 @@
-#include "OpenGL/Texture.hpp"
+#include "OpenGL/TextureBuffer.hpp"
 
 #include "Core/Image/Image.hpp"
 #include "OpenGL/OpenGL.hpp"
@@ -46,17 +46,17 @@ constexpr i32 getTextureSlot(const u32 inSlot)
 }
 
 /*****************************************************************************/
-const Texture* Texture::kCurrentTexture = nullptr;
+const TextureBuffer* TextureBuffer::kCurrentTexture = nullptr;
 
 /*****************************************************************************/
-bool Texture::load(const char* inPath)
+bool TextureBuffer::load(const char* inPath)
 {
 	auto image = Image::make(inPath);
 	return load(image);
 }
 
 /*****************************************************************************/
-bool Texture::load(const Image& inImage)
+bool TextureBuffer::load(const Image& inImage)
 {
 	if (m_texture > 0)
 		return false;
@@ -95,7 +95,7 @@ bool Texture::load(const Image& inImage)
 }
 
 /*****************************************************************************/
-void Texture::dispose()
+void TextureBuffer::dispose()
 {
 	if (kCurrentTexture == this)
 		kCurrentTexture = nullptr;
@@ -110,7 +110,7 @@ void Texture::dispose()
 }
 
 /*****************************************************************************/
-void Texture::bind(const i32 inSlot) const
+void TextureBuffer::bind(const i32 inSlot) const
 {
 	if (kCurrentTexture != this && m_texture > 0)
 	{
@@ -122,7 +122,7 @@ void Texture::bind(const i32 inSlot) const
 }
 
 /*****************************************************************************/
-void Texture::assign(const i32 inSlot) const
+void TextureBuffer::assign(const i32 inSlot) const
 {
 	if (m_texture > 0)
 	{
@@ -132,7 +132,7 @@ void Texture::assign(const i32 inSlot) const
 }
 
 /*****************************************************************************/
-i32 Texture::slot() const noexcept
+i32 TextureBuffer::slot() const noexcept
 {
 	if (m_slot < 0)
 	{

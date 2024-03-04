@@ -16,6 +16,7 @@
 #include "Examples/10_lighting_lightmaps.hpp"
 #include "Examples/11_lighting_casters.hpp"
 #include "Examples/12_multiple_lights.hpp"
+#include "Examples/13_mesh.hpp"
 #include "Examples/x1_abstractions.hpp"
 
 namespace ogl
@@ -64,6 +65,7 @@ inline std::unique_ptr<ProgramBase> getProgramFromNumber(const i32 inNumber)
 		case 10: return make<Program::LightingLightmaps>();
 		case 11: return make<Program::LightingCasters>();
 		case 12: return make<Program::MultipleLights>();
+		case 13: return make<Program::MeshProgram>();
 		case 91: return make<Program::ExtraAbstractions>();
 		default:
 			return nullptr;

@@ -1,8 +1,8 @@
 #include "OpenGL/Material.hpp"
 
 #include "Core/Helpers.hpp"
-#include "OpenGL/Mesh.hpp"
-#include "OpenGL/Texture.hpp"
+#include "OpenGL/AbstractMesh.hpp"
+#include "OpenGL/TextureBuffer.hpp"
 
 namespace ogl
 {
@@ -275,7 +275,7 @@ void Material::setInt(const char* inName, i32 inValue)
 }
 
 /*****************************************************************************/
-void Material::setTexture(const char* inName, const Texture& inTexture)
+void Material::setTexture(const char* inName, const TextureBuffer& inTexture)
 {
 	return this->setInt(inName, inTexture.slot());
 }

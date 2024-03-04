@@ -7,8 +7,8 @@
 
 namespace ogl
 {
-struct Mesh;
-struct Texture;
+struct AbstractMesh;
+struct TextureBuffer;
 struct Material
 {
 	Material() = default;
@@ -34,7 +34,7 @@ struct Material
 	void setVec4(const char* inName, const Color& inColor);
 
 	void setInt(const char* inName, i32 inValue);
-	void setTexture(const char* inName, const Texture& inTexture);
+	void setTexture(const char* inName, const TextureBuffer& inTexture);
 
 	void setMat3(const char* inName, const Mat3f& inValue);
 	void setMat4(const char* inName, const Mat4f& inValue);

@@ -2,12 +2,12 @@
 
 #include "Core/Image/Image.hpp"
 #include "Core/Libraries/Format.hpp"
+#include "OpenGL/AbstractMesh.hpp"
 #include "OpenGL/Camera.hpp"
 #include "OpenGL/GLM.hpp"
 #include "OpenGL/Material.hpp"
-#include "OpenGL/Mesh.hpp"
 #include "OpenGL/OpenGL.hpp"
-#include "OpenGL/Texture.hpp"
+#include "OpenGL/TextureBuffer.hpp"
 
 namespace ogl
 {
