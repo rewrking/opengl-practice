@@ -20,7 +20,7 @@
 	#define SPDLOG_FMT_EXTERNAL
 #endif
 
-#include "Core/Libraries/Format.hpp"
+#include "Libraries/Format.hpp"
 
 #include <spdlog/spdlog.h>
 

@@ -4,7 +4,7 @@
 	#include "Core/Win32/WindowsPlatform.hpp"
 #endif
 
-#include "OpenGL/OpenGL.hpp"
+#include "Libraries/OpenGL.hpp"
 
 /*****************************************************************************/
 void ogl::Platform::initialize(GLFWwindow* inWindow)

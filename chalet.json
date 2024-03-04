@@ -32,6 +32,55 @@
 			"tag": "v1.13.0"
 		}
 	},
+	"package": {
+		"assimp": {
+			"settings:Cxx": {
+				"includeDirs": [
+					"${external:assimp}/include",
+					"${externalBuild:assimp}/include"
+				],
+				"libDirs": "${externalBuild:assimp}/bin",
+				"links[:debug]": [
+					"assimpd"
+				]
+			}
+		},
+		"glfw": {
+			"settings:Cxx": {
+				"includeDirs": [
+					"vendor/glad/include",
+					"${external:glfw}/include"
+				],
+				"staticLinks": [
+					"${externalBuild:glad}/${ar:glad-s}",
+					"${externalBuild:glfw}/src/${ar:glfw3}"
+				],
+				"links[:windows]": "opengl32",
+				"links[:linux]": [
+					"GL",
+					"X11"
+				],
+				"appleFrameworks": [
+					"Cocoa",
+					"OpenGL",
+					"IOKit"
+				]
+			}
+		},
+		"glm": {
+			"settings:Cxx": {
+				"includeDirs": "${external:glm}",
+				"staticLinks": "${externalBuild:glm}/glm/${ar:glm}"
+			}
+		},
+		"spdlog": {
+			"settings:Cxx": {
+				"includeDirs": "${external:spdlog}/include",
+				"staticLinks[:!debug]": "${externalBuild:spdlog}/${ar:spdlog}",
+				"staticLinks[:debug]": "${externalBuild:spdlog}/${ar:spdlogd}"
+			}
+		}
+	},
 	"abstracts:*": {
 		"language": "C++",
 		"settings:Cxx": {
@@ -53,43 +102,11 @@
 			],
 			"includeDirs": [
 				"${external:fmt}/include",
-				"${external:glfw}/include",
-				"${external:spdlog}/include",
-				"${external:glm}",
 				"vendor/stb/include",
-				"vendor/glad/include",
 				"src"
 			],
-			"libDirs": [
-				"${externalBuild:spdlog}",
-				"${externalBuild:glfw}/src",
-				"${externalBuild:glm}/glm",
-				"${externalBuild:glad}"
-			],
-			"staticLinks": [
-				"glad-s",
-				"glfw3",
-				"glm"
-			],
-			"staticLinks[:!debug]": [
-				"spdlog"
-			],
-			"staticLinks[:debug]": [
-				"spdlogd"
-			],
 			"links[:windows]": [
-				"opengl32",
 				"dwmapi"
-			],
-			"links[:linux]": [
-				"GL",
-				"glfw3",
-				"X11"
-			],
-			"appleFrameworks": [
-				"Cocoa",
-				"OpenGL",
-				"IOKit"
 			],
 			"windowsApplicationIcon": "platform/windows/app.ico",
 			"windowsApplicationManifest": "platform/windows/app.manifest"
@@ -145,6 +162,12 @@
 			"kind": "executable",
 			"files": [
 				"src/**.cpp"
+			],
+			"importPackages": [
+				"glfw",
+				"glm",
+				"spdlog",
+				"assimp"
 			],
 			"defaultRunArguments": [
 				"12"

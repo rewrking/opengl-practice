@@ -1,7 +1,7 @@
 #include "Core/Log/Formatting.hpp"
 
-#include "Core/Libraries/Format.hpp"
 #include "Core/Log/TerminalColor.hpp"
+#include "Libraries/Format.hpp"
 
 namespace ogl
 {

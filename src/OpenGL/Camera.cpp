@@ -1,6 +1,6 @@
 #include "OpenGL/Camera.hpp"
 
-#include "OpenGL/OpenGL.hpp"
+#include "Libraries/OpenGL.hpp"
 
 namespace ogl
 {

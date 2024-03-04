@@ -1,6 +1,6 @@
 #include "Core/Image/Image.hpp"
 
-#include "Core/Image/StbImage.hpp"
+#include "Libraries/StbImage.hpp"
 
 namespace ogl
 {

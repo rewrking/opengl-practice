@@ -1,8 +1,8 @@
 #include "Core/Log/LogManager.hpp"
 
-#include "Core/Libraries/Format.hpp"
-#include "Core/Libraries/SpdLog.hpp"
 #include "Core/Log/TerminalColor.hpp"
+#include "Libraries/Format.hpp"
+#include "Libraries/SpdLog.hpp"
 
 #if defined(OGL_MSVC)
 	#pragma warning(push)

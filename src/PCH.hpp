@@ -37,8 +37,8 @@
 
 #include <functional>
 
-#include "Core/Libraries/Filesystem.hpp"
-#include "Core/Libraries/Format.hpp"
+#include "Libraries/Filesystem.hpp"
+#include "Libraries/Format.hpp"
 
 #include "Core/Log/Logger.hpp"
 #include "Core/Types.hpp"

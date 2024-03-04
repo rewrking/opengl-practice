@@ -1,7 +1,7 @@
 #include "OpenGL/TextureBuffer.hpp"
 
 #include "Core/Image/Image.hpp"
-#include "OpenGL/OpenGL.hpp"
+#include "Libraries/OpenGL.hpp"
 
 namespace ogl
 {

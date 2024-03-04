@@ -1,6 +1,6 @@
 #pragma once
 
-#include "OpenGL/GLM.hpp"
+#include "Libraries/GLM.hpp"
 
 namespace ogl
 {

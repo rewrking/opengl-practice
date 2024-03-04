@@ -1,8 +1,8 @@
 #include "OpenGL/MeshOld.hpp"
 
+#include "Libraries/OpenGL.hpp"
 #include "OpenGL/BufferAttribList.hpp"
 #include "OpenGL/Material.hpp"
-#include "OpenGL/OpenGL.hpp"
 
 namespace ogl
 {

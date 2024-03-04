@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Core/Concepts.hpp"
-#include "OpenGL/GLM.hpp"
-#include "OpenGL/OpenGL.hpp"
+#include "Libraries/GLM.hpp"
+#include "Libraries/OpenGL.hpp"
 #include "OpenGL/Shader.hpp"
 
 namespace ogl

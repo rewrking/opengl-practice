@@ -1,20 +1,24 @@
 #include "OpenGL/Mesh.hpp"
 
-#include "OpenGL/OpenGL.hpp"
+#include "Libraries/OpenGL.hpp"
 
 namespace ogl
 {
 /*****************************************************************************/
-Mesh::Mesh(const VertexList& inVertices, const IndexList& inIndices, const TextureList& inTextures) :
-	vertices(inVertices),
-	indices(inIndices),
-	textures(inTextures)
+bool Mesh::load()
 {
+	if (vertices.empty() || indices.empty())
+	{
+		log_error("Error loading mesh: empty");
+		return false;
+	}
+
 	setupMesh();
+	return true;
 }
 
 /*****************************************************************************/
-void Mesh::setupMesh() noexcept
+void Mesh::setupMesh()
 {
 	glGenVertexArrays(1, &m_vao);
 	glGenBuffers(1, &m_vbo);
@@ -23,9 +27,9 @@ void Mesh::setupMesh() noexcept
 	glBindVertexArray(m_vao);
 	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
-	constexpr i32 kVertexSize = sizeof(Vertex);
-	constexpr auto kNormalOffset = offsetof(Vertex, normal);
-	constexpr auto kTexCoordOffset = offsetof(Vertex, texCoords);
+	constexpr i32 kVertexSize = sizeof(Vertex3D);
+	constexpr auto kNormalOffset = offsetof(Vertex3D, normal);
+	constexpr auto kTexCoordOffset = offsetof(Vertex3D, texCoords);
 
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * kVertexSize, vertices.data(), GL_STATIC_DRAW);
 
@@ -54,14 +58,14 @@ void Mesh::draw(Material& material)
 	{
 		glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
 		// retrieve texture number (the N in diffuse_textureN)
-		std::string number;
-		const auto& name = textures[i].type;
+		u32 number = 0;
+		const auto& name = textures.at(i).type;
 		if (name == "texture_diffuse")
-			number = std::to_string(diffuseNr++);
+			number = diffuseNr++;
 		else if (name == "texture_specular")
-			number = std::to_string(specularNr++);
+			number = specularNr++;
 
-		material.setInt(("material." + name + number).c_str(), i);
+		material.setInt(fmt::format("material.{}{}", name, number).c_str(), i);
 		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}
 	glActiveTexture(GL_TEXTURE0);

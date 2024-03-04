@@ -1,4 +1,4 @@
-#include "OpenGL/OpenGL.hpp"
+#include "Libraries/OpenGL.hpp"
 
 /*****************************************************************************/
 // Note: based on SFML's glCheckError
