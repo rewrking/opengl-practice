@@ -342,12 +342,6 @@ void ProgramBase::setClearColor(const i32 inR, const i32 inG, const i32 inB)
 }
 
 /*****************************************************************************/
-Color ProgramBase::getColor(const i32 inR, const i32 inG, const i32 inB, const i32 inA) const
-{
-	return Color(static_cast<f32>(inR) / 255.0f, static_cast<f32>(inG) / 255.0f, static_cast<f32>(inB) / 255.0f, static_cast<f32>(inA) / 255.0f);
-}
-
-/*****************************************************************************/
 Camera& ProgramBase::camera() noexcept
 {
 	return m_camera;

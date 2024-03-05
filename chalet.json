@@ -40,9 +40,9 @@
 					"${externalBuild:assimp}/include"
 				],
 				"libDirs": "${externalBuild:assimp}/bin",
-				"links[:debug]": [
-					"assimpd"
-				]
+				"links[:!windows+:debug]": "assimpd",
+				"links[:!windows+:!debug]": "assimp",
+				"links[:windows]": "${externalBuild:assimp}/lib/${ar:assimp-vc143-mtd}"
 			}
 		},
 		"glfw": {

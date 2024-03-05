@@ -138,8 +138,8 @@ struct MultipleLights final : ogl::ProgramBase
 		m_diffuseMap.bind(0);
 		m_specularMap.bind(1);
 
-		// m_lightingShader.setVec4("u_LightColor", getColor(255, 255, 255));
-		// m_lightingShader.setVec4("u_ObjectColor", getColor(255, 128, 79));
+		// m_lightingShader.setVec4("u_LightColor", Color(255, 255, 255));
+		// m_lightingShader.setVec4("u_ObjectColor", Color(255, 128, 79));
 		// m_lightingShader.setVec3("u_LightPos", lightPos);
 		// m_lightingShader.setVec3("u_ViewPos", m_camera.position());
 

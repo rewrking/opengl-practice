@@ -59,7 +59,6 @@ struct ProgramBase
 	void clearContext();
 	void useDepthBuffer();
 	void setClearColor(const i32 inR, const i32 inG, const i32 inB);
-	Color getColor(const i32 inR, const i32 inG, const i32 inB, const i32 inA = 255) const;
 
 protected:
 	EngineClock Clock;

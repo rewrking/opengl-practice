@@ -111,7 +111,7 @@ void Mesh::draw(Material& material) const
 
 	// draw mesh
 	glCheck(glBindVertexArray(m_vao));
-	glCheck(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0));
+	glCheck(glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0));
 	glCheck(glBindVertexArray(0));
 
 	// always good practice to set everything back to defaults once configured.

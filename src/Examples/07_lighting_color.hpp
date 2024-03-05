@@ -184,8 +184,8 @@ struct LightingColor final : ogl::ProgramBase
 		glCheck(glBindVertexArray(m_vao));
 
 		m_lightingShader.bind();
-		m_lightingShader.setVec4("u_LightColor", getColor(255, 255, 255));
-		m_lightingShader.setVec4("u_ObjectColor", getColor(255, 128, 79));
+		m_lightingShader.setVec4("u_LightColor", Color(255, 255, 255));
+		m_lightingShader.setVec4("u_ObjectColor", Color(255, 128, 79));
 
 		// f32 delta = static_cast<f32>(glfwGetTime());
 

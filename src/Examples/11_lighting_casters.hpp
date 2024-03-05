@@ -133,8 +133,8 @@ struct LightingCasters final : ogl::ProgramBase
 
 		Vec3f lightPos{ -0.2f, -1.0f, -0.3f };
 
-		// m_lightingShader.setVec4("u_LightColor", getColor(255, 255, 255));
-		// m_lightingShader.setVec4("u_ObjectColor", getColor(255, 128, 79));
+		// m_lightingShader.setVec4("u_LightColor", Color(255, 255, 255));
+		// m_lightingShader.setVec4("u_ObjectColor", Color(255, 128, 79));
 		// m_lightingShader.setVec3("u_LightPos", lightPos);
 		// m_lightingShader.setVec3("u_ViewPos", m_camera.position());
 

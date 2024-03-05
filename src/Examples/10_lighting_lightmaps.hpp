@@ -131,8 +131,8 @@ struct LightingLightmaps final : ogl::ProgramBase
 
 		Vec3f lightPos{ 0.0f, -0.25f, 2.0f };
 
-		// m_cubeMaterial.setVec4("u_LightColor", getColor(255, 255, 255));
-		// m_cubeMaterial.setVec4("u_ObjectColor", getColor(255, 128, 79));
+		// m_cubeMaterial.setVec4("u_LightColor", Color(255, 255, 255));
+		// m_cubeMaterial.setVec4("u_ObjectColor", Color(255, 128, 79));
 		m_cubeMaterial.setVec3("u_LightPos", lightPos);
 		// m_cubeMaterial.setVec3("u_ViewPos", m_camera.position());
 
