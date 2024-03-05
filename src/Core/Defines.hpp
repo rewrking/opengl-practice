@@ -49,3 +49,20 @@
 #if defined(OGL_DEBUG)
 	#define OGL_ENABLE_LOGGING
 #endif
+
+#if (defined(__cpp_exceptions) || defined(__EXCEPTIONS) || defined(_CPPUNWIND))
+	#ifndef OGL_EXCEPTIONS
+		#define OGL_EXCEPTIONS
+	#endif
+
+	#define OGL_THROW(exception) throw exception
+	#define OGL_TRY try
+	#define OGL_CATCH(exception) catch (exception)
+	#define OGL_EXCEPT_ERROR(what) priv::Diagnostic::fatalErrorFromException(what);
+#else
+	#include <cstdlib>
+	#define OGL_THROW(exception) std::abort()
+	#define OGL_TRY if (true)
+	#define OGL_CATCH(exception) if (false)
+	#define OGL_EXCEPT_ERROR(what)
+#endif

@@ -14,6 +14,7 @@
 				"${workspaceFolder}/chalet_external/glfw/include",
 				"${workspaceFolder}/chalet_external/glm",
 				"${workspaceFolder}/chalet_external/assimp/include",
+				"${workspaceFolder}/chalet_external/ust",
 				"${workspaceFolder}/src",
 				"/usr/local/include/",
 				"/usr/include/**"
@@ -43,6 +44,7 @@
 				"${workspaceFolder}/chalet_external/glfw/include",
 				"${workspaceFolder}/chalet_external/glm",
 				"${workspaceFolder}/chalet_external/assimp/include",
+				"${workspaceFolder}/chalet_external/ust",
 				"${workspaceFolder}/build/arm64-apple-darwin_Debug/ext.assimp/include",
 				"${workspaceFolder}/src"
 			],
@@ -71,6 +73,7 @@
 				"${workspaceFolder}/chalet_external/glfw/include",
 				"${workspaceFolder}/chalet_external/glm",
 				"${workspaceFolder}/chalet_external/assimp/include",
+				"${workspaceFolder}/chalet_external/ust",
 				"${workspaceFolder}/build/x86_64-apple-darwin_Debug/ext.assimp/include",
 				"${workspaceFolder}/src"
 			],
@@ -95,6 +98,7 @@
 				"${workspaceFolder}/chalet_external/glfw/include",
 				"${workspaceFolder}/chalet_external/glm",
 				"${workspaceFolder}/chalet_external/assimp/include",
+				"${workspaceFolder}/chalet_external/ust",
 				"${workspaceFolder}/src"
 			],
 			"defines": [
@@ -121,6 +125,7 @@
 				"${workspaceFolder}/chalet_external/glfw/include",
 				"${workspaceFolder}/chalet_external/glm",
 				"${workspaceFolder}/chalet_external/assimp/include",
+				"${workspaceFolder}/chalet_external/ust",
 				"${workspaceFolder}/src"
 			],
 			"defines": [

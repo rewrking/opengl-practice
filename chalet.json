@@ -30,6 +30,11 @@
 			"kind": "git",
 			"repository": "git@github.com:gabime/spdlog.git",
 			"tag": "v1.13.0"
+		},
+		"ust": {
+			"kind": "git",
+			"repository": "git@github.com:MisterTea/UniversalStacktrace.git",
+			"commit": "28f5230d75e677ce8e4e140b2f3e0b8550195c85"
 		}
 	},
 	"package": {
@@ -78,6 +83,11 @@
 				"includeDirs": "${external:spdlog}/include",
 				"staticLinks[:!debug]": "${externalBuild:spdlog}/${ar:spdlog}",
 				"staticLinks[:debug]": "${externalBuild:spdlog}/${ar:spdlogd}"
+			}
+		},
+		"ust": {
+			"settings:Cxx": {
+				"includeDirs": "${external:ust}"
 			}
 		}
 	},
@@ -156,7 +166,8 @@
 				"glfw",
 				"glm",
 				"spdlog",
-				"assimp"
+				"assimp",
+				"ust"
 			],
 			"defaultRunArguments": [
 				"12"

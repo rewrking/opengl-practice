@@ -5,6 +5,8 @@
 
 #include "Core/Log/LogManager.hpp"
 #include "Core/Platform.hpp"
+#include "Core/System/ExceptionTranslator.hpp"
+#include "Core/System/SignalHandler.hpp"
 
 namespace ogl
 {
@@ -49,172 +51,183 @@ bool ProgramBase::processInput(GLFWwindow* window)
 /*****************************************************************************/
 i32 ProgramBase::run()
 {
-	initializeLogger();
-
-	if (!glfwInit())
-		return -1;
-
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-
-	Settings settings = getSettings();
-	m_windowProps.width = static_cast<i32>(settings.width);
-	m_windowProps.height = static_cast<i32>(settings.height);
-	m_windowProps.fullscreen = false;
-
-	auto glfwVersion = glfwGetVersionString();
-	log_info("GLFW", glfwVersion);
+	i32 result = OGL_EXIT_SUCCESS;
 
 	{
-#if defined(OGL_MACOS)
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+#if defined(OGL_MSVC)
+		ExceptionTranslator exceptionTranslator;
+#endif
+		SignalHandler::initialize();
 
-		m_window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
+		initializeLogger();
+
+		if (!glfwInit())
+			return OGL_EXIT_FAILURE;
+
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+
+		Settings settings = getSettings();
+		m_windowProps.width = static_cast<i32>(settings.width);
+		m_windowProps.height = static_cast<i32>(settings.height);
+		m_windowProps.fullscreen = false;
+
+		auto glfwVersion = glfwGetVersionString();
+		log_info("GLFW", glfwVersion);
+
+		{
+#if defined(OGL_MACOS)
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
+
+			m_window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 #elif defined(OGL_LINUX)
-		m_window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
+			m_window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 
 #else
-		m_window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
+			m_window = glfwCreateWindow(settings.width, settings.height, settings.name.data(), nullptr, nullptr);
 #endif
-	}
-
-	if (!m_window)
-	{
-		log_fatal("Failed to create window");
-		glfwTerminate();
-		return -1;
-	}
-
-	m_width = settings.width;
-	m_height = settings.height;
-
-	Platform::initialize(m_window);
-
-	glfwMakeContextCurrent(m_window);
-
-	glfwSetWindowUserPointer(m_window, this);
-
-	if (glfwRawMouseMotionSupported())
-		glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
-
-	glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* win, i32 width, i32 height) {
-		if (win)
-		{
-			glCheck(glViewport(0, 0, width, height));
 		}
-	});
-	glfwSetWindowSizeCallback(m_window, [](GLFWwindow* win, i32 width, i32 height) {
-		if (win)
-		{
-			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
-			self->m_width = static_cast<u32>(width);
-			self->m_height = static_cast<u32>(height);
-		}
-	});
 
-	glfwSetCursorPosCallback(m_window, [](GLFWwindow* win, f64 xpos, f64 ypos) {
-		if (win)
+		if (!m_window)
 		{
-			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
-			// if (self->m_mouseInView)
+			log_fatal("Failed to create window");
+			glfwTerminate();
+			return -1;
+		}
+
+		m_width = settings.width;
+		m_height = settings.height;
+
+		Platform::initialize(m_window);
+
+		glfwMakeContextCurrent(m_window);
+
+		glfwSetWindowUserPointer(m_window, this);
+
+		if (glfwRawMouseMotionSupported())
+			glfwSetInputMode(m_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+
+		glfwSetFramebufferSizeCallback(m_window, [](GLFWwindow* win, i32 width, i32 height) {
+			if (win)
 			{
-				self->onMouseMove(xpos, ypos);
+				glCheck(glViewport(0, 0, width, height));
+			}
+		});
+		glfwSetWindowSizeCallback(m_window, [](GLFWwindow* win, i32 width, i32 height) {
+			if (win)
+			{
+				auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
+				self->m_width = static_cast<u32>(width);
+				self->m_height = static_cast<u32>(height);
+			}
+		});
+
+		glfwSetCursorPosCallback(m_window, [](GLFWwindow* win, f64 xpos, f64 ypos) {
+			if (win)
+			{
+				auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
+				// if (self->m_mouseInView)
+				{
+					self->onMouseMove(xpos, ypos);
+				}
+			}
+		});
+
+		glfwSetCursorEnterCallback(m_window, [](GLFWwindow* win, i32 entered) {
+			if (win)
+			{
+				auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
+				self->m_mouseInView = entered == GLFW_TRUE;
+			}
+		});
+
+		glfwSetScrollCallback(m_window, [](GLFWwindow* win, f64 xoffset, f64 yoffset) {
+			if (win)
+			{
+				auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
+				self->onMouseScroll(xoffset, yoffset);
+			}
+		});
+
+		int version = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+		if (version == 0)
+		{
+			log_fatal("Failed to initialize GLAD");
+			glfwTerminate();
+			return -1;
+		}
+
+		log_info("-", glGetString(GL_RENDERER));
+		log_info("-", glGetString(GL_VENDOR));
+		log_info("-", glGetString(GL_VERSION));
+
+		{
+			i32 nrAttributes;
+			glCheck(glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes));
+			log_info("- Max vertex attributes:", nrAttributes);
+		}
+
+		// glCheck(glViewport(0, 0, settings.width, settings.height));
+
+		OGL_TRY
+		{
+			m_lastMousePosition.x = static_cast<f32>(m_width / 2);
+			m_lastMousePosition.y = static_cast<f32>(m_height / 2);
+
+			this->init();
+
+			updateMouse();
+
+			// Loop until the user closes the window
+			while (!glfwWindowShouldClose(m_window))
+			{
+				f64 currentFrame = glfwGetTime();
+				Clock.deltaTime = static_cast<f32>(currentFrame) - Clock.lastFrame;
+				Clock.lastFrame = static_cast<f32>(currentFrame);
+
+				if (!processInput(m_window))
+					break;
+
+				if (m_cameraEnabled)
+				{
+					m_camera.update(Clock.deltaTime);
+				}
+
+				this->update();
+
+				glfwSwapBuffers(m_window);
+				glfwPollEvents();
+
+				// We just want to slow rendering down "enough" until this is done properly
+				std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<u64>((1.0 / 125.0) * 1000.0)));
 			}
 		}
-	});
-
-	glfwSetCursorEnterCallback(m_window, [](GLFWwindow* win, i32 entered) {
-		if (win)
+		OGL_CATCH(const std::exception& err)
 		{
-			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
-			self->m_mouseInView = entered == GLFW_TRUE;
+			log_fatal("Exception thrown:", err.what());
+			result = OGL_EXIT_FAILURE;
 		}
-	});
 
-	glfwSetScrollCallback(m_window, [](GLFWwindow* win, f64 xoffset, f64 yoffset) {
-		if (win)
+		OGL_TRY
 		{
-			auto self = static_cast<ProgramBase*>(glfwGetWindowUserPointer(win));
-			self->onMouseScroll(xoffset, yoffset);
+			this->dispose();
 		}
-	});
+		OGL_CATCH(const std::exception& err)
+		{
+			log_fatal("Exception thrown:", err.what());
+			result = OGL_EXIT_FAILURE;
+		}
 
-	int version = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-	if (version == 0)
-	{
-		log_fatal("Failed to initialize GLAD");
 		glfwTerminate();
-		return -1;
+		glfwDestroyWindow(m_window);
+		m_window = nullptr;
 	}
-
-	log_info("-", glGetString(GL_RENDERER));
-	log_info("-", glGetString(GL_VENDOR));
-	log_info("-", glGetString(GL_VERSION));
-
-	{
-		i32 nrAttributes;
-		glCheck(glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes));
-		log_info("- Max vertex attributes:", nrAttributes);
-	}
-
-	// glCheck(glViewport(0, 0, settings.width, settings.height));
-
-	try
-	{
-		m_lastMousePosition.x = static_cast<f32>(m_width / 2);
-		m_lastMousePosition.y = static_cast<f32>(m_height / 2);
-
-		this->init();
-
-		updateMouse();
-
-		// Loop until the user closes the window
-		while (!glfwWindowShouldClose(m_window))
-		{
-			f64 currentFrame = glfwGetTime();
-			Clock.deltaTime = static_cast<f32>(currentFrame) - Clock.lastFrame;
-			Clock.lastFrame = static_cast<f32>(currentFrame);
-
-			if (!processInput(m_window))
-				break;
-
-			if (m_cameraEnabled)
-			{
-				m_camera.update(Clock.deltaTime);
-			}
-
-			this->update();
-
-			glfwSwapBuffers(m_window);
-			glfwPollEvents();
-
-			// We just want to slow rendering down "enough" until this is done properly
-			std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<u64>((1.0 / 125.0) * 1000.0)));
-		}
-	}
-	catch (const std::exception& err)
-	{
-		log_fatal("Exception thrown:", err.what());
-	}
-
-	try
-	{
-		this->dispose();
-	}
-	catch (const std::exception& err)
-	{
-		log_fatal("Exception thrown:", err.what());
-	}
-
-	glfwTerminate();
-	glfwDestroyWindow(m_window);
-	m_window = nullptr;
 
 	LogManager::dispose();
 
-	return 0;
+	return result;
 };
 
 /*****************************************************************************/
