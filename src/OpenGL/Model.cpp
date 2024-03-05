@@ -48,8 +48,8 @@ bool Model::load(const char* inPath)
 /*****************************************************************************/
 void Model::dispose()
 {
-	for (auto& mesh : m_meshes)
-		mesh.dispose();
+	for (auto it = m_meshes.rbegin(); it != m_meshes.rend(); ++it)
+		it->dispose();
 
 	m_meshes.clear();
 

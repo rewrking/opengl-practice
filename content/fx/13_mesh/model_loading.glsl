@@ -4,6 +4,8 @@
 layout (location = 0) in vec3 a_Pos;
 layout (location = 1) in vec3 a_Normal;
 layout (location = 2) in vec2 a_TexCoords;
+layout (location = 1) in vec3 a_Tangent;
+layout (location = 1) in vec3 a_Bitangent;
 
 uniform mat4 u_Model;
 uniform mat4 u_View;
@@ -58,7 +60,7 @@ vec3 calculateDirectionalLight(DirLight light, vec3 normal, vec3 viewDir);
 
 void main()
 {
-    vec3 norm = normalize(v_Normal) * vec3(texture(u_Material.normal, v_TexCoords)) * vec3(texture(u_Material.height, v_TexCoords));
+    vec3 norm = normalize(v_Normal) * texture(u_Material.normal, v_TexCoords).rgb * texture(u_Material.height, v_TexCoords).rgb;
     vec3 viewDir = normalize(u_ViewPos - v_FragPos);
 
     vec3 result = calculateDirectionalLight(u_DirLight, norm, viewDir);
@@ -78,9 +80,9 @@ vec3 calculateDirectionalLight(DirLight light, vec3 normal, vec3 viewDir)
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_Material.shininess);
 
     // combine results
-    vec3 ambient = light.ambient * vec3(texture(u_Material.diffuse, v_TexCoords));
-    vec3 diffuse = light.diffuse * diff * vec3(texture(u_Material.diffuse, v_TexCoords));
-    vec3 specular = light.specular * spec * vec3(texture(u_Material.specular, v_TexCoords));
+    vec3 ambient = light.ambient * texture(u_Material.diffuse, v_TexCoords).rgb;
+    vec3 diffuse = light.diffuse * diff * texture(u_Material.diffuse, v_TexCoords).rgb;
+    vec3 specular = light.specular * spec * texture(u_Material.specular, v_TexCoords).rgb;
     return (ambient + diffuse + specular);
 }
 
