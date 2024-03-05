@@ -42,7 +42,8 @@
 				"libDirs": "${externalBuild:assimp}/bin",
 				"links[:!windows+:debug]": "assimpd",
 				"links[:!windows+:!debug]": "assimp",
-				"links[:windows]": "${externalBuild:assimp}/lib/${ar:assimp-vc143-mtd}"
+				"links[:windows+:debug]": "${externalBuild:assimp}/lib/${ar:assimp-vc143-mtd}",
+				"links[:windows+:!debug]": "${externalBuild:assimp}/lib/${ar:assimp-vc143-mt}"
 			}
 		},
 		"glfw": {
