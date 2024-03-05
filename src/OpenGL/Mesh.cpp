@@ -126,9 +126,12 @@ void Mesh::draw(Material& material) const
 		}
 
 		UNUSED(number);
-		texture->buffer.bind(i);
-		// material.setTexture(fmt::format("u_Material.{}[{}]", id, number).c_str(), texture->buffer);
-		material.setTexture(fmt::format("u_Material.{}", id).c_str(), texture->buffer);
+		if (texture->buffer.loaded())
+		{
+			texture->buffer.bind(static_cast<i32>(i));
+			// material.setTexture(fmt::format("u_Material.{}[{}]", id, number).c_str(), texture->buffer);
+			material.setTexture(fmt::format("u_Material.{}", id).c_str(), texture->buffer);
+		}
 	}
 
 	// draw mesh

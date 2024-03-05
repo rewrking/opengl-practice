@@ -225,8 +225,8 @@ Mesh::TextureList Model::loadMaterialTextures(aiMaterial& mat, i32 type, const T
 
 		if (!skip)
 		{
-			m_texturesLoaded.emplace_back(makeTexture(str.C_Str(), inType));
-			textures.emplace_back(&m_texturesLoaded.back());
+			auto& texture = m_texturesLoaded.emplace_back(makeTexture(str.C_Str(), inType));
+			textures.emplace_back(&texture);
 		}
 	}
 

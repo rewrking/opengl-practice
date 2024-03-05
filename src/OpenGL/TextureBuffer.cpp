@@ -49,6 +49,12 @@ namespace ogl
 const TextureBuffer* TextureBuffer::kCurrentTexture = nullptr;
 
 /*****************************************************************************/
+bool TextureBuffer::loaded() const noexcept
+{
+	return m_texture > 0;
+}
+
+/*****************************************************************************/
 bool TextureBuffer::load(const char* inPath, const TextureSettings& settings)
 {
 	auto image = Image::make(inPath);
@@ -91,6 +97,12 @@ bool TextureBuffer::load(const Image& inImage, const TextureSettings& settings)
 
 	glCheck(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, static_cast<GLsizei>(inImage.width), static_cast<GLsizei>(inImage.height), 0, format, GL_UNSIGNED_BYTE, inImage.pixels.data()));
 	glCheck(glGenerateMipmap(GL_TEXTURE_2D));
+
+	if (m_texture == 0)
+	{
+		dispose();
+		return false;
+	}
 
 	return true;
 }
@@ -137,7 +149,7 @@ i32 TextureBuffer::slot() const noexcept
 {
 	if (m_slot < 0)
 	{
-		log_debug("texture not assigned a slot:", m_slot);
+		log_error("texture not assigned a slot:", m_slot);
 		return 0;
 	}
 

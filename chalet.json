@@ -70,8 +70,7 @@
 		},
 		"glm": {
 			"settings:Cxx": {
-				"includeDirs": "${external:glm}",
-				"staticLinks": "${externalBuild:glm}/glm/${ar:glm}"
+				"includeDirs": "${external:glm}"
 			}
 		},
 		"spdlog": {
@@ -140,17 +139,6 @@
 			"recheck": false,
 			"rebuild": false,
 			"targets": "spdlog"
-		},
-		"glm": {
-			"kind": "cmakeProject",
-			"location": "${external:glm}",
-			"targets": "glm/all",
-			"defines": [
-				"BUILD_STATIC_LIBS=ON",
-				"BUILD_SHARED_LIBS=OFF"
-			],
-			"recheck": false,
-			"rebuild": false
 		},
 		"glfw": {
 			"kind": "cmakeProject",

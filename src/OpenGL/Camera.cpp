@@ -180,9 +180,9 @@ void Camera::processMouseScroll(const f32 inYOffset)
 void Camera::updateCameraVectors()
 {
 	Vec3f front;
-	front.x = cos(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
-	front.y = sin(glm::radians(m_pitch));
-	front.z = sin(glm::radians(m_yaw)) * cos(glm::radians(m_pitch));
+	front.x = std::cos(glm::radians(m_yaw)) * std::cos(glm::radians(m_pitch));
+	front.y = std::sin(glm::radians(m_pitch));
+	front.z = std::sin(glm::radians(m_yaw)) * std::cos(glm::radians(m_pitch));
 	m_front = glm::normalize(front);
 
 	m_right = glm::normalize(glm::cross(m_front, m_worldUp));

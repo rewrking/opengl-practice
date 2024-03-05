@@ -10,6 +10,8 @@ struct TextureBuffer
 {
 	TextureBuffer() = default;
 
+	bool loaded() const noexcept;
+
 	bool load(const char* inPath, const TextureSettings& settings = TextureSettings());
 	bool load(const Image& inImage, const TextureSettings& settings = TextureSettings());
 	void dispose();
