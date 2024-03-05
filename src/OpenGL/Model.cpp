@@ -25,7 +25,9 @@ bool Model::load(const char* inPath)
 	auto path = Image::getImagePath(inPath);
 
 	Assimp::Importer import;
-	auto scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+	i32 flags = aiProcess_Triangulate
+		| aiProcess_FlipUVs;
+	auto scene = import.ReadFile(path, flags);
 	if (scene == nullptr || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || scene->mRootNode == nullptr)
 	{
 		log_error("Error loading model:", import.GetErrorString());
@@ -87,7 +89,6 @@ Mesh Model::processMesh(aiMesh& mesh, const aiScene& inScene)
 {
 	Mesh out;
 
-	out.vertices.reserve(mesh.mNumVertices);
 	for (u32 i = 0; i < mesh.mNumVertices; ++i)
 	{
 		out.vertices.emplace_back(makeVertex(mesh, i));
@@ -96,9 +97,7 @@ Mesh Model::processMesh(aiMesh& mesh, const aiScene& inScene)
 	// process indices
 	for (u32 i = 0; i < mesh.mNumFaces; ++i)
 	{
-		auto face = mesh.mFaces[i];
-
-		out.indices.reserve(out.indices.size() + face.mNumIndices);
+		auto& face = mesh.mFaces[i];
 		for (u32 j = 0; j < face.mNumIndices; ++j)
 			out.indices.emplace_back(face.mIndices[j]);
 	}
@@ -106,13 +105,12 @@ Mesh Model::processMesh(aiMesh& mesh, const aiScene& inScene)
 	// process material
 	if (mesh.mMaterialIndex >= 0)
 	{
-		auto material = inScene.mMaterials[mesh.mMaterialIndex];
+		auto* material = inScene.mMaterials[mesh.mMaterialIndex];
 
 		// 1. Diffuse maps (the texture)
 		auto diffuseMaps = loadMaterialTextures(*material, aiTextureType_DIFFUSE, TextureKind::Diffuse);
 		if (!diffuseMaps.empty())
 		{
-			out.textures.reserve(out.textures.size() + diffuseMaps.size());
 			out.textures.insert(out.textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 		}
 
@@ -120,7 +118,6 @@ Mesh Model::processMesh(aiMesh& mesh, const aiScene& inScene)
 		auto specularMaps = loadMaterialTextures(*material, aiTextureType_SPECULAR, TextureKind::Specular);
 		if (!specularMaps.empty())
 		{
-			out.textures.reserve(out.textures.size() + specularMaps.size());
 			out.textures.insert(out.textures.end(), specularMaps.begin(), specularMaps.end());
 		}
 
@@ -128,7 +125,6 @@ Mesh Model::processMesh(aiMesh& mesh, const aiScene& inScene)
 		auto normalMaps = loadMaterialTextures(*material, aiTextureType_HEIGHT, TextureKind::Normal);
 		if (!normalMaps.empty())
 		{
-			out.textures.reserve(out.textures.size() + normalMaps.size());
 			out.textures.insert(out.textures.end(), normalMaps.begin(), normalMaps.end());
 		}
 
@@ -136,7 +132,6 @@ Mesh Model::processMesh(aiMesh& mesh, const aiScene& inScene)
 		auto heightMaps = loadMaterialTextures(*material, aiTextureType_AMBIENT, TextureKind::Height);
 		if (!heightMaps.empty())
 		{
-			out.textures.reserve(out.textures.size() + heightMaps.size());
 			out.textures.insert(out.textures.end(), heightMaps.begin(), heightMaps.end());
 		}
 	}
