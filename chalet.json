@@ -87,7 +87,10 @@
 		},
 		"ust": {
 			"settings:Cxx": {
-				"includeDirs": "${external:ust}"
+				"includeDirs": "${external:ust}",
+				"links[:linux]": [
+					"unwind"
+				]
 			}
 		}
 	},
@@ -154,9 +157,6 @@
 				],
 				"links[:windows]": [
 					"dwmapi"
-				],
-				"links[:linux]": [
-					"unwind"
 				],
 				"windowsApplicationIcon": "platform/windows/app.ico",
 				"windowsApplicationManifest": "platform/windows/app.manifest",
