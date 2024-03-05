@@ -2,7 +2,7 @@
 
 #if defined(OGL_MSVC)
 	#include "Libraries/WindowsApi.hpp"
-	#include "System/SignalHandler.hpp"
+	#include "Core/System/SignalHandler.hpp"
 
 	#include <eh.h>
 #endif
@@ -32,7 +32,7 @@ void translatorFunction(u32 inValue, EXCEPTION_POINTERS*)
 	}
 	else
 	{
-		phlog("unknown / unhandled exception:", inValue);
+		log_warning("unknown / unhandled exception:", inValue);
 	}
 
 	throw SEHException(inValue);

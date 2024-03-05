@@ -94,6 +94,7 @@
 	"abstracts:*": {
 		"language": "C++",
 		"settings:Cxx": {
+			"exceptions[toolchain:pc-windows-msvc]": false,
 			"buildSuffix": "opengl",
 			"cppStandard": "c++20",
 			"warningsPreset": "strictPedantic",
@@ -119,7 +120,8 @@
 				"dwmapi"
 			],
 			"windowsApplicationIcon": "platform/windows/app.ico",
-			"windowsApplicationManifest": "platform/windows/app.manifest"
+			"windowsApplicationManifest": "platform/windows/app.manifest",
+			"compileOptions[toolchain:pc-windows-msvc]": "/EHa"
 		}
 	},
 	"targets": {
