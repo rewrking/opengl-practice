@@ -34,7 +34,7 @@
 		"ust": {
 			"kind": "git",
 			"repository": "git@github.com:MisterTea/UniversalStacktrace.git",
-			"commit": "28f5230d75e677ce8e4e140b2f3e0b8550195c85"
+			"commit": "88281dcc43c169afd5eea9fe26f68999656140e3"
 		}
 	},
 	"package": {

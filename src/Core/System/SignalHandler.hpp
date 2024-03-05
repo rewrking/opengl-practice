@@ -6,7 +6,7 @@ namespace ogl
 {
 namespace SignalHandler
 {
-void initialize();
+void initialize(Function<void> inOnError = nullptr);
 void handler(const i32 inSignal);
 }
 }

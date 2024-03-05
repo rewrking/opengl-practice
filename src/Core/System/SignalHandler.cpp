@@ -15,6 +15,10 @@
 
 namespace ogl
 {
+namespace
+{
+Function<void> sOnErrorCallback = nullptr;
+}
 
 void printStackTrace();
 void printError(const char* inType, const char* inDescription, const bool inPrintStackTrace = true);
@@ -148,8 +152,10 @@ void printError(const char* inType, const char* inDescription, const bool inPrin
 }
 
 /*****************************************************************************/
-void SignalHandler::initialize()
+void SignalHandler::initialize(Function<void> inOnError)
 {
+	sOnErrorCallback = inOnError;
+
 	std::signal(SIGABRT, handler);
 	std::signal(SIGFPE, handler);
 	std::signal(SIGILL, handler);
@@ -206,6 +212,9 @@ void SignalHandler::handler(const i32 inSignal)
 			printStackTrace();
 			break;
 	}
+
+	if (sOnErrorCallback != nullptr)
+		sOnErrorCallback();
 
 	LogManager::dispose();
 

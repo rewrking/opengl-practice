@@ -69,8 +69,8 @@ struct MeshProgram final : ogl::ProgramBase
 
 	virtual void dispose() final
 	{
-		m_model.dispose();
 		m_material.dispose();
+		m_model.dispose();
 	}
 };
 }

@@ -57,7 +57,13 @@ i32 ProgramBase::run()
 #if defined(OGL_MSVC)
 		ExceptionTranslator exceptionTranslator;
 #endif
-		SignalHandler::initialize();
+		SignalHandler::initialize([this]() {
+			this->dispose();
+
+			glfwTerminate();
+			glfwDestroyWindow(m_window);
+			m_window = nullptr;
+		});
 
 		initializeLogger();
 
