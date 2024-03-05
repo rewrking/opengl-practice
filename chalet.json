@@ -91,39 +91,6 @@
 			}
 		}
 	},
-	"abstracts:*": {
-		"language": "C++",
-		"settings:Cxx": {
-			"exceptions[toolchain:pc-windows-msvc]": false,
-			"buildSuffix": "opengl",
-			"cppStandard": "c++20",
-			"warningsPreset": "strictPedantic",
-			"warnings[toolchain:apple-llvm]": [
-				"no-deprecated-declarations"
-			],
-			"precompiledHeader": "src/PCH.hpp",
-			"treatWarningsAsErrors": true,
-			"runtimeTypeInformation": false,
-			"threads": true,
-			"defines[:debug]": [
-				"_DEBUG"
-			],
-			"defines[:macos]": [
-				"GL_SILENCE_DEPRECATION"
-			],
-			"includeDirs": [
-				"${external:fmt}/include",
-				"vendor/stb/include",
-				"src"
-			],
-			"links[:windows]": [
-				"dwmapi"
-			],
-			"windowsApplicationIcon": "platform/windows/app.ico",
-			"windowsApplicationManifest": "platform/windows/app.manifest",
-			"compileOptions[toolchain:pc-windows-msvc]": "/EHa"
-		}
-	},
 	"targets": {
 		"glad": {
 			"kind": "cmakeProject",
@@ -161,6 +128,40 @@
 		},
 		"opengl-practice": {
 			"kind": "executable",
+			"language": "C++",
+			"settings:Cxx": {
+				"exceptions[toolchain:pc-windows-msvc]": false,
+				"buildSuffix": "opengl",
+				"cppStandard": "c++20",
+				"warningsPreset": "strictPedantic",
+				"warnings[toolchain:apple-llvm]": [
+					"no-deprecated-declarations"
+				],
+				"precompiledHeader": "src/PCH.hpp",
+				"treatWarningsAsErrors": true,
+				"runtimeTypeInformation": false,
+				"threads": true,
+				"defines[:debug]": [
+					"_DEBUG"
+				],
+				"defines[:macos]": [
+					"GL_SILENCE_DEPRECATION"
+				],
+				"includeDirs": [
+					"${external:fmt}/include",
+					"vendor/stb/include",
+					"src"
+				],
+				"links[:windows]": [
+					"dwmapi"
+				],
+				"links[:linux]": [
+					"unwind"
+				],
+				"windowsApplicationIcon": "platform/windows/app.ico",
+				"windowsApplicationManifest": "platform/windows/app.manifest",
+				"compileOptions[toolchain:pc-windows-msvc]": "/EHa"
+			},
 			"files": [
 				"src/**.cpp"
 			],
