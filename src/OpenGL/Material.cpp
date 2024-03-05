@@ -251,6 +251,17 @@ void Material::setVec3(const char* inName, const Vec3f& inVec)
 }
 
 /*****************************************************************************/
+void Material::setVec3(const char* inName, const Color& inColor)
+{
+	this->bind();
+	i32 location = getUniformLocation(m_id, inName);
+	f32 red = static_cast<f32>(inColor.r) / 255.0f;
+	f32 green = static_cast<f32>(inColor.g) / 255.0f;
+	f32 blue = static_cast<f32>(inColor.b) / 255.0f;
+	glCheck(glUniform3f(location, red, green, blue));
+}
+
+/*****************************************************************************/
 void Material::setVec4(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW)
 {
 	this->bind();
@@ -263,7 +274,11 @@ void Material::setVec4(const char* inName, const Color& inColor)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
-	glCheck(glUniform4f(location, inColor.r, inColor.g, inColor.b, inColor.a));
+	f32 red = static_cast<f32>(inColor.r) / 255.0f;
+	f32 green = static_cast<f32>(inColor.g) / 255.0f;
+	f32 blue = static_cast<f32>(inColor.b) / 255.0f;
+	f32 alpha = static_cast<f32>(inColor.a) / 255.0f;
+	glCheck(glUniform4f(location, red, green, blue, alpha));
 }
 
 /*****************************************************************************/

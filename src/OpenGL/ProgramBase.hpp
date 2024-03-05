@@ -5,6 +5,7 @@
 #include "Libraries/GLM.hpp"
 #include "Libraries/OpenGL.hpp"
 #include "OpenGL/Camera.hpp"
+#include "OpenGL/Color.hpp"
 #include "OpenGL/Material.hpp"
 #include "OpenGL/Mesh.hpp"
 #include "OpenGL/MeshOld.hpp"

@@ -20,10 +20,14 @@ bool Mesh::load()
 /*****************************************************************************/
 void Mesh::dispose()
 {
-	if (m_vao > 0)
+	textures.clear();
+	vertices.clear();
+	indices.clear();
+
+	if (m_ebo > 0)
 	{
-		glCheck(glDeleteVertexArrays(1, &m_vao));
-		m_vao = 0;
+		glCheck(glDeleteBuffers(1, &m_ebo));
+		m_ebo = 0;
 	}
 
 	if (m_vbo > 0)
@@ -32,15 +36,11 @@ void Mesh::dispose()
 		m_vbo = 0;
 	}
 
-	if (m_ebo > 0)
+	if (m_vao > 0)
 	{
-		glCheck(glDeleteBuffers(1, &m_ebo));
-		m_ebo = 0;
+		glCheck(glDeleteVertexArrays(1, &m_vao));
+		m_vao = 0;
 	}
-
-	textures.clear();
-	vertices.clear();
-	indices.clear();
 }
 
 /*****************************************************************************/

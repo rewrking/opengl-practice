@@ -46,5 +46,4 @@ using Vec3f = glm::vec3;
 using Vec4f = glm::vec4;
 using Mat3f = glm::mat3;
 using Mat4f = glm::mat4;
-using Color = glm::vec4;
 }

@@ -48,9 +48,9 @@ struct MeshProgram final : ogl::ProgramBase
 
 		// Directional light
 		m_material.setVec3("u_DirLight.direction", -0.2f, -0.5f, 1.0f);
-		m_material.setVec3("u_DirLight.ambient", 0.5f, 0.5f, 0.5f);
-		m_material.setVec3("u_DirLight.diffuse", 0.4f, 0.4f, 0.4f);
-		m_material.setVec3("u_DirLight.specular", 1.0f, 1.0f, 1.0f);
+		m_material.setVec3("u_DirLight.ambient", Color(128, 128, 128));
+		m_material.setVec3("u_DirLight.diffuse", Color(128, 128, 128));
+		m_material.setVec3("u_DirLight.specular", Color(255, 255, 255));
 
 		m_projection = getProjectionMatrix();
 		m_view = getViewMatrix();

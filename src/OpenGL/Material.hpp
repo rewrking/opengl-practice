@@ -3,6 +3,7 @@
 #include "Core/Concepts.hpp"
 #include "Libraries/GLM.hpp"
 #include "Libraries/OpenGL.hpp"
+#include "OpenGL/Color.hpp"
 #include "OpenGL/Shader.hpp"
 
 namespace ogl
@@ -30,6 +31,7 @@ struct Material
 	void setVec2(const char* inName, const Vec2f& inVec);
 	void setVec3(const char* inName, f32 inX, f32 inY, f32 inZ);
 	void setVec3(const char* inName, const Vec3f& inVec);
+	void setVec3(const char* inName, const Color& inColor);
 	void setVec4(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW);
 	void setVec4(const char* inName, const Color& inColor);
 
