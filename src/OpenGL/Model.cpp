@@ -87,6 +87,7 @@ Mesh Model::processMesh(aiMesh& mesh, const aiScene& inScene)
 {
 	Mesh out;
 
+	out.vertices.reserve(mesh.mNumVertices);
 	for (u32 i = 0; i < mesh.mNumVertices; ++i)
 	{
 		out.vertices.emplace_back(makeVertex(mesh, i));
@@ -97,6 +98,7 @@ Mesh Model::processMesh(aiMesh& mesh, const aiScene& inScene)
 	{
 		auto face = mesh.mFaces[i];
 
+		out.indices.reserve(out.indices.size() + face.mNumIndices);
 		for (u32 j = 0; j < face.mNumIndices; ++j)
 			out.indices.emplace_back(face.mIndices[j]);
 	}
@@ -107,9 +109,11 @@ Mesh Model::processMesh(aiMesh& mesh, const aiScene& inScene)
 		auto material = inScene.mMaterials[mesh.mMaterialIndex];
 
 		auto diffuseMaps = loadMaterialTextures(*material, aiTextureType_DIFFUSE, TextureKind::Diffuse);
+		out.textures.reserve(out.textures.size() + diffuseMaps.size());
 		out.textures.insert(out.textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
 		auto specularMaps = loadMaterialTextures(*material, aiTextureType_SPECULAR, TextureKind::Specular);
+		out.textures.reserve(out.textures.size() + specularMaps.size());
 		out.textures.insert(out.textures.end(), specularMaps.begin(), specularMaps.end());
 	}
 
