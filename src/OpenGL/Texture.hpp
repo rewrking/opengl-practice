@@ -1,11 +1,14 @@
 #pragma once
 
+#include "OpenGL/TextureBuffer.hpp"
+#include "OpenGL/TextureKind.hpp"
+
 namespace ogl
 {
 struct Texture
 {
-	u32 id = 0;
-	std::string type;
+	TextureBuffer buffer;
+	TextureKind kind = TextureKind::None;
 	std::string path;
 };
 }

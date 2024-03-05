@@ -5,46 +5,60 @@
 			"name": "MSVC",
 			"type": "cppvsdbg",
 			"request": "launch",
-			"args": [],
+			"args": [
+				"13"
+			],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"console": "integratedTerminal",
 			"preLaunchTask": "Build: Debug",
-			"program": "${workspaceFolder}/build/x86_64-pc-windows-msvc_Debug/01_triangles.exe",
+			"program": "${workspaceFolder}/build/x86_64-pc-windows-msvc_Debug/opengl-practice.exe",
 			"envFile": "${workspaceFolder}/build/x86_64-pc-windows-msvc_Debug/run.env"
 		},
 		{
 			"name": "LLDB",
 			"type": "lldb",
 			"request": "launch",
-			"program": "${workspaceFolder}/build/Debug/x1_abstractions",
-			"args": [],
+			"program": "${workspaceFolder}/build/Debug/opengl-practice",
+			"args": [
+				"13"
+			],
 			"stopOnEntry": false,
 			"cwd": "${workspaceFolder}",
 			"preLaunchTask": "Build: Debug",
 			"osx": {
-				"program": "${workspaceFolder}/build/x86_64-apple-darwin_Debug/x1_abstractions"
+				"program": "${workspaceFolder}/build/x86_64-apple-darwin_Debug/opengl-practice",
+				"env": {
+					"DYLD_FALLBACK_LIBRARY_PATH": "${workspaceFolder}/build/x86_64-apple-darwin_Debug/ext.assimp/bin:${env:DYLD_FALLBACK_LIBRARY_PATH}"
+				}
 			}
 		},
 		{
 			"name": "LLDB (arm64)",
 			"type": "lldb",
 			"request": "launch",
-			"program": "${workspaceFolder}/build/Debug/10_lighting_lightmaps",
-			"args": [],
+			"program": "${workspaceFolder}/build/Debug/opengl-practice",
+			"args": [
+				"13"
+			],
 			"stopOnEntry": false,
 			"cwd": "${workspaceFolder}",
 			"preLaunchTask": "Build: Debug",
 			"osx": {
-				"program": "${workspaceFolder}/build/arm64-apple-darwin_Debug/10_lighting_lightmaps"
+				"program": "${workspaceFolder}/build/arm64-apple-darwin_Debug/opengl-practice",
+				"env": {
+					"DYLD_FALLBACK_LIBRARY_PATH": "${workspaceFolder}/build/arm64-apple-darwin_Debug/ext.assimp/bin:${env:DYLD_FALLBACK_LIBRARY_PATH}"
+				}
 			}
 		},
 		{
 			"name": "GDB",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/build/Debug/02_shaders",
-			"args": [],
+			"program": "${workspaceFolder}/build/Debug/opengl-practice",
+			"args": [
+				"13"
+			],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"preLaunchTask": "Build: Debug",
@@ -53,13 +67,13 @@
 			"windows": {
 				"MIMode": "gdb",
 				"miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
-				"program": "${workspaceFolder}/build/x86_64-w64-mingw32_Debug/01_triangles.exe",
+				"program": "${workspaceFolder}/build/x86_64-w64-mingw32_Debug/opengl-practice.exe",
 				"envFile": "${workspaceFolder}/build/x86_64-w64-mingw32_Debug/run.env"
 			},
 			"linux": {
 				"MIMode": "gdb",
 				"miDebuggerPath": "/usr/bin/gdb",
-				"program": "${workspaceRoot}/build/x86_64-linux-gnu_Debug/02_shaders",
+				"program": "${workspaceRoot}/build/x86_64-linux-gnu_Debug/opengl-practice",
 				"envFile": "${workspaceFolder}/build/x86_64-linux-gnu_Debug/run.env"
 			}
 		}

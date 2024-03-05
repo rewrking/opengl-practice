@@ -5,7 +5,7 @@
 
 namespace ogl
 {
-constexpr i32 getTextureSlot(const u32 inSlot)
+/*constexpr i32 getTextureSlot(const u32 inSlot)
 {
 	switch (inSlot)
 	{
@@ -43,20 +43,20 @@ constexpr i32 getTextureSlot(const u32 inSlot)
 		case 31: return GL_TEXTURE31;
 	}
 	return GL_TEXTURE0;
-}
+}*/
 
 /*****************************************************************************/
 const TextureBuffer* TextureBuffer::kCurrentTexture = nullptr;
 
 /*****************************************************************************/
-bool TextureBuffer::load(const char* inPath)
+bool TextureBuffer::load(const char* inPath, const TextureSettings& settings)
 {
 	auto image = Image::make(inPath);
-	return load(image);
+	return load(image, settings);
 }
 
 /*****************************************************************************/
-bool TextureBuffer::load(const Image& inImage)
+bool TextureBuffer::load(const Image& inImage, const TextureSettings& settings)
 {
 	if (m_texture > 0)
 		return false;
@@ -83,8 +83,9 @@ bool TextureBuffer::load(const Image& inImage)
 		GL_NEAREST_MIPMAP_LINEAR
 		GL_LINEAR_MIPMAP_LINEAR
 	*/
-	glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
-	glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+	auto textureFlags = settings.smooth ? GL_LINEAR : GL_NEAREST;
+	glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, textureFlags));
+	glCheck(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, textureFlags));
 
 	auto format = inImage.channels == 3 ? GL_RGB : GL_RGBA;
 
@@ -127,7 +128,7 @@ void TextureBuffer::assign(const i32 inSlot) const
 	if (m_texture > 0)
 	{
 		m_slot = inSlot;
-		glCheck(glActiveTexture(getTextureSlot(inSlot)));
+		glCheck(glActiveTexture(GL_TEXTURE0 + inSlot));
 	}
 }
 

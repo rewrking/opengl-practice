@@ -18,61 +18,101 @@ bool Mesh::load()
 }
 
 /*****************************************************************************/
-void Mesh::setupMesh()
+void Mesh::dispose()
 {
-	glGenVertexArrays(1, &m_vao);
-	glGenBuffers(1, &m_vbo);
-	glGenBuffers(1, &m_ebo);
+	if (m_vao > 0)
+	{
+		glCheck(glDeleteVertexArrays(1, &m_vao));
+		m_vao = 0;
+	}
 
-	glBindVertexArray(m_vao);
-	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+	if (m_vbo > 0)
+	{
+		glCheck(glDeleteBuffers(1, &m_vbo));
+		m_vbo = 0;
+	}
 
-	constexpr i32 kVertexSize = sizeof(Vertex3D);
-	constexpr auto kNormalOffset = offsetof(Vertex3D, normal);
-	constexpr auto kTexCoordOffset = offsetof(Vertex3D, texCoords);
+	if (m_ebo > 0)
+	{
+		glCheck(glDeleteBuffers(1, &m_ebo));
+		m_ebo = 0;
+	}
 
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * kVertexSize, vertices.data(), GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(u32), indices.data(), GL_STATIC_DRAW);
-
-	// vertex positions
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, kVertexSize, (void*)0);
-	// vertex normals
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, kVertexSize, (void*)kNormalOffset);
-	// vertex texture coords
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, kVertexSize, (void*)kTexCoordOffset);
-
-	glBindVertexArray(0);
+	textures.clear();
+	vertices.clear();
+	indices.clear();
 }
 
 /*****************************************************************************/
-void Mesh::draw(Material& material)
+void Mesh::setupMesh()
+{
+	glCheck(glGenVertexArrays(1, &m_vao));
+	glCheck(glGenBuffers(1, &m_vbo));
+	glCheck(glGenBuffers(1, &m_ebo));
+
+	glCheck(glBindVertexArray(m_vao));
+	glCheck(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
+
+	constexpr i32 kVertexSize = sizeof(VertexType);
+	constexpr i32 kIndexSize = sizeof(IndexType);
+	constexpr auto kNormalOffset = offsetof(VertexType, normal);
+	constexpr auto kTexCoordOffset = offsetof(VertexType, texCoords);
+
+	glCheck(glBufferData(GL_ARRAY_BUFFER, vertices.size() * kVertexSize, vertices.data(), GL_STATIC_DRAW));
+
+	glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));
+	glCheck(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * kIndexSize, indices.data(), GL_STATIC_DRAW));
+
+	// vertex positions
+	glCheck(glEnableVertexAttribArray(0));
+	glCheck(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, kVertexSize, (void*)0));
+
+	// vertex normals
+	glCheck(glEnableVertexAttribArray(1));
+	glCheck(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, kVertexSize, (void*)kNormalOffset));
+
+	// vertex texture coords
+	glCheck(glEnableVertexAttribArray(2));
+	glCheck(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, kVertexSize, (void*)kTexCoordOffset));
+
+	glCheck(glBindVertexArray(0));
+}
+
+/*****************************************************************************/
+void Mesh::draw(Material& material) const
 {
 	u32 diffuseNr = 1;
 	u32 specularNr = 1;
-	for (u32 i = 0; i < textures.size(); i++)
+	for (u32 i = 0; i < textures.size(); ++i)
 	{
-		glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
-		// retrieve texture number (the N in diffuse_textureN)
 		u32 number = 0;
-		const auto& name = textures.at(i).type;
-		if (name == "texture_diffuse")
+		std::string id;
+		auto& texture = textures.at(i);
+		if (texture->kind == TextureKind::Diffuse)
+		{
 			number = diffuseNr++;
-		else if (name == "texture_specular")
+			id = "diffuse";
+		}
+		else if (texture->kind == TextureKind::Specular)
+		{
 			number = specularNr++;
+			id = "specular";
+		}
+		else
+		{
+			return;
+		}
 
-		material.setInt(fmt::format("material.{}{}", name, number).c_str(), i);
-		glBindTexture(GL_TEXTURE_2D, textures[i].id);
+		texture->buffer.bind(i);
+		material.setTexture(fmt::format("u_Material.{}{}", id, number).c_str(), texture->buffer);
 	}
-	glActiveTexture(GL_TEXTURE0);
 
 	// draw mesh
-	glBindVertexArray(m_vao);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+	glCheck(glBindVertexArray(m_vao));
+	glCheck(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0));
+	glCheck(glBindVertexArray(0));
+
+	// always good practice to set everything back to defaults once configured.
+	glCheck(glActiveTexture(GL_TEXTURE0));
 }
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "OpenGL/TextureSettings.hpp"
+
 namespace ogl
 {
 struct Image;
@@ -8,8 +10,8 @@ struct TextureBuffer
 {
 	TextureBuffer() = default;
 
-	bool load(const char* inPath);
-	bool load(const Image& inImage);
+	bool load(const char* inPath, const TextureSettings& settings = TextureSettings());
+	bool load(const Image& inImage, const TextureSettings& settings = TextureSettings());
 	void dispose();
 
 	void bind(const i32 inSlot = 0) const;

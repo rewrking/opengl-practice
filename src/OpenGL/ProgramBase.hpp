@@ -6,7 +6,9 @@
 #include "Libraries/OpenGL.hpp"
 #include "OpenGL/Camera.hpp"
 #include "OpenGL/Material.hpp"
+#include "OpenGL/Mesh.hpp"
 #include "OpenGL/MeshOld.hpp"
+#include "OpenGL/Model.hpp"
 #include "OpenGL/TextureBuffer.hpp"
 
 namespace ogl

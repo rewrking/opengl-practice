@@ -9,24 +9,29 @@ namespace ogl
 {
 struct Mesh
 {
-	using VertexList = std::vector<Vertex3D>;
-	using IndexList = std::vector<u32>;
-	using TextureList = std::vector<Texture>;
+	using IndexType = u32;
+	using VertexType = Vertex3D;
+
+	using VertexList = std::vector<VertexType>;
+	using IndexList = std::vector<IndexType>;
+	using TextureList = std::vector<Texture*>;
 
 	Mesh() = default;
 
 	bool load();
-	void draw(Material& material);
+	void dispose();
+
+	void draw(Material& inMaterial) const;
 
 	VertexList vertices;
 	IndexList indices;
 	TextureList textures;
 
 private:
+	void setupMesh();
+
 	u32 m_vao = 0;
 	u32 m_vbo = 0;
 	u32 m_ebo = 0;
-
-	void setupMesh();
 };
 }

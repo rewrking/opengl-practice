@@ -1,6 +1,8 @@
 #pragma once
 
 #include "OpenGL/Mesh.hpp"
+#include "OpenGL/TextureBuffer.hpp"
+#include "OpenGL/TextureKind.hpp"
 
 struct aiNode;
 struct aiMesh;
@@ -15,19 +17,23 @@ struct Model
 
 	Model() = default;
 
-	void draw(Material& material);
+	void draw(Material& material) const;
 
-	bool loadModel(const std::string& inPath);
+	bool load(const char* inPath);
+	void dispose();
 
 private:
+	using TextureList = std::vector<Texture>;
+
 	bool processNode(aiNode& node, const aiScene& inScene);
 	Vertex3D makeVertex(aiMesh& mesh, u32 index);
 	Mesh processMesh(aiMesh& mesh, const aiScene& inScene);
-	Mesh::TextureList loadMaterialTextures(aiMaterial& mat, i32 type, std::string typeName);
-	u32 makeTextureFromFile(const char* path, const std::string& directory) const;
+	Mesh::TextureList loadMaterialTextures(aiMaterial& mat, i32 type, const TextureKind inType);
+	Texture makeTexture(const char* path, const TextureKind inType) const;
+	TextureBuffer makeTextureFromFile(const char* path, const std::string& directory) const;
 
 	MeshList m_meshes;
-	Mesh::TextureList m_texturesLoaded;
+	TextureList m_texturesLoaded;
 	std::string m_directory;
 };
 }

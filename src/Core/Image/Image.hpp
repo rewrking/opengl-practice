@@ -11,7 +11,6 @@ struct Image
 
 	[[nodiscard]] static Image make(const char* inPath, const u32 inTargetChannels = 0);
 
-private:
 	static std::string getImagePath(const char* inPath);
 };
 }
