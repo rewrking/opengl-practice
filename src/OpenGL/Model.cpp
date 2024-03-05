@@ -108,13 +108,37 @@ Mesh Model::processMesh(aiMesh& mesh, const aiScene& inScene)
 	{
 		auto material = inScene.mMaterials[mesh.mMaterialIndex];
 
+		// 1. Diffuse maps (the texture)
 		auto diffuseMaps = loadMaterialTextures(*material, aiTextureType_DIFFUSE, TextureKind::Diffuse);
-		out.textures.reserve(out.textures.size() + diffuseMaps.size());
-		out.textures.insert(out.textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+		if (!diffuseMaps.empty())
+		{
+			out.textures.reserve(out.textures.size() + diffuseMaps.size());
+			out.textures.insert(out.textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+		}
 
+		// 2. Specular maps
 		auto specularMaps = loadMaterialTextures(*material, aiTextureType_SPECULAR, TextureKind::Specular);
-		out.textures.reserve(out.textures.size() + specularMaps.size());
-		out.textures.insert(out.textures.end(), specularMaps.begin(), specularMaps.end());
+		if (!specularMaps.empty())
+		{
+			out.textures.reserve(out.textures.size() + specularMaps.size());
+			out.textures.insert(out.textures.end(), specularMaps.begin(), specularMaps.end());
+		}
+
+		// 3. Normal maps
+		auto normalMaps = loadMaterialTextures(*material, aiTextureType_HEIGHT, TextureKind::Normal);
+		if (!normalMaps.empty())
+		{
+			out.textures.reserve(out.textures.size() + normalMaps.size());
+			out.textures.insert(out.textures.end(), normalMaps.begin(), normalMaps.end());
+		}
+
+		// 4. Height maps
+		auto heightMaps = loadMaterialTextures(*material, aiTextureType_AMBIENT, TextureKind::Height);
+		if (!heightMaps.empty())
+		{
+			out.textures.reserve(out.textures.size() + heightMaps.size());
+			out.textures.insert(out.textures.end(), heightMaps.begin(), heightMaps.end());
+		}
 	}
 
 	if (!out.load())
@@ -154,13 +178,16 @@ Vertex3D Model::makeVertex(aiMesh& mesh, u32 index)
 		vertex.texCoords.x = static_cast<f32>(thisNormal.x);
 		vertex.texCoords.y = static_cast<f32>(thisNormal.y);
 
-		// vertex.tangent.x = mesh.mTangents[i].x;
-		// vertex.tangent.y = mesh.mTangents[i].y;
-		// vertex.tangent.z = mesh.mTangents[i].z;
+		if (mesh.HasTangentsAndBitangents())
+		{
+			vertex.tangent.x = mesh.mTangents[index].x;
+			vertex.tangent.y = mesh.mTangents[index].y;
+			vertex.tangent.z = mesh.mTangents[index].z;
 
-		// vertex.bitangent.x = mesh.mBitangents[i].x;
-		// vertex.bitangent.y = mesh.mBitangents[i].y;
-		// vertex.bitangent.z = mesh.mBitangents[i].z;
+			vertex.bitangent.x = mesh.mBitangents[index].x;
+			vertex.bitangent.y = mesh.mBitangents[index].y;
+			vertex.bitangent.z = mesh.mBitangents[index].z;
+		}
 	}
 	else
 	{

@@ -31,6 +31,8 @@ void main()
 struct Material {
     sampler2D diffuse;
     sampler2D specular;
+    sampler2D normal;
+    sampler2D height;
     float shininess;
 };
 
@@ -56,7 +58,7 @@ vec3 calculateDirectionalLight(DirLight light, vec3 normal, vec3 viewDir);
 
 void main()
 {
-    vec3 norm = normalize(v_Normal);
+    vec3 norm = normalize(v_Normal) * vec3(texture(u_Material.normal, v_TexCoords)) * vec3(texture(u_Material.height, v_TexCoords));
     vec3 viewDir = normalize(u_ViewPos - v_FragPos);
 
     vec3 result = calculateDirectionalLight(u_DirLight, norm, viewDir);

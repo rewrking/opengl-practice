@@ -57,6 +57,8 @@ void Mesh::setupMesh()
 	constexpr i32 kIndexSize = sizeof(IndexType);
 	constexpr auto kNormalOffset = offsetof(VertexType, normal);
 	constexpr auto kTexCoordOffset = offsetof(VertexType, texCoords);
+	constexpr auto kTangentOffset = offsetof(VertexType, tangent);
+	constexpr auto kBitangentOffset = offsetof(VertexType, bitangent);
 
 	glCheck(glBufferData(GL_ARRAY_BUFFER, vertices.size() * kVertexSize, vertices.data(), GL_STATIC_DRAW));
 
@@ -75,14 +77,24 @@ void Mesh::setupMesh()
 	glCheck(glEnableVertexAttribArray(2));
 	glCheck(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, kVertexSize, (void*)kTexCoordOffset));
 
+	// vertex tangent
+	glCheck(glEnableVertexAttribArray(3));
+	glCheck(glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, kVertexSize, (void*)kTangentOffset));
+
+	// vertex bitangent
+	glCheck(glEnableVertexAttribArray(4));
+	glCheck(glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, kVertexSize, (void*)kBitangentOffset));
+
 	glCheck(glBindVertexArray(0));
 }
 
 /*****************************************************************************/
 void Mesh::draw(Material& material) const
 {
-	u32 diffuseNr = 0;
-	u32 specularNr = 0;
+	u32 diffuseIdx = 0;
+	u32 specularIdx = 0;
+	u32 normalIdx = 0;
+	u32 heightIdx = 0;
 	for (u32 i = 0; i < textures.size(); ++i)
 	{
 		u32 number = 0;
@@ -90,13 +102,23 @@ void Mesh::draw(Material& material) const
 		auto& texture = textures.at(i);
 		if (texture->kind == TextureKind::Diffuse)
 		{
-			number = diffuseNr++;
+			number = diffuseIdx++;
 			id = "diffuse";
 		}
 		else if (texture->kind == TextureKind::Specular)
 		{
-			number = specularNr++;
+			number = specularIdx++;
 			id = "specular";
+		}
+		else if (texture->kind == TextureKind::Normal)
+		{
+			number = normalIdx++;
+			id = "normal";
+		}
+		else if (texture->kind == TextureKind::Height)
+		{
+			number = heightIdx++;
+			id = "height";
 		}
 		else
 		{

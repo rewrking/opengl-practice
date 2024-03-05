@@ -6,6 +6,8 @@ enum class TextureKind : u32
 {
 	None,
 	Diffuse,
-	Specular
+	Specular,
+	Normal,
+	Height
 };
 }

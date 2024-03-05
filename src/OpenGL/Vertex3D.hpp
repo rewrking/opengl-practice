@@ -11,8 +11,8 @@ struct Vertex3D
 	glm::vec3 normal;
 
 	glm::vec2 texCoords;
-	// glm::vec3 tangent;
-	// glm::vec3 bitangent;
+	glm::vec3 tangent;
+	glm::vec3 bitangent;
 
 	// std::array<i32, kMaxBoneInfluence> m_boneIDs;
 	// std::array<f32, kMaxBoneInfluence> m_weights;
