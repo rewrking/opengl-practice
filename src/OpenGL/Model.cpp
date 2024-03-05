@@ -14,6 +14,12 @@ void Model::draw(Material& material) const
 }
 
 /*****************************************************************************/
+bool Model::loaded() const noexcept
+{
+	return m_loaded;
+}
+
+/*****************************************************************************/
 bool Model::load(const char* inPath)
 {
 	auto path = Image::getImagePath(inPath);
@@ -35,6 +41,7 @@ bool Model::load(const char* inPath)
 		return false;
 	}
 
+	m_loaded = true;
 	return true;
 }
 
@@ -53,6 +60,8 @@ void Model::dispose()
 
 	m_texturesLoaded.clear();
 	m_directory.clear();
+
+	m_loaded = false;
 }
 
 /*****************************************************************************/

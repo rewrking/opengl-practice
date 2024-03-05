@@ -40,6 +40,18 @@ struct MeshProgram final : ogl::ProgramBase
 	{
 		clearContext();
 
+		if (!m_model.loaded())
+			return;
+
+		m_material.setVec3("u_ViewPos", camera().position());
+		m_material.setFloat("u_Material.shininess", 100.0f);
+
+		// Directional light
+		m_material.setVec3("u_DirLight.direction", -0.2f, -0.5f, 1.0f);
+		m_material.setVec3("u_DirLight.ambient", 0.5f, 0.5f, 0.5f);
+		m_material.setVec3("u_DirLight.diffuse", 0.4f, 0.4f, 0.4f);
+		m_material.setVec3("u_DirLight.specular", 1.0f, 1.0f, 1.0f);
+
 		m_projection = getProjectionMatrix();
 		m_view = getViewMatrix();
 

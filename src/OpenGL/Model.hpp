@@ -19,6 +19,8 @@ struct Model
 
 	void draw(Material& material) const;
 
+	bool loaded() const noexcept;
+
 	bool load(const char* inPath);
 	void dispose();
 
@@ -35,5 +37,7 @@ private:
 	MeshList m_meshes;
 	TextureList m_texturesLoaded;
 	std::string m_directory;
+
+	bool m_loaded = false;
 };
 }

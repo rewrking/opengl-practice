@@ -81,8 +81,8 @@ void Mesh::setupMesh()
 /*****************************************************************************/
 void Mesh::draw(Material& material) const
 {
-	u32 diffuseNr = 1;
-	u32 specularNr = 1;
+	u32 diffuseNr = 0;
+	u32 specularNr = 0;
 	for (u32 i = 0; i < textures.size(); ++i)
 	{
 		u32 number = 0;
@@ -103,8 +103,10 @@ void Mesh::draw(Material& material) const
 			return;
 		}
 
+		UNUSED(number);
 		texture->buffer.bind(i);
-		material.setTexture(fmt::format("u_Material.{}{}", id, number).c_str(), texture->buffer);
+		// material.setTexture(fmt::format("u_Material.{}[{}]", id, number).c_str(), texture->buffer);
+		material.setTexture(fmt::format("u_Material.{}", id).c_str(), texture->buffer);
 	}
 
 	// draw mesh
