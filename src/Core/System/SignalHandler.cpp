@@ -18,6 +18,7 @@ namespace ogl
 namespace
 {
 Function<void> sOnErrorCallback = nullptr;
+bool sSignalHandled = false;
 }
 
 void printStackTrace();
@@ -156,17 +157,22 @@ void SignalHandler::initialize(Function<void> inOnError)
 {
 	sOnErrorCallback = inOnError;
 
-	std::signal(SIGABRT, handler);
-	std::signal(SIGFPE, handler);
-	std::signal(SIGILL, handler);
-	std::signal(SIGINT, handler);
-	std::signal(SIGSEGV, handler);
-	std::signal(SIGTERM, handler);
+	std::signal(SIGABRT, SignalHandler::handler);
+	std::signal(SIGFPE, SignalHandler::handler);
+	std::signal(SIGILL, SignalHandler::handler);
+	std::signal(SIGINT, SignalHandler::handler);
+	std::signal(SIGSEGV, SignalHandler::handler);
+	std::signal(SIGTERM, SignalHandler::handler);
 }
 
 /*****************************************************************************/
 void SignalHandler::handler(const i32 inSignal)
 {
+	if (sSignalHandled)
+		return;
+
+	sSignalHandled = true;
+
 	priv::Logger::log(LogLevel::Trace, "");
 
 	bool exceptionThrown = std::current_exception() != nullptr;
