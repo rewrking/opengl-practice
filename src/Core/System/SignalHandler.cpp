@@ -18,7 +18,6 @@ namespace ogl
 namespace
 {
 Function<void> sOnErrorCallback = nullptr;
-bool sSignalHandled = false;
 }
 
 void printStackTrace();
@@ -153,6 +152,9 @@ void printError(const char* inType, const char* inDescription, const bool inPrin
 }
 
 /*****************************************************************************/
+bool SignalHandler::signaled = false;
+
+/*****************************************************************************/
 void SignalHandler::initialize(Function<void> inOnError)
 {
 	sOnErrorCallback = inOnError;
@@ -168,10 +170,10 @@ void SignalHandler::initialize(Function<void> inOnError)
 /*****************************************************************************/
 void SignalHandler::handler(const i32 inSignal)
 {
-	if (sSignalHandled)
+	if (signaled)
 		return;
 
-	sSignalHandled = true;
+	signaled = true;
 
 	priv::Logger::log(LogLevel::Trace, "");
 

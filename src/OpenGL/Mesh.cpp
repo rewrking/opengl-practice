@@ -48,7 +48,11 @@ void Mesh::setupMesh()
 {
 	glCheck(glGenVertexArrays(1, &m_vao));
 	glCheck(glGenBuffers(1, &m_vbo));
-	glCheck(glGenBuffers(1, &m_ebo));
+
+	if (!indices.empty())
+	{
+		glCheck(glGenBuffers(1, &m_ebo));
+	}
 
 	glCheck(glBindVertexArray(m_vao));
 	glCheck(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
@@ -60,10 +64,13 @@ void Mesh::setupMesh()
 	constexpr auto kTangentOffset = offsetof(VertexType, tangent);
 	constexpr auto kBitangentOffset = offsetof(VertexType, bitangent);
 
-	glCheck(glBufferData(GL_ARRAY_BUFFER, vertices.size() * kVertexSize, vertices.data(), GL_STATIC_DRAW));
+	glCheck(glBufferData(GL_ARRAY_BUFFER, kVertexSize * vertices.size(), vertices.data(), GL_STATIC_DRAW));
 
-	glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));
-	glCheck(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * kIndexSize, indices.data(), GL_STATIC_DRAW));
+	if (!indices.empty())
+	{
+		glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));
+		glCheck(glBufferData(GL_ELEMENT_ARRAY_BUFFER, kIndexSize * indices.size(), indices.data(), GL_STATIC_DRAW));
+	}
 
 	// vertex positions
 	glCheck(glEnableVertexAttribArray(0));
@@ -136,7 +143,17 @@ void Mesh::draw(Material& material) const
 
 	// draw mesh
 	glCheck(glBindVertexArray(m_vao));
-	glCheck(glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0));
+
+	if (!indices.empty())
+	{
+		// Note: causes segfaults on macos (fun!)
+		glCheck(glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0));
+	}
+	else
+	{
+		glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(vertices.size())));
+	}
+
 	glCheck(glBindVertexArray(0));
 
 	// always good practice to set everything back to defaults once configured.

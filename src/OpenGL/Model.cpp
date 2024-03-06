@@ -25,7 +25,7 @@ bool Model::load(const char* inPath)
 	auto path = Image::getImagePath(inPath);
 
 	Assimp::Importer import;
-	i32 flags = aiProcess_Triangulate
+	i32 flags = aiProcessPreset_TargetRealtime_Quality
 		| aiProcess_FlipUVs;
 	auto scene = import.ReadFile(path, flags);
 	if (scene == nullptr || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || scene->mRootNode == nullptr)
