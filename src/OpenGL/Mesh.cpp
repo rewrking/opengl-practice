@@ -7,7 +7,11 @@ namespace ogl
 /*****************************************************************************/
 bool Mesh::load()
 {
+#if OGL_USE_INDICES
 	if (vertices.empty() || indices.empty())
+#else
+	if (vertices.empty())
+#endif
 	{
 		log_error("Error loading mesh: empty");
 		return false;
@@ -22,6 +26,8 @@ void Mesh::dispose()
 {
 	textures.clear();
 	vertices.clear();
+
+#if OGL_USE_INDICES
 	indices.clear();
 
 	if (m_ebo > 0)
@@ -29,6 +35,7 @@ void Mesh::dispose()
 		glCheck(glDeleteBuffers(1, &m_ebo));
 		m_ebo = 0;
 	}
+#endif
 
 	if (m_vbo > 0)
 	{
@@ -49,16 +56,14 @@ void Mesh::setupMesh()
 	glCheck(glGenVertexArrays(1, &m_vao));
 	glCheck(glGenBuffers(1, &m_vbo));
 
-	if (!indices.empty())
-	{
-		glCheck(glGenBuffers(1, &m_ebo));
-	}
+#if OGL_USE_INDICES
+	glCheck(glGenBuffers(1, &m_ebo));
+#endif
 
 	glCheck(glBindVertexArray(m_vao));
 	glCheck(glBindBuffer(GL_ARRAY_BUFFER, m_vbo));
 
 	constexpr i32 kVertexSize = sizeof(VertexType);
-	constexpr i32 kIndexSize = sizeof(IndexType);
 	constexpr auto kNormalOffset = offsetof(VertexType, normal);
 	constexpr auto kTexCoordOffset = offsetof(VertexType, texCoords);
 	constexpr auto kTangentOffset = offsetof(VertexType, tangent);
@@ -66,11 +71,12 @@ void Mesh::setupMesh()
 
 	glCheck(glBufferData(GL_ARRAY_BUFFER, kVertexSize * vertices.size(), vertices.data(), GL_STATIC_DRAW));
 
-	if (!indices.empty())
-	{
-		glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));
-		glCheck(glBufferData(GL_ELEMENT_ARRAY_BUFFER, kIndexSize * indices.size(), indices.data(), GL_STATIC_DRAW));
-	}
+#if OGL_USE_INDICES
+	constexpr i32 kIndexSize = sizeof(IndexType);
+	glCheck(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo));
+	glCheck(glBufferData(GL_ELEMENT_ARRAY_BUFFER, kIndexSize * indices.size(), indices.data(), GL_STATIC_DRAW));
+
+#endif
 
 	// vertex positions
 	glCheck(glEnableVertexAttribArray(0));
@@ -144,15 +150,11 @@ void Mesh::draw(Material& material) const
 	// draw mesh
 	glCheck(glBindVertexArray(m_vao));
 
-	if (!indices.empty())
-	{
-		// Note: causes segfaults on macos (fun!)
-		glCheck(glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0));
-	}
-	else
-	{
-		glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(vertices.size())));
-	}
+#if OGL_USE_INDICES
+	glCheck(glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0));
+#else
+	glCheck(glDrawArrays(GL_TRIANGLES, 0, static_cast<i32>(vertices.size())));
+#endif
 
 	glCheck(glBindVertexArray(0));
 

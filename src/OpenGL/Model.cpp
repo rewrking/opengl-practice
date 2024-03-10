@@ -1,5 +1,6 @@
 #include "OpenGL/Model.hpp"
 
+#include "Core/DefinesFeatures.hpp"
 #include "Core/Image/Image.hpp"
 #include "Libraries/Assimp.hpp"
 #include "Libraries/StbImage.hpp"
@@ -88,19 +89,25 @@ bool Model::processNode(aiNode& node, const aiScene& inScene)
 Mesh Model::processMesh(aiMesh& mesh, const aiScene& inScene)
 {
 	Mesh out;
-
+#if OGL_USE_INDICES
 	for (u32 i = 0; i < mesh.mNumVertices; ++i)
-	{
 		out.vertices.emplace_back(makeVertex(mesh, i));
-	}
 
-	// process indices
 	for (u32 i = 0; i < mesh.mNumFaces; ++i)
 	{
 		auto& face = mesh.mFaces[i];
 		for (u32 j = 0; j < face.mNumIndices; ++j)
 			out.indices.emplace_back(face.mIndices[j]);
 	}
+#else
+
+	for (u32 i = 0; i < mesh.mNumFaces; ++i)
+	{
+		auto& face = mesh.mFaces[i];
+		for (u32 j = 0; j < face.mNumIndices; ++j)
+			out.vertices.emplace_back(makeVertex(mesh, face.mIndices[j]));
+	}
+#endif
 
 	// process material
 	if (mesh.mMaterialIndex >= 0)

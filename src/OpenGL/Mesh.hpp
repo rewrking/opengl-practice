@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/DefinesFeatures.hpp"
 #include "Libraries/GLM.hpp"
 #include "OpenGL/Material.hpp"
 #include "OpenGL/Texture.hpp"
@@ -24,7 +25,9 @@ struct Mesh
 	void draw(Material& inMaterial) const;
 
 	VertexList vertices;
+#if OGL_USE_INDICES
 	IndexList indices;
+#endif
 	TextureList textures;
 
 private:
@@ -32,6 +35,8 @@ private:
 
 	u32 m_vao = 0;
 	u32 m_vbo = 0;
+#if OGL_USE_INDICES
 	u32 m_ebo = 0;
+#endif
 };
 }
