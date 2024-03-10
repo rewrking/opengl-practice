@@ -51,17 +51,18 @@ bool Model::load(const char* inPath)
 /*****************************************************************************/
 void Model::dispose()
 {
-	for (auto it = m_meshes.rbegin(); it != m_meshes.rend(); ++it)
-		it->dispose();
-
-	m_meshes.clear();
-
 	for (auto& texture : m_texturesLoaded)
 	{
 		texture.buffer.dispose();
 	}
 
 	m_texturesLoaded.clear();
+
+	for (auto it = m_meshes.rbegin(); it != m_meshes.rend(); ++it)
+		it->dispose();
+
+	m_meshes.clear();
+
 	m_directory.clear();
 
 	m_loaded = false;

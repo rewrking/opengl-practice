@@ -227,8 +227,8 @@ i32 ProgramBase::run()
 		}
 
 		glfwMakeContextCurrent(nullptr);
-		glfwTerminate();
 		glfwDestroyWindow(m_window);
+		glfwTerminate();
 		m_window = nullptr;
 	}
 
