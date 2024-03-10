@@ -19,7 +19,7 @@
 		"glfw": {
 			"kind": "git",
 			"repository": "git@github.com:glfw/glfw.git",
-			"tag": "3.4"
+			"tag": "3.3.10"
 		},
 		"glm": {
 			"kind": "git",

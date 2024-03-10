@@ -111,7 +111,6 @@ Mesh Model::processMesh(aiMesh& mesh, const aiScene& inScene)
 #endif
 
 	// process material
-	if (mesh.mMaterialIndex >= 0)
 	{
 		auto* material = inScene.mMaterials[mesh.mMaterialIndex];
 
