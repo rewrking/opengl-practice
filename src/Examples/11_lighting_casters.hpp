@@ -70,8 +70,8 @@ struct LightingCasters final : ogl::ProgramBase
 	f32 m_yaw = 0.0f;
 	f32 m_pitch = 0.0f;
 
-	Material m_lightingShader;
-	Material m_lightCubeShader;
+	ShaderProgram m_lightingShader;
+	ShaderProgram m_lightCubeShader;
 
 	TextureBuffer m_diffuseMap;
 	TextureBuffer m_specularMap;

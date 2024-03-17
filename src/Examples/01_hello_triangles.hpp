@@ -27,7 +27,7 @@ struct HelloTriangles final : ogl::ProgramBase
 
 	u32 m_vao = 0;
 
-	Material shaderProgram;
+	ShaderProgram shaderProgram;
 
 	virtual Settings getSettings() const final
 	{

@@ -1,4 +1,4 @@
-#include "OpenGL/Material.hpp"
+#include "OpenGL/ShaderProgram.hpp"
 
 #include "Core/Helpers.hpp"
 #include "OpenGL/MeshOld.hpp"
@@ -21,22 +21,22 @@ inline i32 getUniformLocation(u32 id, const char* inName)
 }
 
 /*****************************************************************************/
-const Material* Material::kCurrentMaterial = nullptr;
+const ShaderProgram* ShaderProgram::kCurrentMaterial = nullptr;
 
 /*****************************************************************************/
-u32 Material::id() const noexcept
+u32 ShaderProgram::id() const noexcept
 {
 	return m_id;
 }
 
 /*****************************************************************************/
-bool Material::valid() const noexcept
+bool ShaderProgram::valid() const noexcept
 {
 	return m_id > 0;
 }
 
 /*****************************************************************************/
-bool Material::loadFromFiles(const StringList& inShaderFiles)
+bool ShaderProgram::loadFromFiles(const StringList& inShaderFiles)
 {
 	dispose();
 
@@ -68,11 +68,11 @@ bool Material::loadFromFiles(const StringList& inShaderFiles)
 }
 
 /*****************************************************************************/
-bool Material::loadFromFile(const std::string& inFile)
+bool ShaderProgram::loadFromFile(const std::string& inFile)
 {
 	if (!String::endsWith(".glsl", inFile))
 	{
-		log_error("Material failed to load (type unknown - expected .glsl)");
+		log_error("ShaderProgram failed to load (type unknown - expected .glsl)");
 		return false;
 	}
 
@@ -145,7 +145,7 @@ bool Material::loadFromFile(const std::string& inFile)
 }
 
 /*****************************************************************************/
-bool Material::loadFromShaders(const ShaderList& inShaders)
+bool ShaderProgram::loadFromShaders(const ShaderList& inShaders)
 {
 	m_id = glCreateProgram();
 
@@ -188,7 +188,7 @@ bool Material::loadFromShaders(const ShaderList& inShaders)
 }
 
 /*****************************************************************************/
-void Material::bind() const
+void ShaderProgram::bind() const
 {
 	if (kCurrentMaterial != this)
 	{
@@ -198,7 +198,7 @@ void Material::bind() const
 }
 
 /*****************************************************************************/
-void Material::dispose()
+void ShaderProgram::dispose()
 {
 	if (kCurrentMaterial == this)
 		kCurrentMaterial = nullptr;
@@ -211,7 +211,7 @@ void Material::dispose()
 }
 
 /*****************************************************************************/
-void Material::setFloat(const char* inName, f32 inValue)
+void ShaderProgram::setFloat(const char* inName, f32 inValue)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -219,7 +219,7 @@ void Material::setFloat(const char* inName, f32 inValue)
 }
 
 /*****************************************************************************/
-void Material::setVec2(const char* inName, f32 inX, f32 inY)
+void ShaderProgram::setVec2(const char* inName, f32 inX, f32 inY)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -227,7 +227,7 @@ void Material::setVec2(const char* inName, f32 inX, f32 inY)
 }
 
 /*****************************************************************************/
-void Material::setVec2(const char* inName, const Vec2f& inVec)
+void ShaderProgram::setVec2(const char* inName, const Vec2f& inVec)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -235,7 +235,7 @@ void Material::setVec2(const char* inName, const Vec2f& inVec)
 }
 
 /*****************************************************************************/
-void Material::setVec3(const char* inName, f32 inX, f32 inY, f32 inZ)
+void ShaderProgram::setVec3(const char* inName, f32 inX, f32 inY, f32 inZ)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -243,7 +243,7 @@ void Material::setVec3(const char* inName, f32 inX, f32 inY, f32 inZ)
 }
 
 /*****************************************************************************/
-void Material::setVec3(const char* inName, const Vec3f& inVec)
+void ShaderProgram::setVec3(const char* inName, const Vec3f& inVec)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -251,7 +251,7 @@ void Material::setVec3(const char* inName, const Vec3f& inVec)
 }
 
 /*****************************************************************************/
-void Material::setVec3(const char* inName, const Color& inColor)
+void ShaderProgram::setVec3(const char* inName, const Color& inColor)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -262,7 +262,7 @@ void Material::setVec3(const char* inName, const Color& inColor)
 }
 
 /*****************************************************************************/
-void Material::setVec4(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW)
+void ShaderProgram::setVec4(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -270,7 +270,7 @@ void Material::setVec4(const char* inName, f32 inX, f32 inY, f32 inZ, f32 inW)
 }
 
 /*****************************************************************************/
-void Material::setVec4(const char* inName, const Color& inColor)
+void ShaderProgram::setVec4(const char* inName, const Color& inColor)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -282,7 +282,7 @@ void Material::setVec4(const char* inName, const Color& inColor)
 }
 
 /*****************************************************************************/
-void Material::setInt(const char* inName, i32 inValue)
+void ShaderProgram::setInt(const char* inName, i32 inValue)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -290,13 +290,13 @@ void Material::setInt(const char* inName, i32 inValue)
 }
 
 /*****************************************************************************/
-void Material::setTexture(const char* inName, const TextureBuffer& inTexture)
+void ShaderProgram::setTexture(const char* inName, const TextureBuffer& inTexture)
 {
 	return this->setInt(inName, inTexture.slot());
 }
 
 /*****************************************************************************/
-void Material::setMat3(const char* inName, const Mat3f& inValue)
+void ShaderProgram::setMat3(const char* inName, const Mat3f& inValue)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);
@@ -304,7 +304,7 @@ void Material::setMat3(const char* inName, const Mat3f& inValue)
 }
 
 /*****************************************************************************/
-void Material::setMat4(const char* inName, const Mat4f& inValue)
+void ShaderProgram::setMat4(const char* inName, const Mat4f& inValue)
 {
 	this->bind();
 	i32 location = getUniformLocation(m_id, inName);

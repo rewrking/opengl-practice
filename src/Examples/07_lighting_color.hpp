@@ -75,8 +75,8 @@ struct LightingColor final : ogl::ProgramBase
 	f32 m_yaw = 0.0f;
 	f32 m_pitch = 0.0f;
 
-	Material m_lightingShader;
-	Material m_lightCubeshader;
+	ShaderProgram m_lightingShader;
+	ShaderProgram m_lightCubeshader;
 
 	Mat4f m_view;
 	Mat4f m_projection;

@@ -70,8 +70,8 @@ struct LightingLightmaps final : ogl::ProgramBase
 	f32 m_yaw = 0.0f;
 	f32 m_pitch = 0.0f;
 
-	Material m_cubeMaterial;
-	Material m_lightMaterial;
+	ShaderProgram m_cubeMaterial;
+	ShaderProgram m_lightMaterial;
 
 	TextureBuffer m_diffuseMap;
 	TextureBuffer m_specularMap;

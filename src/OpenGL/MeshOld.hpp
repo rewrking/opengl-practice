@@ -4,7 +4,7 @@
 
 namespace ogl
 {
-struct Material;
+struct ShaderProgram;
 struct MeshOld
 {
 	MeshOld() = default;
@@ -16,7 +16,7 @@ struct MeshOld
 	MeshOld& setGeometry(const std::vector<Attrib>& inAttribs, std::vector<f32>&& inData);
 	MeshOld& setGeometry(const std::vector<Attrib>& inAttribs, const std::vector<f32>& inData);
 
-	void setMaterial(const Material& inMaterial);
+	void setMaterial(const ShaderProgram& inMaterial);
 
 	void draw() const;
 
@@ -25,7 +25,7 @@ struct MeshOld
 private:
 	void initialize();
 
-	const Material* m_material = nullptr;
+	const ShaderProgram* m_material = nullptr;
 
 	std::vector<f32> m_data;
 

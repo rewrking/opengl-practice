@@ -2,7 +2,7 @@
 
 #include "Libraries/OpenGL.hpp"
 #include "OpenGL/BufferAttribList.hpp"
-#include "OpenGL/Material.hpp"
+#include "OpenGL/ShaderProgram.hpp"
 
 namespace ogl
 {
@@ -83,7 +83,7 @@ MeshOld& MeshOld::setGeometry(const std::vector<Attrib>& inAttribs, const std::v
 }
 
 /*****************************************************************************/
-void MeshOld::setMaterial(const Material& inMaterial)
+void MeshOld::setMaterial(const ShaderProgram& inMaterial)
 {
 	m_material = &inMaterial;
 }

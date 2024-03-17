@@ -6,7 +6,7 @@ namespace ogl::Program
 {
 struct MeshProgram final : ogl::ProgramBase
 {
-	Material m_material;
+	ShaderProgram m_material;
 
 	Model m_model;
 

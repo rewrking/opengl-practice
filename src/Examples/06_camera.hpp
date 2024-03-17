@@ -83,7 +83,7 @@ struct Cameras final : ogl::ProgramBase
 	f32 m_yaw = 0.0f;
 	f32 m_pitch = 0.0f;
 
-	Material shaderProgram;
+	ShaderProgram shaderProgram;
 
 	Mat4f m_view;
 	Mat4f m_projection;

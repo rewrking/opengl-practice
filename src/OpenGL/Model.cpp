@@ -8,7 +8,7 @@
 namespace ogl
 {
 /*****************************************************************************/
-void Model::draw(Material& material) const
+void Model::draw(ShaderProgram& material) const
 {
 	for (auto& mesh : m_meshes)
 		mesh.draw(material);

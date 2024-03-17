@@ -76,7 +76,7 @@ struct ExtraAbstractions final : ogl::ProgramBase
 	TextureBuffer m_texture;
 	MeshOld m_mesh;
 
-	Material m_material;
+	ShaderProgram m_material;
 
 	Mat4f m_projection;
 	Mat4f m_view;

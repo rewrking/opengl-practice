@@ -102,7 +102,7 @@ void Mesh::setupMesh()
 }
 
 /*****************************************************************************/
-void Mesh::draw(Material& material) const
+void Mesh::draw(ShaderProgram& material) const
 {
 	u32 diffuseIdx = 0;
 	u32 specularIdx = 0;

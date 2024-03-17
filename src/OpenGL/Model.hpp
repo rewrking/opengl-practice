@@ -17,7 +17,7 @@ struct Model
 
 	Model() = default;
 
-	void draw(Material& material) const;
+	void draw(ShaderProgram& material) const;
 
 	bool loaded() const noexcept;
 

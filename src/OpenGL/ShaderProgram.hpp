@@ -10,11 +10,11 @@ namespace ogl
 {
 struct MeshOld;
 struct TextureBuffer;
-struct Material
+struct ShaderProgram
 {
-	Material() = default;
-	OGL_DEFAULT_COPY_MOVE(Material);
-	virtual ~Material() = default;
+	ShaderProgram() = default;
+	OGL_DEFAULT_COPY_MOVE(ShaderProgram);
+	virtual ~ShaderProgram() = default;
 
 	bool loadFromFiles(const StringList& inShaderFiles);
 	bool loadFromFile(const std::string& inFile);
@@ -47,6 +47,6 @@ protected:
 	u32 m_id = 0;
 
 private:
-	static const Material* kCurrentMaterial;
+	static const ShaderProgram* kCurrentMaterial;
 };
 }

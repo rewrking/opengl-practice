@@ -2,7 +2,7 @@
 
 #include "Core/DefinesFeatures.hpp"
 #include "Libraries/GLM.hpp"
-#include "OpenGL/Material.hpp"
+#include "OpenGL/ShaderProgram.hpp"
 #include "OpenGL/Texture.hpp"
 #include "OpenGL/Vertex3D.hpp"
 
@@ -22,7 +22,7 @@ struct Mesh
 	bool load();
 	void dispose();
 
-	void draw(Material& inMaterial) const;
+	void draw(ShaderProgram& inMaterial) const;
 
 	VertexList vertices;
 #if OGL_USE_INDICES
