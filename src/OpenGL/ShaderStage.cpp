@@ -1,4 +1,4 @@
-#include "OpenGL/Shader.hpp"
+#include "OpenGL/ShaderStage.hpp"
 
 #include "Core/Helpers.hpp"
 
@@ -7,32 +7,32 @@
 namespace ogl
 {
 /*****************************************************************************/
-Shader::Shader(const std::string& inFilePath) :
+ShaderStage::ShaderStage(const std::string& inFilePath) :
 	m_filename(inFilePath)
 {
 }
 
 /*****************************************************************************/
-u32 Shader::id() const noexcept
+u32 ShaderStage::id() const noexcept
 {
 	return m_id;
 }
 
 /*****************************************************************************/
-Shader::Type Shader::type() const noexcept
+ShaderStage::Type ShaderStage::type() const noexcept
 {
 	return m_type;
 }
 
 /*****************************************************************************/
-[[nodiscard]] std::string Shader::readFile(const std::string& inFilePath)
+[[nodiscard]] std::string ShaderStage::readFile(const std::string& inFilePath)
 {
-	auto filename = Shader::getFullPath(inFilePath);
+	auto filename = ShaderStage::getFullPath(inFilePath);
 	return readResolvedFile(filename);
 }
 
 /*****************************************************************************/
-[[nodiscard]] Shader::Type Shader::getTypeFromPath(const std::string& inFilePath)
+[[nodiscard]] ShaderStage::Type ShaderStage::getTypeFromPath(const std::string& inFilePath)
 {
 	if (String::endsWith(".vert", inFilePath))
 		return Type::Vertex;
@@ -50,7 +50,7 @@ Shader::Type Shader::type() const noexcept
 }
 
 /*****************************************************************************/
-[[nodiscard]] std::string Shader::readResolvedFile(const std::string& inFilePath)
+[[nodiscard]] std::string ShaderStage::readResolvedFile(const std::string& inFilePath)
 {
 	std::stringstream buffer;
 	{
@@ -69,21 +69,21 @@ Shader::Type Shader::type() const noexcept
 }
 
 /*****************************************************************************/
-[[nodiscard]] std::string Shader::getFullPath(const std::string& inFilePath)
+[[nodiscard]] std::string ShaderStage::getFullPath(const std::string& inFilePath)
 {
 	return std::string("content/fx/") + inFilePath;
 }
 
 /*****************************************************************************/
-bool Shader::loadFromFile(const std::string& inFilePath)
+bool ShaderStage::loadFromFile(const std::string& inFilePath)
 {
-	m_filename = Shader::getFullPath(inFilePath);
-	auto type = Shader::getTypeFromPath(inFilePath);
-	return loadFromSource(Shader::readResolvedFile(m_filename), type);
+	m_filename = ShaderStage::getFullPath(inFilePath);
+	auto type = ShaderStage::getTypeFromPath(inFilePath);
+	return loadFromSource(ShaderStage::readResolvedFile(m_filename), type);
 }
 
 /*****************************************************************************/
-bool Shader::loadFromSource(const std::string& inSource, const Type inType)
+bool ShaderStage::loadFromSource(const std::string& inSource, const Type inType)
 {
 	if (inSource.empty())
 		return false;
@@ -106,7 +106,7 @@ bool Shader::loadFromSource(const std::string& inSource, const Type inType)
 	GLenum type = getGLenumFromType(inType);
 	if (type == GL_NONE || m_type == Type::None)
 	{
-		log_error("Shader failed to load (type unknown)");
+		log_error("ShaderStage failed to load (type unknown)");
 		return false;
 	}
 
@@ -124,7 +124,7 @@ bool Shader::loadFromSource(const std::string& inSource, const Type inType)
 
 		dispose();
 
-		log_error("Shader compilation failed:", infoLog.data());
+		log_error("ShaderStage compilation failed:", infoLog.data());
 		return false;
 	}
 
@@ -153,7 +153,7 @@ bool Shader::loadFromSource(const std::string& inSource, const Type inType)
 }
 
 /*****************************************************************************/
-void Shader::dispose()
+void ShaderStage::dispose()
 {
 	if (m_id > 0)
 	{

@@ -4,7 +4,7 @@
 #include "Libraries/GLM.hpp"
 #include "Libraries/OpenGL.hpp"
 #include "OpenGL/Color.hpp"
-#include "OpenGL/Shader.hpp"
+#include "OpenGL/ShaderStage.hpp"
 
 namespace ogl
 {

@@ -88,9 +88,9 @@
 			""
 		],
 	},
-	"Shader File": {
+	"ShaderStage File": {
 		"prefix": "glsls",
-		"description": "Shader file",
+		"description": "ShaderStage file",
 		"scope": "glsl",
 		"body": [
 			"#pragma type : vertex",

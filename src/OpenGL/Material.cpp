@@ -50,7 +50,7 @@ bool Material::loadFromFiles(const StringList& inShaderFiles)
 
 	for (auto& file : inShaderFiles)
 	{
-		Shader shader;
+		ShaderStage shader;
 		bool result = shader.loadFromFile(file);
 		if (!result)
 		{
@@ -86,23 +86,23 @@ bool Material::loadFromFile(const std::string& inFile)
 		shaders.clear();
 	};
 
-	auto getShaderTypeFromString = [](const std::string& inType) -> Shader::Type {
+	auto getShaderTypeFromString = [](const std::string& inType) -> ShaderStage::Type {
 		if (inType == "vertex")
-			return Shader::Type::Vertex;
+			return ShaderStage::Type::Vertex;
 
 		if (inType == "fragment")
-			return Shader::Type::Fragment;
+			return ShaderStage::Type::Fragment;
 
 		if (inType == "geometry")
-			return Shader::Type::Geometry;
+			return ShaderStage::Type::Geometry;
 
 		if (inType == "compute")
-			return Shader::Type::Compute;
+			return ShaderStage::Type::Compute;
 
-		return Shader::Type::None;
+		return ShaderStage::Type::None;
 	};
 
-	auto source = Shader::readFile(inFile);
+	auto source = ShaderStage::readFile(inFile);
 
 	const std::string kToken("#pragma type :");
 	auto pos = source.find(kToken, 0);
@@ -120,14 +120,14 @@ bool Material::loadFromFile(const std::string& inFile)
 		auto endType = eol - beginType;
 		std::string type = source.substr(beginType, endType);
 
-		Shader::Type shaderType = getShaderTypeFromString(type);
+		ShaderStage::Type shaderType = getShaderTypeFromString(type);
 
 		auto beginSource = source.find_first_not_of("\r\n", eol);
 		pos = source.find(kToken, beginSource);
 		auto endSource = pos - (beginSource == std::string::npos ? source.size() - 1 : beginSource);
 		auto shaderSource = source.substr(beginSource, endSource);
 
-		Shader shader(inFile);
+		ShaderStage shader(inFile);
 		bool result = shader.loadFromSource(shaderSource, shaderType);
 		if (!result)
 		{
@@ -150,15 +150,15 @@ bool Material::loadFromShaders(const ShaderList& inShaders)
 	m_id = glCreateProgram();
 
 	{
-		std::vector<Shader::Type> shaderTypes;
+		std::vector<ShaderStage::Type> shaderTypes;
 		for (auto& shader : inShaders)
 		{
 			auto type = shader.type();
-			for (Shader::Type shaderType : shaderTypes)
+			for (ShaderStage::Type shaderType : shaderTypes)
 			{
 				if (type == shaderType)
 				{
-					log_error("Shader program cannot contain duplicate shader types");
+					log_error("ShaderStage program cannot contain duplicate shader types");
 					dispose();
 					return false;
 				}
@@ -180,7 +180,7 @@ bool Material::loadFromShaders(const ShaderList& inShaders)
 
 		dispose();
 
-		log_error("Shader program linking failed:", infoLog.data());
+		log_error("ShaderStage program linking failed:", infoLog.data());
 		return false;
 	}
 

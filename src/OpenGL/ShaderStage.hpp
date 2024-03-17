@@ -4,10 +4,10 @@
 
 namespace ogl
 {
-struct Shader;
-using ShaderList = std::vector<Shader>;
+struct ShaderStage;
+using ShaderList = std::vector<ShaderStage>;
 
-struct Shader
+struct ShaderStage
 {
 	enum class Type
 	{
@@ -18,8 +18,8 @@ struct Shader
 		Compute,
 	};
 
-	Shader() = default;
-	explicit Shader(const std::string& inFilePath);
+	ShaderStage() = default;
+	explicit ShaderStage(const std::string& inFilePath);
 
 	u32 id() const noexcept;
 	Type type() const noexcept;
