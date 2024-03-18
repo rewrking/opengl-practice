@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Core/Concepts.hpp"
 #include "Libraries/GLM.hpp"
 #include "Libraries/OpenGL.hpp"
 #include "OpenGL/Color.hpp"
@@ -8,7 +7,6 @@
 
 namespace ogl
 {
-struct MeshOld;
 struct TextureBuffer;
 struct ShaderProgram
 {

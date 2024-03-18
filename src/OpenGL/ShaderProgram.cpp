@@ -312,5 +312,3 @@ void ShaderProgram::setMat4(const char* inName, const Mat4f& inValue)
 }
 
 }
-
-#undef CHECK_LOCATION
